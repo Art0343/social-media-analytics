@@ -358,8 +358,23 @@ export const connectedAccountsData: ConnectedAccountData[] = [
   },
   {
     id: '6', platform: 'Twitter / X', platformSlug: 'twitter', platformColor: '#000000',
-    icon: 'tag', accountName: 'X / Twitter Ads', isConnected: false,
+    icon: 'flutter', accountName: 'X / Twitter Ads', isConnected: false,
     description: 'Measure real-time engagement and paid campaign impact.',
+  },
+  {
+    id: '7', platform: 'WhatsApp Business', platformSlug: 'whatsapp', platformColor: '#25D366',
+    icon: 'chat_bubble', accountName: 'WhatsApp Business', isConnected: false,
+    description: 'Connect with customers and track messaging metrics.',
+  },
+  {
+    id: '8', platform: 'Google Ads', platformSlug: 'google-ads', platformColor: '#4285F4',
+    icon: 'ads_click', accountName: 'Google Ads', isConnected: false,
+    description: 'Track paid search and display campaign performance.',
+  },
+  {
+    id: '9', platform: 'Google Maps', platformSlug: 'google-maps', platformColor: '#4285F4',
+    icon: 'location_on', accountName: 'Google Business Profile', isConnected: false,
+    description: 'Monitor local business visibility and reviews.',
   },
 ];
 
@@ -378,5 +393,9 @@ export const demoPlatforms: DemoPlatform[] = [
   { id: 'p2', name: 'Facebook', slug: 'facebook', brandColor: '#1877F2', icon: 'thumb_up', isActive: true, isBuiltIn: true },
   { id: 'p3', name: 'LinkedIn', slug: 'linkedin', brandColor: '#0A66C2', icon: 'work', isActive: true, isBuiltIn: true },
   { id: 'p4', name: 'YouTube', slug: 'youtube', brandColor: '#FF0000', icon: 'smart_display', isActive: true, isBuiltIn: true },
-  { id: 'p5', name: 'Twitter / X', slug: 'twitter', brandColor: '#000000', icon: 'tag', isActive: true, isBuiltIn: true },
+  { id: 'p5', name: 'Twitter / X', slug: 'twitter', brandColor: '#000000', icon: 'flutter', isActive: true, isBuiltIn: true },
+  { id: 'p6', name: 'WhatsApp Business', slug: 'whatsapp', brandColor: '#25D366', icon: 'chat_bubble', isActive: true, isBuiltIn: true },
+  { id: 'p7', name: 'Google Ads', slug: 'google-ads', brandColor: '#4285F4', icon: 'ads_click', isActive: true, isBuiltIn: true },
+  { id: 'p8', name: 'Google Maps', slug: 'google-maps', brandColor: '#4285F4', icon: 'location_on', isActive: true, isBuiltIn: true },
+  { id: 'p9', name: 'TikTok', slug: 'tiktok', brandColor: '#000000', icon: 'music_note', isActive: true, isBuiltIn: true },
 ];

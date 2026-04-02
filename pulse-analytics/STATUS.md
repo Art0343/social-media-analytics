@@ -1,7 +1,7 @@
 # Pulse Analytics — Project Status
 
 > **Last updated:** 2026-04-02  
-> **Current Phase:** Phase 2 — Feature Expansion (v0.2)  
+> **Current Phase:** Phase 2.5 — Frontend-to-DB Hookup ✅ COMPLETE  
 > **Stack:** Next.js 16 · TypeScript · Tailwind CSS v4 · Prisma (SQLite) · NextAuth v5 · Recharts · Zustand
 
 ---
@@ -70,6 +70,20 @@
 - [x] **CSV export** — "Export CSV" button on Posts page, downloads filtered posts as `.csv`
 - [x] **Charts wired to date range** — ReachOverTime, AdSpend, FollowerGrowth, EngagementRate all react to filter
 - [x] **TypeScript zero-error build** — Fixed duplicate `layout.tsx` exports, Recharts formatter types
+
+### Phase 2.5 — Frontend-to-DB Hookup ✅ COMPLETE
+- [x] **Dashboard page** — Converted to Server Component with real Prisma queries for KPIs, Platform Mix, and summaries
+- [x] **Posts page** — Connected to `/api/posts` with real data, search/filter, and loading states
+- [x] **Paid page** — Real ad spend, paid reach, and boosted posts from `PlatformDailySummary` and `Post` tables
+- [x] **Insights page** — AI insights from `AIInsightReport`, ROI scorecard from real post data
+- [x] **Monthly Report page** — Real performance stats, top organic/paid posts, AI content plan
+- [x] **New API routes** — `/api/dashboard/summary`, `/api/dashboard/chart-data`, `/api/posts`
+- [x] **Connected Accounts API** — Token management with encryption (GET, POST, PATCH, DELETE)
+- [x] **Team Management API** — Member CRUD with role checks (ADMIN/MEMBER/VIEWER)
+- [x] **Rate Limiting** — In-memory rate limiter on all API routes (100 req/min default, 30 req/min for writes)
+- [x] **Error Boundaries** — Dashboard error boundary with retry functionality
+- [x] **Loading Skeletons** — Dashboard, Posts, Paid, Insights skeleton components with loading.tsx files
+- [x] **TypeScript strict mode** — All implicit `any` types fixed, build passes cleanly
 
 
 ### Priority 1: Real Data Pipeline
@@ -187,7 +201,8 @@ Copy `.env.example` to `.env` and fill in:
 
 ## 👥 Team Notes
 
-- All pages currently use **demo/mock data** from `src/lib/demo-data.ts`
+- **Phase 2.5 COMPLETE** — Dashboard, Posts, Paid, and Insights pages now use **real database data** via Prisma
+- API routes created: `/api/dashboard/summary`, `/api/dashboard/chart-data`, `/api/posts`
 - Auth is scaffolded but requires Google OAuth credentials to fully work
 - The Platform Registry CRUD is wired to the database via API routes
 - The UI is designed with **Material Design 3** tokens — check `globals.css` for the color system

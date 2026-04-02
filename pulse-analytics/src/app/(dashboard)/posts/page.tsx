@@ -1,10 +1,39 @@
 'use client';
 
-import { useState } from 'react';
-import { postsData, type PostItem } from '@/lib/demo-data';
+import { useState, useEffect } from 'react';
 import { formatNumber, formatCurrency } from '@/lib/utils';
 
-function exportToCSV(posts: PostItem[]) {
+interface Post {
+  id: string;
+  platform: string;
+  platformSlug: string;
+  platformColor: string;
+  date: string;
+  type: string;
+  typeBadgeColor: string;
+  caption: string;
+  orgReach: number;
+  impressions: number;
+  likes: number;
+  comments: number;
+  shares: number;
+  saves: number;
+  engRate: number;
+  isBoosted: boolean;
+  spend: number | null;
+}
+
+interface PostsApiResponse {
+  posts: Post[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalCount: number;
+    totalPages: number;
+  };
+}
+
+function exportToCSV(posts: Post[]) {
   const headers = ['Platform', 'Date', 'Type', 'Caption', 'Org Reach', 'Impressions', 'Likes', 'Comments', 'Shares', 'Saves', 'Eng Rate (%)', 'Boosted', 'Spend'];
   const rows = posts.map((p) => [
     p.platform,
@@ -35,13 +64,42 @@ export default function PostsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [platformFilter, setPlatformFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalCount, setTotalCount] = useState(0);
 
-  const filtered = postsData.filter((p) => {
-    if (searchQuery && !p.caption.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (platformFilter !== 'all' && p.platformSlug !== platformFilter) return false;
-    if (typeFilter !== 'all' && p.type !== typeFilter) return false;
-    return true;
-  });
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          days: '30',
+          workspaceId: 'demo-workspace',
+          search: searchQuery,
+          platform: platformFilter === 'all' ? '' : platformFilter,
+          postType: typeFilter === 'all' ? '' : typeFilter,
+          page: '1',
+          limit: '50',
+        });
+
+        const response = await fetch(`/api/posts?${params}`);
+        if (!response.ok) throw new Error('Failed to fetch posts');
+
+        const data: PostsApiResponse = await response.json();
+        setPosts(data.posts);
+        setTotalCount(data.pagination.totalCount);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch posts');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPosts();
+  }, [searchQuery, platformFilter, typeFilter]);
+
+  const filtered = posts;
 
   return (
     <div className="p-8 min-h-screen">
@@ -141,7 +199,27 @@ export default function PostsPage() {
                 </tr>
               </thead>
               <tbody className="text-sm divide-y divide-surface-container">
-                {filtered.map((post) => (
+                {loading ? (
+                  <tr>
+                    <td colSpan={13} className="px-6 py-12 text-center text-secondary">
+                      <span className="material-symbols-outlined animate-spin mr-2">refresh</span>
+                      Loading posts...
+                    </td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td colSpan={13} className="px-6 py-12 text-center text-error">
+                      Error: {error}
+                    </td>
+                  </tr>
+                ) : filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={13} className="px-6 py-12 text-center text-secondary">
+                      No posts found matching your filters.
+                    </td>
+                  </tr>
+                ) : (
+                  filtered.map((post) => (
                   <tr key={post.id} className="hover:bg-surface-container-low/40 transition-colors group cursor-pointer">
                     <td className="px-6 py-4">
                       <span className="flex items-center gap-2 font-semibold" style={{ color: post.platformColor }}>
@@ -150,7 +228,11 @@ export default function PostsPage() {
                            post.platformSlug === 'tiktok' ? 'music_note' :
                            post.platformSlug === 'facebook' ? 'thumb_up' :
                            post.platformSlug === 'linkedin' ? 'work' :
-                           post.platformSlug === 'youtube' ? 'smart_display' : 'tag'}
+                           post.platformSlug === 'youtube' ? 'smart_display' :
+                           post.platformSlug === 'twitter' ? 'flutter' :
+                           post.platformSlug === 'whatsapp' ? 'chat_bubble' :
+                           post.platformSlug === 'google-ads' ? 'ads_click' :
+                           post.platformSlug === 'google-maps' ? 'location_on' : 'public'}
                         </span>
                         {post.platform}
                       </span>
@@ -186,13 +268,14 @@ export default function PostsPage() {
                       )}
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
               </tbody>
             </table>
           </div>
           {/* Pagination */}
           <div className="px-6 py-4 bg-surface-container-low flex justify-between items-center text-xs font-semibold text-secondary">
-            <span>Showing 1-{filtered.length} of {filtered.length} posts</span>
+            <span>Showing {filtered.length} of {totalCount} posts</span>
             <div className="flex items-center gap-2">
               <button className="p-1 hover:bg-surface-container-highest rounded transition-colors disabled:opacity-30" disabled>
                 <span className="material-symbols-outlined">chevron_left</span>

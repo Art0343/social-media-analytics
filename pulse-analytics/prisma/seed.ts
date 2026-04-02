@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { prisma } from '../src/lib/prisma';
 
 async function main() {
   console.log('🌱 Seeding database...\n');
@@ -58,6 +56,46 @@ async function main() {
       tokenUrl: 'https://open.tiktokapis.com/v2/oauth/token/',
       scopes: 'user.info.basic,video.list',
       apiBaseUrl: 'https://open.tiktokapis.com/v2',
+    },
+    {
+      name: 'Twitter / X',
+      slug: 'twitter',
+      brandColor: '#000000',
+      isBuiltIn: true,
+      authUrl: 'https://twitter.com/i/oauth2/authorize',
+      tokenUrl: 'https://api.twitter.com/2/oauth2/token',
+      scopes: 'tweet.read,users.read,analytics.read',
+      apiBaseUrl: 'https://api.twitter.com/2',
+    },
+    {
+      name: 'WhatsApp Business',
+      slug: 'whatsapp',
+      brandColor: '#25D366',
+      isBuiltIn: true,
+      authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
+      tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
+      scopes: 'whatsapp_business_management,whatsapp_business_messaging',
+      apiBaseUrl: 'https://graph.facebook.com/v18.0',
+    },
+    {
+      name: 'Google Ads',
+      slug: 'google-ads',
+      brandColor: '#4285F4',
+      isBuiltIn: true,
+      authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+      tokenUrl: 'https://oauth2.googleapis.com/token',
+      scopes: 'https://www.googleapis.com/auth/adwords',
+      apiBaseUrl: 'https://googleads.googleapis.com/v14',
+    },
+    {
+      name: 'Google Maps',
+      slug: 'google-maps',
+      brandColor: '#4285F4',
+      isBuiltIn: true,
+      authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+      tokenUrl: 'https://oauth2.googleapis.com/token',
+      scopes: 'https://www.googleapis.com/auth/business.manage',
+      apiBaseUrl: 'https://mybusiness.googleapis.com/v4',
     },
   ];
 

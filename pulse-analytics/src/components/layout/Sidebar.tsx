@@ -1,9 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useTheme } from '@/lib/stores/useTheme';
+
+interface Workspace {
+  id: string;
+  name: string;
+  logoUrl: string | null;
+  role: string;
+}
 
 const navItems = [
   { href: '/dashboard', label: 'Overview', icon: 'dashboard' },
@@ -25,19 +32,52 @@ interface SidebarProps {
 
 export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+  const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
+  const [workspaceMenuOpen, setWorkspaceMenuOpen] = useState(false);
+
+  // Fetch workspaces on mount
+  useEffect(() => {
+    const fetchWorkspaces = async () => {
+      try {
+        const response = await fetch('/api/workspaces');
+        if (response.ok) {
+          const data = await response.json();
+          setWorkspaces(data.workspaces || []);
+          // Set first workspace as current if none selected
+          if (data.workspaces?.length > 0 && !currentWorkspace) {
+            setCurrentWorkspace(data.workspaces[0]);
+            localStorage.setItem('currentWorkspaceId', data.workspaces[0].id);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch workspaces:', error);
+      }
+    };
+
+    const storedWorkspaceId = localStorage.getItem('currentWorkspaceId');
+    if (storedWorkspaceId) {
+      fetchWorkspaces().then(() => {
+        const stored = workspaces.find(w => w.id === storedWorkspaceId);
+        if (stored) setCurrentWorkspace(stored);
+      });
+    } else {
+      fetchWorkspaces();
+    }
+  }, []);
 
   // Apply theme on mount and when theme changes
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    // Enable Tailwind's dark: utilities by toggling the 'dark' class
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
   // Close mobile sidebar on route change
   useEffect(() => {
     onClose?.();
-  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   const isActive = (href: string) => {
     if (href === '/settings' && pathname.startsWith('/settings') && !pathname.startsWith('/settings/accounts')) {
@@ -46,10 +86,17 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
     return pathname === href || (href !== '/settings' && pathname.startsWith(href));
   };
 
+  const handleWorkspaceSwitch = (workspace: Workspace) => {
+    setCurrentWorkspace(workspace);
+    localStorage.setItem('currentWorkspaceId', workspace.id);
+    setWorkspaceMenuOpen(false);
+    router.refresh();
+  };
+
   const sidebarContent = (
     <aside className="flex flex-col h-full w-[240px] p-4 bg-[#faf8ff] dark:bg-[#12142a] border-r border-transparent">
       {/* Logo */}
-      <div className="mb-10 px-2 flex items-center justify-between">
+      <div className="mb-6 px-2 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-black text-[#131b2e] dark:text-white leading-tight">Pulse Analytics</h1>
           <p className="text-xs font-medium text-[#505f76] dark:text-[#8892b0] tracking-wider uppercase">SaaS Dashboard</p>
@@ -62,6 +109,64 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
         >
           <span className="material-symbols-outlined text-xl">close</span>
         </button>
+      </div>
+
+      {/* Workspace Switcher */}
+      <div className="mb-6 px-2">
+        <div className="relative">
+          <button
+            onClick={() => setWorkspaceMenuOpen(!workspaceMenuOpen)}
+            className="w-full flex items-center justify-between gap-2 px-3 py-2.5 bg-[#d8e2ff]/50 dark:bg-[#1e2d5a]/50 rounded-lg text-[#131b2e] dark:text-white hover:bg-[#d8e2ff] dark:hover:bg-[#1e2d5a] transition-colors"
+          >
+            <div className="flex items-center gap-2 overflow-hidden">
+              <div className="w-6 h-6 rounded bg-[#0058be] dark:bg-[#82b0ff] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                {currentWorkspace?.name?.charAt(0).toUpperCase() || 'W'}
+              </div>
+              <span className="text-sm font-medium truncate">
+                {currentWorkspace?.name || 'Select Workspace'}
+              </span>
+            </div>
+            <span className={`material-symbols-outlined text-[18px] transition-transform ${workspaceMenuOpen ? 'rotate-180' : ''}`}>
+              expand_more
+            </span>
+          </button>
+
+          {/* Workspace Dropdown */}
+          {workspaceMenuOpen && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#1e2d5a] rounded-lg shadow-lg border border-[#e8eaf0] dark:border-[#2d3048] z-50 max-h-60 overflow-y-auto">
+              {workspaces.map((workspace) => (
+                <button
+                  key={workspace.id}
+                  onClick={() => handleWorkspaceSwitch(workspace)}
+                  className={`w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-[#d8e2ff]/50 dark:hover:bg-[#2d3048] transition-colors ${
+                    currentWorkspace?.id === workspace.id ? 'bg-[#d8e2ff]/30 dark:bg-[#2d3048]/50' : ''
+                  }`}
+                >
+                  <div className="w-6 h-6 rounded bg-[#0058be]/10 dark:bg-[#82b0ff]/10 flex items-center justify-center text-[#0058be] dark:text-[#82b0ff] text-xs font-bold">
+                    {workspace.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[#131b2e] dark:text-white truncate">{workspace.name}</p>
+                    <p className="text-[10px] text-[#505f76] dark:text-[#8892b0] capitalize">{workspace.role.toLowerCase()}</p>
+                  </div>
+                  {currentWorkspace?.id === workspace.id && (
+                    <span className="material-symbols-outlined text-[#0058be] dark:text-[#82b0ff] text-[18px]">check</span>
+                  )}
+                </button>
+              ))}
+              <div className="border-t border-[#e8eaf0] dark:border-[#2d3048] p-2">
+                <Link
+                  href="/settings?tab=workspaces"
+                  onClick={() => setWorkspaceMenuOpen(false)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-[#505f76] dark:text-[#8892b0] hover:text-[#0058be] dark:hover:text-[#82b0ff] transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add</span>
+                  New Workspace
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Navigation */}

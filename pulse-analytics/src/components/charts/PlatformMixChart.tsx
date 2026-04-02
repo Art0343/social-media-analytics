@@ -1,16 +1,30 @@
 'use client';
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { platformMixData } from '@/lib/demo-data';
+import { platformMixData as defaultPlatformMixData } from '@/lib/demo-data';
 
-export default function PlatformMixChart() {
+interface PlatformMixItem {
+  name: string;
+  slug: string;
+  value: number;
+  color: string;
+  icon: string;
+}
+
+interface PlatformMixChartProps {
+  data?: PlatformMixItem[];
+}
+
+export default function PlatformMixChart({ data }: PlatformMixChartProps) {
+  const chartData = data || defaultPlatformMixData;
+
   return (
     <div className="flex flex-col items-center">
       <div className="relative w-48 h-48 mb-8">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={platformMixData}
+              data={chartData}
               cx="50%"
               cy="50%"
               innerRadius={56}
@@ -19,12 +33,12 @@ export default function PlatformMixChart() {
               dataKey="value"
               stroke="none"
             >
-              {platformMixData.map((entry) => (
+              {chartData.map((entry) => (
                 <Cell key={entry.slug} fill={entry.color} />
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: any) => [`${Number(value).toFixed(1)}%`, '']}
+              formatter={(value) => [`${Number(value).toFixed(1)}%`, '']}
               contentStyle={{
                 background: 'rgba(255,255,255,0.95)',
                 border: 'none',
@@ -37,12 +51,12 @@ export default function PlatformMixChart() {
           </PieChart>
         </ResponsiveContainer>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-2xl font-black text-on-surface">{platformMixData.length}</span>
+          <span className="text-2xl font-black text-on-surface">{chartData.length}</span>
           <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Platforms</span>
         </div>
       </div>
       <div className="w-full space-y-3">
-        {platformMixData.map((item) => (
+        {chartData.map((item) => (
           <div key={item.slug} className="flex justify-between items-center text-xs">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />

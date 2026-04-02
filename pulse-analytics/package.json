@@ -6,15 +6,20 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/adapter-better-sqlite3": "^7.6.0",
     "@prisma/client": "^7.6.0",
+    "@react-pdf/renderer": "^4.3.2",
     "@tanstack/react-query": "^5.96.1",
     "better-sqlite3": "^12.8.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "next": "16.2.2",
     "next-auth": "^5.0.0-beta.30",
     "prisma": "^7.6.0",
@@ -30,6 +35,7 @@
     "seed": "npx tsx prisma/seed.ts"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^20",

@@ -30,6 +30,8 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
   // Apply theme on mount and when theme changes
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    // Enable Tailwind's dark: utilities by toggling the 'dark' class
+    document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
   // Close mobile sidebar on route change

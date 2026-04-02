@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// Public routes that don't require authentication
 const publicPaths = ['/login', '/api/auth'];
 
 function isPublicPath(pathname: string): boolean {
@@ -10,14 +9,13 @@ function isPublicPath(pathname: string): boolean {
   );
 }
 
-export function middleware(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // ── Development bypass ──────────────────────────────────────────────────────
+  // Dev bypass — remove to enforce auth in production
   if (process.env.NODE_ENV === 'development') {
     return NextResponse.next();
   }
-  // ────────────────────────────────────────────────────────────────────────────
 
   if (isPublicPath(pathname)) return NextResponse.next();
 

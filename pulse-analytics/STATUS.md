@@ -1,7 +1,7 @@
 # Pulse Analytics — Project Status
 
 > **Last updated:** 2026-04-02  
-> **Current Phase:** Phase 1 — Foundation (v0.1)  
+> **Current Phase:** Phase 2 — Feature Expansion (v0.2)  
 > **Stack:** Next.js 16 · TypeScript · Tailwind CSS v4 · Prisma (SQLite) · NextAuth v5 · Recharts · Zustand
 
 ---
@@ -61,7 +61,16 @@
 
 ---
 
-## 🔲 Next Up — Phase 2 (Feature Expansion)
+## ✅ Completed
+
+### Phase 2 — Feature Expansion (v0.2)
+- [x] **Global date range filter** — 7D/30D/90D/6M/1Y pill tabs in TopHeader, Zustand store (`useDateRange`)
+- [x] **Dark mode toggle** — Full M3 token dark palette, persisted to `localStorage` via Zustand (`useTheme`)
+- [x] **Mobile-responsive sidebar** — Hamburger menu on small screens, slide-in drawer with backdrop overlay
+- [x] **CSV export** — "Export CSV" button on Posts page, downloads filtered posts as `.csv`
+- [x] **Charts wired to date range** — ReachOverTime, AdSpend, FollowerGrowth, EngagementRate all react to filter
+- [x] **TypeScript zero-error build** — Fixed duplicate `layout.tsx` exports, Recharts formatter types
+
 
 ### Priority 1: Real Data Pipeline
 - [ ] Generic OAuth sync engine — pull real metrics from connected platforms

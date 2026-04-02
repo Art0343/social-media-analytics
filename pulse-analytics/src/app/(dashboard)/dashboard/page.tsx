@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { kpiCards, platformPerformanceData } from '@/lib/demo-data';
 import { formatNumber, formatCurrency } from '@/lib/utils';
+import { useDateRange } from '@/lib/stores/useDateRange';
 
 const ReachOverTimeChart = dynamic(() => import('@/components/charts/ReachOverTimeChart'), { ssr: false });
 const PlatformMixChart = dynamic(() => import('@/components/charts/PlatformMixChart'), { ssr: false });
@@ -11,6 +12,7 @@ const AdSpendChart = dynamic(() => import('@/components/charts/AdSpendChart'), {
 const FollowerGrowthChart = dynamic(() => import('@/components/charts/FollowerGrowthChart'), { ssr: false });
 
 export default function DashboardPage() {
+  const { label } = useDateRange();
   return (
     <section className="p-8 space-y-8">
       {/* KPI Cards */}
@@ -44,7 +46,7 @@ export default function DashboardPage() {
           <div className="flex justify-between items-center mb-6">
             <div>
               <h4 className="text-xl font-bold text-on-surface mb-1">Reach Over Time</h4>
-              <p className="text-secondary text-xs">Comparison between Organic and Paid channels (Last 6 Months)</p>
+              <p className="text-secondary text-xs">Comparison between Organic and Paid channels ({label})</p>
             </div>
           </div>
           <ReachOverTimeChart />

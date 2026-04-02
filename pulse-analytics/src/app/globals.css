@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Tailwind v4: use 'class' strategy so dark: utilities activate on html.dark */
+@variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   /* Material You 3 Color Tokens */
   --color-on-primary: #ffffff;

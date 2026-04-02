@@ -1,18 +1,18 @@
-// ============================
-// Demo / Mock data for all pages
-// ============================
+// Demo / Mock data for development and testing
+// Types are defined in @/lib/types
 
-export interface KpiData {
-  title: string;
-  value: string;
-  delta: string;
-  deltaPositive: boolean;
-  icon: string;
-  iconBg: string;
-  iconColor: string;
-}
+export {
+  type KpiData,
+  type PlatformMixItem,
+  type PlatformPerformanceItem,
+  type Post,
+  type InsightCard,
+  type ROITableItem,
+  type ConnectedAccount,
+  type DemoPlatform,
+} from '@/lib/types';
 
-export const kpiCards: KpiData[] = [
+export const kpiCards = [
   {
     title: 'Organic Reach',
     value: '260.5K',
@@ -51,15 +51,7 @@ export const kpiCards: KpiData[] = [
   },
 ];
 
-export interface PlatformMixItem {
-  name: string;
-  slug: string;
-  value: number;
-  color: string;
-  icon: string;
-}
-
-export const platformMixData: PlatformMixItem[] = [
+export const platformMixData = [
   { name: 'Instagram', slug: 'instagram', value: 32.0, color: '#E1306C', icon: 'photo_camera' },
   { name: 'TikTok', slug: 'tiktok', value: 31.2, color: '#000000', icon: 'music_note' },
   { name: 'YouTube', slug: 'youtube', value: 15.1, color: '#FF0000', icon: 'smart_display' },
@@ -67,112 +59,7 @@ export const platformMixData: PlatformMixItem[] = [
   { name: 'LinkedIn', slug: 'linkedin', value: 7.9, color: '#0A66C2', icon: 'work' },
 ];
 
-export interface ReachOverTimeItem {
-  month: string;
-  organic: number;
-  paid: number;
-  combined: number;
-}
-
-export const reachOverTimeData: ReachOverTimeItem[] = [
-  { month: 'Oct', organic: 120000, paid: 45000, combined: 165000 },
-  { month: 'Nov', organic: 145000, paid: 58000, combined: 203000 },
-  { month: 'Dec', organic: 135000, paid: 52000, combined: 187000 },
-  { month: 'Jan', organic: 180000, paid: 68000, combined: 248000 },
-  { month: 'Feb', organic: 220000, paid: 82000, combined: 302000 },
-  { month: 'Mar', organic: 260000, paid: 95000, combined: 355000 },
-];
-
-export interface EngRateItem {
-  platform: string;
-  slug: string;
-  rate: number;
-  color: string;
-}
-
-export const engagementRateData: EngRateItem[] = [
-  { platform: 'IG', slug: 'instagram', rate: 5.2, color: '#E1306C' },
-  { platform: 'FB', slug: 'facebook', rate: 2.8, color: '#1877F2' },
-  { platform: 'LI', slug: 'linkedin', rate: 6.1, color: '#0A66C2' },
-  { platform: 'YT', slug: 'youtube', rate: 4.5, color: '#FF0000' },
-  { platform: 'TK', slug: 'tiktok', rate: 7.1, color: '#000000' },
-];
-
-export interface AdSpendItem {
-  month: string;
-  instagram: number;
-  facebook: number;
-  youtube: number;
-  linkedin: number;
-  tiktok: number;
-}
-
-export const adSpendData: AdSpendItem[] = [
-  { month: 'Oct', instagram: 280, facebook: 200, youtube: 120, linkedin: 80, tiktok: 60 },
-  { month: 'Nov', instagram: 350, facebook: 250, youtube: 150, linkedin: 100, tiktok: 80 },
-  { month: 'Dec', instagram: 480, facebook: 320, youtube: 180, linkedin: 120, tiktok: 100 },
-  { month: 'Jan', instagram: 550, facebook: 380, youtube: 200, linkedin: 150, tiktok: 120 },
-  { month: 'Feb', instagram: 600, facebook: 400, youtube: 210, linkedin: 200, tiktok: 140 },
-  { month: 'Mar', instagram: 650, facebook: 420, youtube: 220, linkedin: 270, tiktok: 160 },
-];
-
-export interface FollowerGrowthItem {
-  month: string;
-  instagram: number;
-  tiktok: number;
-  youtube: number;
-  facebook: number;
-  linkedin: number;
-}
-
-export const followerGrowthData: FollowerGrowthItem[] = [
-  { month: 'Oct', instagram: 12000, tiktok: 8000, youtube: 5000, facebook: 9500, linkedin: 3000 },
-  { month: 'Nov', instagram: 13500, tiktok: 10200, youtube: 5800, facebook: 9800, linkedin: 3200 },
-  { month: 'Dec', instagram: 14200, tiktok: 12400, youtube: 6200, facebook: 10000, linkedin: 3500 },
-  { month: 'Jan', instagram: 15800, tiktok: 15000, youtube: 6800, facebook: 10200, linkedin: 3800 },
-  { month: 'Feb', instagram: 17000, tiktok: 18500, youtube: 7400, facebook: 10500, linkedin: 4100 },
-  { month: 'Mar', instagram: 18500, tiktok: 22000, youtube: 8200, facebook: 10800, linkedin: 4500 },
-];
-
-export interface PlatformPerformanceItem {
-  name: string;
-  slug: string;
-  color: string;
-  icon: string;
-  orgReach: number;
-  paidReach: number;
-  spend: number;
-}
-
-export const platformPerformanceData: PlatformPerformanceItem[] = [
-  { name: 'Instagram', slug: 'instagram', color: '#E1306C', icon: 'photo_camera', orgReach: 71000, paidReach: 52000, spend: 650 },
-  { name: 'TikTok', slug: 'tiktok', color: '#000000', icon: 'music_note', orgReach: 105000, paidReach: 15000, spend: 160 },
-  { name: 'YouTube', slug: 'youtube', color: '#FF0000', icon: 'smart_display', orgReach: 40000, paidReach: 18000, spend: 220 },
-  { name: 'Facebook', slug: 'facebook', color: '#1877F2', icon: 'thumb_up', orgReach: 26000, paidReach: 27000, spend: 420 },
-  { name: 'LinkedIn', slug: 'linkedin', color: '#0A66C2', icon: 'work', orgReach: 18500, paidReach: 12000, spend: 270 },
-];
-
-export interface PostItem {
-  id: string;
-  platform: string;
-  platformSlug: string;
-  platformColor: string;
-  date: string;
-  type: string;
-  typeBadgeColor: string;
-  caption: string;
-  orgReach: number;
-  impressions: number;
-  likes: number;
-  comments: number;
-  shares: number;
-  saves: number;
-  engRate: number;
-  isBoosted: boolean;
-  spend: number | null;
-}
-
-export const postsData: PostItem[] = [
+export const postsData = [
   {
     id: '1', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
     date: '2026-03-22', type: 'REEL', typeBadgeColor: 'bg-purple-100 text-purple-700',
@@ -217,19 +104,7 @@ export const postsData: PostItem[] = [
   },
 ];
 
-export interface InsightCard {
-  id: string;
-  icon: string;
-  iconBg: string;
-  iconColor: string;
-  label: string;
-  labelColor: string;
-  title: string;
-  description: string;
-  extra?: string;
-}
-
-export const insightCards: InsightCard[] = [
+export const insightCards = [
   {
     id: 'top-performing',
     icon: 'rocket_launch',
@@ -272,65 +147,34 @@ export const insightCards: InsightCard[] = [
   },
 ];
 
-export interface ROITableItem {
-  id: string;
-  title: string;
-  platform: string;
-  platformSlug: string;
-  platformColor: string;
-  type: string;
-  organicER: string;
-  paidSpend: string;
-  cpe: string;
-  totalReach: string;
-  roiScore: number;
-  roiColor: string;
-  recommendation: string;
-  recColor: string;
-  recBg: string;
-}
-
-export const roiTableData: ROITableItem[] = [
+export const roiTableData = [
   {
     id: '1', title: 'New product launch', platform: 'Instagram', platformSlug: 'instagram',
-    platformColor: '#E1306C', type: 'Carousel', organicER: '5.4%', paidSpend: '$1,240',
-    cpe: '$0.12', totalReach: '842k', roiScore: 92, roiColor: 'text-tertiary',
+    platformColor: '#E1306C', type: 'Carousel', organicER: '5.4%', paidSpend: '₹1,240',
+    cpe: '₹0.12', totalReach: '842k', roiScore: 92, roiColor: 'text-tertiary',
     recommendation: 'Scale up', recColor: 'text-tertiary', recBg: 'bg-tertiary/10',
   },
   {
     id: '2', title: 'Day in my life', platform: 'TikTok', platformSlug: 'tiktok',
-    platformColor: '#000000', type: 'Video', organicER: '7.2%', paidSpend: '$300',
-    cpe: '$0.08', totalReach: '1.2M', roiScore: 87, roiColor: 'text-tertiary',
+    platformColor: '#000000', type: 'Video', organicER: '7.2%', paidSpend: '₹300',
+    cpe: '₹0.08', totalReach: '1.2M', roiScore: 87, roiColor: 'text-tertiary',
     recommendation: 'Boost this', recColor: 'text-primary', recBg: 'bg-primary/10',
   },
   {
     id: '3', title: 'Replying to the haters', platform: 'TikTok', platformSlug: 'tiktok',
-    platformColor: '#000000', type: 'Video', organicER: '8.1%', paidSpend: '$0',
+    platformColor: '#000000', type: 'Video', organicER: '8.1%', paidSpend: '₹0',
     cpe: 'n/a', totalReach: '54k', roiScore: 94, roiColor: 'text-tertiary',
     recommendation: 'Boost this', recColor: 'text-primary', recBg: 'bg-primary/10',
   },
   {
     id: '4', title: '3 mistakes', platform: 'Facebook', platformSlug: 'facebook',
-    platformColor: '#1877F2', type: 'Single Image', organicER: '0.8%', paidSpend: '$420',
-    cpe: '$2.40', totalReach: '12k', roiScore: 48, roiColor: 'text-error',
+    platformColor: '#1877F2', type: 'Single Image', organicER: '0.8%', paidSpend: '₹420',
+    cpe: '₹2.40', totalReach: '12k', roiScore: 48, roiColor: 'text-error',
     recommendation: 'Cut budget', recColor: 'text-error', recBg: 'bg-error/10',
   },
 ];
 
-export interface ConnectedAccountData {
-  id: string;
-  platform: string;
-  platformSlug: string;
-  platformColor: string;
-  icon: string;
-  accountName: string;
-  accountHandle?: string;
-  isConnected: boolean;
-  lastSynced?: string;
-  description?: string;
-}
-
-export const connectedAccountsData: ConnectedAccountData[] = [
+export const connectedAccountsData = [
   {
     id: '1', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
     icon: 'photo_camera', accountName: 'Instagram Business', accountHandle: '@pulse_digital_official',
@@ -378,17 +222,7 @@ export const connectedAccountsData: ConnectedAccountData[] = [
   },
 ];
 
-export interface DemoPlatform {
-  id: string;
-  name: string;
-  slug: string;
-  brandColor: string;
-  icon: string;
-  isActive: boolean;
-  isBuiltIn: boolean;
-}
-
-export const demoPlatforms: DemoPlatform[] = [
+export const demoPlatforms = [
   { id: 'p1', name: 'Instagram', slug: 'instagram', brandColor: '#E1306C', icon: 'photo_camera', isActive: true, isBuiltIn: true },
   { id: 'p2', name: 'Facebook', slug: 'facebook', brandColor: '#1877F2', icon: 'thumb_up', isActive: true, isBuiltIn: true },
   { id: 'p3', name: 'LinkedIn', slug: 'linkedin', brandColor: '#0A66C2', icon: 'work', isActive: true, isBuiltIn: true },
@@ -398,4 +232,40 @@ export const demoPlatforms: DemoPlatform[] = [
   { id: 'p7', name: 'Google Ads', slug: 'google-ads', brandColor: '#4285F4', icon: 'ads_click', isActive: true, isBuiltIn: true },
   { id: 'p8', name: 'Google Maps', slug: 'google-maps', brandColor: '#4285F4', icon: 'location_on', isActive: true, isBuiltIn: true },
   { id: 'p9', name: 'TikTok', slug: 'tiktok', brandColor: '#000000', icon: 'music_note', isActive: true, isBuiltIn: true },
+];
+
+// Chart data exports for backward compatibility
+export const adSpendData = [
+  { month: 'Oct', instagram: 420, facebook: 280, youtube: 120, linkedin: 90, tiktok: 160 },
+  { month: 'Nov', instagram: 580, facebook: 320, youtube: 140, linkedin: 110, tiktok: 180 },
+  { month: 'Dec', instagram: 520, facebook: 290, youtube: 100, linkedin: 85, tiktok: 150 },
+  { month: 'Jan', instagram: 680, facebook: 340, youtube: 160, linkedin: 130, tiktok: 220 },
+  { month: 'Feb', instagram: 820, facebook: 380, youtube: 180, linkedin: 140, tiktok: 240 },
+  { month: 'Mar', instagram: 950, facebook: 420, youtube: 220, linkedin: 160, tiktok: 270 },
+];
+
+export const engagementRateData = [
+  { platform: 'IG', slug: 'instagram', rate: 5.2, color: '#E1306C' },
+  { platform: 'FB', slug: 'facebook', rate: 2.8, color: '#1877F2' },
+  { platform: 'LI', slug: 'linkedin', rate: 6.1, color: '#0A66C2' },
+  { platform: 'YT', slug: 'youtube', rate: 4.5, color: '#FF0000' },
+  { platform: 'TK', slug: 'tiktok', rate: 7.1, color: '#000000' },
+];
+
+export const followerGrowthData = [
+  { month: 'Oct', instagram: 12500, tiktok: 4200, youtube: 850 },
+  { month: 'Nov', instagram: 14200, tiktok: 5800, youtube: 920 },
+  { month: 'Dec', instagram: 13800, tiktok: 6200, youtube: 880 },
+  { month: 'Jan', instagram: 18400, tiktok: 8400, youtube: 1100 },
+  { month: 'Feb', instagram: 22100, tiktok: 11200, youtube: 1350 },
+  { month: 'Mar', instagram: 26300, tiktok: 14500, youtube: 1680 },
+];
+
+export const reachOverTimeData = [
+  { month: 'Oct', organic: 120000, paid: 45000, combined: 165000 },
+  { month: 'Nov', organic: 145000, paid: 58000, combined: 203000 },
+  { month: 'Dec', organic: 135000, paid: 52000, combined: 187000 },
+  { month: 'Jan', organic: 180000, paid: 68000, combined: 248000 },
+  { month: 'Feb', organic: 220000, paid: 82000, combined: 302000 },
+  { month: 'Mar', organic: 260000, paid: 95000, combined: 355000 },
 ];

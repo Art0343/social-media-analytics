@@ -91,7 +91,7 @@ export default function PaidClient({ data }: PaidClientProps) {
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
             <p className="text-secondary text-xs font-bold uppercase tracking-widest mb-2">Avg CPE</p>
-            <h3 className="text-3xl font-black text-on-surface">${avgCPE.toFixed(2)}</h3>
+            <h3 className="text-3xl font-black text-on-surface">₹{avgCPE.toFixed(2)}</h3>
             <span className={`text-xs font-medium flex items-center gap-1 mt-1 ${!cpeDelta.positive ? 'text-tertiary' : 'text-error'}`}>
               <span className="material-symbols-outlined text-[14px]">{!cpeDelta.positive ? 'arrow_downward' : 'arrow_upward'}</span>
               {cpeDelta.value} {cpeDelta.positive ? 'higher' : 'improved'}

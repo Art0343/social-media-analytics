@@ -1,7 +1,7 @@
 # Pulse Analytics — Implementation Plan
 
 > **Project:** Social Media Analytics SaaS Dashboard  
-> **Version:** 0.2 (Phase 2.5 Complete)  
+> **Version:** 0.2 (Phase 2.5 Complete + Project Organization + INR Currency)  
 > **Last Updated:** 2026-04-02
 
 ---
@@ -12,7 +12,7 @@
 - **Framework:** Next.js 16 with App Router
 - **Language:** TypeScript 5
 - **Styling:** Tailwind CSS v4 with Material Design 3 tokens
-- **Database:** Prisma ORM with SQLite (PostgreSQL planned)
+- **Database:** Prisma ORM with PostgreSQL (Neon) ✅
 - **Auth:** NextAuth v5 with Google OAuth
 - **State:** Zustand for global state
 - **Charts:** Recharts for data visualization
@@ -84,6 +84,7 @@ report/page.tsx        → ReportClient.tsx
 | CSV Export | Client-side CSV generation from filtered posts |
 | Responsive Charts | Recharts with ResponsiveContainer |
 | Encrypted Tokens | AES-256-GCM for OAuth tokens in DB |
+| Currency | INR (₹) | `formatCurrency()` helper uses Indian Rupees |
 | TypeScript Strict | Zero `any` types, full type coverage |
 
 ---
@@ -236,7 +237,7 @@ const groupedSummaries = await prisma.platformDailySummary.groupBy({
 - [ ] Shareable public report links
 
 ### 7.4 Production Hardening (Priority 4)
-- [ ] PostgreSQL migration (Neon)
+- [x] PostgreSQL migration (Neon)
 - [ ] RBAC enforcement
 - [ ] Multi-workspace switching
 - [ ] Rate limiting
@@ -282,13 +283,18 @@ src/
 │   └── login/
 │       └── page.tsx
 ├── components/
-│   ├── charts/                   # Recharts components
-│   ├── layout/                   # Sidebar, TopHeader
-│   └── ui/                       # Reusable UI
+│   ├── charts/                   # Recharts components (barrel exports)
+│   ├── layout/                   # Sidebar, TopHeader (barrel exports)
+│   ├── ui/                       # Reusable UI (barrel exports)
+│   ├── platforms/                # Platform icons (barrel exports)
+│   ├── pdf/                      # PDF components (barrel exports)
+│   ├── providers/                # Context providers (barrel exports)
+│   └── index.ts                  # Main components barrel export
 ├── lib/
 │   ├── auth.ts                   # NextAuth config
 │   ├── prisma.ts                 # Prisma singleton
 │   ├── encryption.ts             # AES-256 utilities
+│   ├── types/                    # Shared TypeScript types
 │   └── demo-data.ts              # Mock data (deprecated)
 └── middleware.ts                 # Auth protection
 ```

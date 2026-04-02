@@ -95,7 +95,7 @@ async function getReportData(days: number = 30, workspaceId: string = 'demo-work
       title: `"${post.caption.slice(0, 30)}${post.caption.length > 30 ? '...' : ''}"`,
       platform: platform?.name || post.platformSlug,
       platformColor: platform?.brandColor || platformColorMap[post.platformSlug] || '#666',
-      meta: `$${post.paidSpend?.toFixed(0) || '0'} Spend`,
+      meta: `₹${post.paidSpend?.toFixed(0) || '0'} Spend`,
       value: `${roas}×`,
       label: 'ROAS',
     };
@@ -143,7 +143,7 @@ async function getReportData(days: number = 30, workspaceId: string = 'demo-work
   const insights = [
     { type: 'success' as const, text: `TikTok drove ${tiktokPercent}% of total organic reach — prioritize short-form video content.` },
     { type: 'success' as const, text: `Average engagement rate of ${avgEngRate.toFixed(1)}% is ${avgEngRate > 5 ? 'above' : 'below'} industry benchmark.` },
-    { type: avgEngRate > 5 ? 'success' as const : 'warning' as const, text: totalAdSpend > 1000 ? `Ad spend of $${totalAdSpend.toFixed(0)} generated ${totalPaidReach >= 1000 ? `${(totalPaidReach / 1000).toFixed(1)}K` : totalPaidReach} paid reach.` : 'Consider increasing ad budget to amplify top-performing organic content.' },
+    { type: avgEngRate > 5 ? 'success' as const : 'warning' as const, text: totalAdSpend > 1000 ? `Ad spend of ₹${totalAdSpend.toFixed(0)} generated ${totalPaidReach >= 1000 ? `${(totalPaidReach / 1000).toFixed(1)}K` : totalPaidReach} paid reach.` : 'Consider increasing ad budget to amplify top-performing organic content.' },
     { type: 'warning' as const, text: 'Review underperforming platforms and reallocate budget to high-ROI channels.' },
   ];
 
@@ -152,7 +152,7 @@ async function getReportData(days: number = 30, workspaceId: string = 'demo-work
     stats: {
       totalOrganicReach: totalOrganicReach >= 1000 ? `${(totalOrganicReach / 1000).toFixed(0)}K` : String(totalOrganicReach),
       totalPaidReach: totalPaidReach >= 1000 ? `${(totalPaidReach / 1000).toFixed(0)}K` : String(totalPaidReach),
-      totalAdSpend: `$${totalAdSpend.toFixed(0)}`,
+      totalAdSpend: `₹${totalAdSpend.toFixed(0)}`,
       avgEngRate: `${avgEngRate.toFixed(1)}%`,
       totalFollowers: totalFollowers >= 1000 ? `${(totalFollowers / 1000).toFixed(1)}K` : String(totalFollowers),
       roas: '3.6×',

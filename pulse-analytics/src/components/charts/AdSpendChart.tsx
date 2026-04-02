@@ -35,11 +35,11 @@ export default function AdSpendChart() {
           tick={{ fontSize: 10, fill: '#727785' }}
           axisLine={false}
           tickLine={false}
-          tickFormatter={(v) => `$${v}`}
+          tickFormatter={(v) => `₹${v}`}
         />
         <Tooltip
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          formatter={(value: any, name: any) => [`$${value}`, String(name).charAt(0).toUpperCase() + String(name).slice(1)]}
+          formatter={(value: any, name: any) => [`₹${value}`, String(name).charAt(0).toUpperCase() + String(name).slice(1)]}
           contentStyle={{
             background: 'rgba(255,255,255,0.95)',
             border: 'none',

@@ -155,7 +155,7 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
           <EngagementRateChart />
         </div>
         <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
-          <h4 className="text-lg font-bold text-on-surface mb-6">Ad Spend ($)</h4>
+          <h4 className="text-lg font-bold text-on-surface mb-6">Ad Spend (₹)</h4>
           <AdSpendChart />
         </div>
         <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">

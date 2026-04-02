@@ -13,6 +13,14 @@ function isPublicPath(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // ── Development bypass ──────────────────────────────────────────────────────
+  // Skip auth in dev so all pages are visible without OAuth credentials.
+  // Remove this block (or set NODE_ENV=production) to enforce auth.
+  if (process.env.NODE_ENV === 'development') {
+    return NextResponse.next();
+  }
+  // ────────────────────────────────────────────────────────────────────────────
+
   // Allow public paths
   if (isPublicPath(pathname)) {
     return NextResponse.next();

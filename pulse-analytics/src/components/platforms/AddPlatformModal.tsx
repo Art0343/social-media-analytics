@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-interface PlatformFormData {
+export interface PlatformFormData {
   name: string;
   slug: string;
   brandColor: string;

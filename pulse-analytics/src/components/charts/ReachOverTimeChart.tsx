@@ -24,7 +24,7 @@ export default function ReachOverTimeChart() {
           tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`}
         />
         <Tooltip
-          formatter={(value: number) => [`${(value / 1000).toFixed(1)}K`, '']}
+          formatter={(value: any) => [`${(Number(value) / 1000).toFixed(1)}K`, '']}
           contentStyle={{
             background: 'rgba(255,255,255,0.95)',
             border: 'none',

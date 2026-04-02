@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { demoPlatforms } from '@/lib/demo-data';
-import AddPlatformModal from '@/components/platforms/AddPlatformModal';
+import AddPlatformModal, { PlatformFormData } from '@/components/platforms/AddPlatformModal';
 
 interface Platform {
   id: string;
@@ -20,7 +20,7 @@ export default function PlatformRegistryPage() {
   const [editingPlatform, setEditingPlatform] = useState<Platform | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
-  const handleAddPlatform = (data: Record<string, unknown>) => {
+  const handleAddPlatform = (data: PlatformFormData) => {
     const newPlatform: Platform = {
       id: `p${Date.now()}`,
       name: data.name as string,

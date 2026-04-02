@@ -23,7 +23,7 @@ export default function AdSpendChart() {
           tickFormatter={(v) => `$${v}`}
         />
         <Tooltip
-          formatter={(value: number, name: string) => [`$${value}`, name.charAt(0).toUpperCase() + name.slice(1)]}
+          formatter={(value: any, name: any) => [`$${value}`, String(name).charAt(0).toUpperCase() + String(name).slice(1)]}
           contentStyle={{
             background: 'rgba(255,255,255,0.95)',
             border: 'none',

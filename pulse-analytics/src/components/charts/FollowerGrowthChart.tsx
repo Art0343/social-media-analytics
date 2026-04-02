@@ -31,7 +31,7 @@ export default function FollowerGrowthChart() {
           tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`}
         />
         <Tooltip
-          formatter={(value: number) => [`${(value / 1000).toFixed(1)}K followers`, '']}
+          formatter={(value: any) => [`${(Number(value) / 1000).toFixed(1)}K followers`, '']}
           contentStyle={{
             background: 'rgba(255,255,255,0.95)',
             border: 'none',

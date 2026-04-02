@@ -20,7 +20,7 @@ export default function EngagementRateChart() {
           tickFormatter={(v) => `${v}%`}
         />
         <Tooltip
-          formatter={(value: number) => [`${value.toFixed(1)}%`, 'Engagement Rate']}
+          formatter={(value: any) => [`${Number(value).toFixed(1)}%`, 'Engagement Rate']}
           contentStyle={{
             background: 'rgba(255,255,255,0.95)',
             border: 'none',

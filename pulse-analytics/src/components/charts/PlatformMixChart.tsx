@@ -24,7 +24,7 @@ export default function PlatformMixChart() {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number) => [`${value.toFixed(1)}%`, '']}
+              formatter={(value: any) => [`${Number(value).toFixed(1)}%`, '']}
               contentStyle={{
                 background: 'rgba(255,255,255,0.95)',
                 border: 'none',

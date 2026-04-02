@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  workspaces    WorkspaceUser[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Workspace {
+  id                String               @id @default(cuid())
+  name              String
+  logoUrl           String?
+  allowedDomain     String?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  users             WorkspaceUser[]
+  connectedAccounts ConnectedAccount[]
+  posts             Post[]
+  platformSummaries PlatformDailySummary[]
+  aiReports         AIInsightReport[]
+}
+
+model WorkspaceUser {
+  id          String    @id @default(cuid())
+  userId      String
+  workspaceId String
+  role        String    @default("MEMBER")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workspaceId])
+}
+
+model SocialPlatform {
+  id              String   @id @default(cuid())
+  name            String   @unique
+  slug            String   @unique
+  iconUrl         String   @default("")
+  brandColor      String   @default("#000000")
+  isActive        Boolean  @default(true)
+  isBuiltIn       Boolean  @default(false)
+
+  clientId        String   @default("")
+  clientSecret    String   @default("")
+  authUrl         String   @default("")
+  tokenUrl        String   @default("")
+  scopes          String   @default("")
+  redirectUri     String   @default("")
+
+  apiBaseUrl      String   @default("")
+  fieldMappings   String   @default("{}")
+  webhookEndpoint String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  connectedAccounts ConnectedAccount[]
+}
+
+model ConnectedAccount {
+  id               String    @id @default(cuid())
+  workspaceId      String
+  platformId       String
+  accountName      String
+  accountHandle    String?
+  accessToken      String    @default("")
+  refreshToken     String?
+  expiresAt        DateTime?
+  lastSynced       DateTime?
+  status           String    @default("CONNECTED")
+  workspace        Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  platform         SocialPlatform @relation(fields: [platformId], references: [id], onDelete: Cascade)
+  posts            Post[]
+}
+
+model Post {
+  id                 String           @id @default(cuid())
+  workspaceId        String
+  connectedAccountId String
+  platformSlug       String
+  postType           String
+  externalId         String
+  caption            String
+  publishedAt        DateTime
+  orgReach           Int              @default(0)
+  impressions        Int              @default(0)
+  likes              Int              @default(0)
+  comments           Int              @default(0)
+  shares             Int              @default(0)
+  saves              Int              @default(0)
+  engRate            Float            @default(0)
+  isBoosted          Boolean          @default(false)
+  paidSpend          Float?
+  paidReach          Int?
+  paidCPE            Float?
+  roiScore           Int?
+  rawData            String           @default("{}")
+  workspace          Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  connectedAccount   ConnectedAccount @relation(fields: [connectedAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([externalId, platformSlug])
+}
+
+model PlatformDailySummary {
+  id          String    @id @default(cuid())
+  workspaceId String
+  platformSlug String
+  date        DateTime
+  orgReach    Int       @default(0)
+  paidReach   Int       @default(0)
+  impressions Int       @default(0)
+  engRate     Float     @default(0)
+  adSpend     Float     @default(0)
+  followers   Int       @default(0)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, platformSlug, date])
+}
+
+model AIInsightReport {
+  id              String    @id @default(cuid())
+  workspaceId     String
+  period          String
+  summary         String
+  topContent      String    @default("[]")
+  wastedSpend     String    @default("[]")
+  boostCandidates String    @default("[]")
+  budgetReco      String    @default("[]")
+  roiTable        String    @default("[]")
+  contentPlan     String    @default("[]")
+  generatedAt     DateTime  @default(now())
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}

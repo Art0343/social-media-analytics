@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pulse Analytics 📈
 
-## Getting Started
+> A production-grade Social Media Analytics SaaS dashboard built with Next.js 16.
 
-First, run the development server:
+**Pulse Analytics** is a unified dashboard that aggregates metrics from Instagram, TikTok, YouTube, Facebook, LinkedIn (and custom platforms). It features real-time charts, global date filtering, full dark mode, and an AI insights engine.
 
+---
+
+## 🛠 Tech Stack
+
+- **Framework:** Next.js 16 (App Router) & React 19
+- **Styling:** Tailwind CSS v4 & Material Design 3 UI tokens
+- **Database:** Prisma ORM with SQLite (ready for PostgreSQL migration)
+- **Authentication:** NextAuth.js v5 (Google OAuth)
+- **State Management:** Zustand (for Global Date Range & Theme persistence)
+- **Charts:** Recharts
+- **Icons:** Material Symbols Outlined
+
+---
+
+## ✨ Features (v0.2 - Current State)
+
+- **Comprehensive Dashboard:** Reach, Engagement, Ad Spend, and Follower Growth metrics.
+- **Global Date Range Filter:** 7D / 30D / 90D / 6M / 1Y toggles that dynamically update all charts and UI components.
+- **Responsive Design:** Fully responsive sidebar with mobile hamburger menu and slide-in drawer.
+- **Dark Mode:** System and manual toggle support persisted to `localStorage`.
+- **Export Capabilities:** CSV exporting for post analytics.
+- **Platform Registry:** Full CRUD scaffolding for adding new social platforms to track.
+
+> **Note to team:** The UI is currently built and populated with high-quality mock data (`src/lib/demo-data.ts`). The immediate next step is to hook up the frontend components to our Prisma Database.
+
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to get the project running locally for development.
+
+### 1. Clone & Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone https://github.com/your-username/pulse-analytics.git
+cd pulse-analytics
+
+# Install dependencies
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment Variables
+Copy the example environment file and fill in the necessary values:
+```bash
+cp .env.example .env
+```
+Key required variables:
+- `DATABASE_URL`: Setup default to `file:./dev.db`
+- `NEXTAUTH_SECRET`: Secret for NextAuth
+- `ENCRYPTION_KEY`: A 32-character string for AES-256 data encryption (e.g., storing API keys/tokens).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Database Setup (Prisma)
+Initialize the SQLite database and seed it with demo data:
+```bash
+# Push the schema to the database (creates tables)
+npx prisma db push
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Seed the database
+npx prisma db seed
+```
 
-## Learn More
+### 4. Run the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser. The app includes a dev-environment bypass in the middleware so you can view all authenticated routes locally without needing Google OAuth configured.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📂 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+pulse-analytics/
+├── prisma/
+│   ├── schema.prisma          # Database schema (Models: User, Workspace, Platform, Post, etc.)
+│   └── seed.ts                # Database seeder
+├── src/
+│   ├── app/
+│   │   ├── (dashboard)/       # Authenticated layout group (Dashboard, Posts, Paid, Insights)
+│   │   ├── api/               # API Routes (auth, platforms CRUD)
+│   │   └── login/             # Public login page
+│   ├── components/
+│   │   ├── charts/            # Recharts components (ReachOverTime, AdSpend, etc.)
+│   │   ├── layout/            # Sidebar, TopHeader
+│   │   ├── providers/         # NextAuth SessionProvider, TanStack Query
+│   │   └── ui/                # Generic reusable components (Modal, SkeletonLoader, StatusBadge)
+│   ├── lib/
+│   │   ├── auth.ts            # NextAuth configuration
+│   │   ├── demo-data.ts       # Mock data currently driving the UI
+│   │   ├── encryption.ts      # AES-256 encryption utilities
+│   │   ├── prisma.ts          # Prisma client singleton
+│   │   ├── stores/            # Zustand stores (useTheme, useDateRange)
+│   │   └── utils.ts           # Tailwind cn() and number/currency formatters
+│   └── middleware.ts          # Route protection and auth middleware
+└── package.json
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🗺 Roadmap & Next Steps
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you are picking up work on this repository, here are the immediate priorities:
+
+1. **Frontend-to-DB Hookup (Phase 2.5):** Replace `demo-data.ts` arrays inside pages (`dashboard/page.tsx`, `posts/page.tsx`, etc.) with real React Server Component fetches using Prisma.
+2. **Platform Management:** Connect the "Add Platform" modal (`src/components/platforms/AddPlatformModal.tsx`) logic to save OAuth tokens to the database.
+3. **Authentication:** Remove the development bypass in `src/middleware.ts` and set up Google OAuth credentials so login is securely enforced.
+4. **Real Data Pipeline (Phase 3):** Implement background chron jobs and API calls to Instagram/YouTube/TikTok to pull real metrics down and store them in the DB.
+
+---
+
+## 🤝 Contributing
+
+- **Strict TypeScript:** Run `npm run type-check` (or `npx tsc --noEmit`) before opening a PR. The project currently has zero TS errors.
+- **Tailwind v4:** Note the project uses Tailwind v4 styling paradigms (`globals.css` with `@theme` configurations).
+- **Component Architecture:** Build small, reusable components. Keep server fetches separate from client interactivity where possible using the Next.js App Router paradigms.

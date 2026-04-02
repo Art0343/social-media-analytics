@@ -189,3 +189,95 @@ body {
 .animate-slide-in-right {
   animation: slideInRight 0.4s ease-out both;
 }
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* =============================================
+   DARK MODE — data-theme="dark" overrides
+   ============================================= */
+[data-theme="dark"] {
+  /* Surfaces */
+  --color-surface: #0d0f1e;
+  --color-background: #0d0f1e;
+  --color-surface-bright: #1a1c2e;
+  --color-surface-dim: #0a0c1a;
+  --color-surface-container-lowest: #111326;
+  --color-surface-container-low: #161829;
+  --color-surface-container: #1e2035;
+  --color-surface-container-high: #252740;
+  --color-surface-container-highest: #2d3050;
+  --color-surface-variant: #2a2d4a;
+
+  /* On-surface (text) */
+  --color-on-surface: #e2e4f3;
+  --color-on-background: #e2e4f3;
+  --color-on-surface-variant: #9aa0c0;
+
+  /* Primary */
+  --color-primary: #82b0ff;
+  --color-on-primary: #00315e;
+  --color-primary-container: #1a3a6e;
+  --color-primary-fixed: #1a2d55;
+  --color-primary-fixed-dim: #3a5a9e;
+  --color-on-primary-fixed: #ccdeff;
+  --color-on-primary-container: #ccdeff;
+  --color-inverse-primary: #0058be;
+
+  /* Secondary */
+  --color-secondary: #9aaac2;
+  --color-secondary-container: #2a3a52;
+  --color-secondary-fixed: #253448;
+  --color-on-secondary: #1a2a3e;
+  --color-on-secondary-container: #c0d0e8;
+
+  /* Tertiary */
+  --color-tertiary: #3edccc;
+  --color-tertiary-container: #00403a;
+  --color-on-tertiary: #003830;
+  --color-on-tertiary-container: #b0f5ef;
+
+  /* Error */
+  --color-error: #ffb3ae;
+  --color-error-container: #7a0d0d;
+  --color-on-error: #680003;
+  --color-on-error-container: #ffdad6;
+
+  /* Outline */
+  --color-outline: #4a4e6e;
+  --color-outline-variant: #30344e;
+
+  /* Inverse */
+  --color-inverse-surface: #e2e4f3;
+  --color-inverse-on-surface: #2a2e40;
+}
+
+[data-theme="dark"] body {
+  background-color: #0d0f1e;
+  color: #e2e4f3;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #2d3050;
+}
+
+[data-theme="dark"] .hero-gradient {
+  background: linear-gradient(135deg, #0d0f1e 0%, #1a3a6e 100%);
+}
+
+[data-theme="dark"] .glass-panel {
+  background: rgba(18, 20, 42, 0.8);
+}
+

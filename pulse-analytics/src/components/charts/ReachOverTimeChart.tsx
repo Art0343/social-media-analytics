@@ -5,11 +5,26 @@ import {
   ResponsiveContainer, Legend,
 } from 'recharts';
 import { reachOverTimeData } from '@/lib/demo-data';
+import { useDateRange } from '@/lib/stores/useDateRange';
+
+function sliceByRange(range: string) {
+  switch (range) {
+    case '7d':  return reachOverTimeData.slice(-1);
+    case '30d': return reachOverTimeData.slice(-2);
+    case '90d': return reachOverTimeData.slice(-3);
+    case '1y':  return reachOverTimeData;
+    case '6m':
+    default:    return reachOverTimeData;
+  }
+}
 
 export default function ReachOverTimeChart() {
+  const { range } = useDateRange();
+  const data = sliceByRange(range);
+
   return (
     <ResponsiveContainer width="100%" height={280}>
-      <LineChart data={reachOverTimeData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+      <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#eaedff" />
         <XAxis
           dataKey="month"
@@ -24,6 +39,7 @@ export default function ReachOverTimeChart() {
           tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`}
         />
         <Tooltip
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           formatter={(value: any) => [`${(Number(value) / 1000).toFixed(1)}K`, '']}
           contentStyle={{
             background: 'rgba(255,255,255,0.95)',
@@ -49,6 +65,7 @@ export default function ReachOverTimeChart() {
           dot={{ r: 3, fill: '#00685f' }}
           activeDot={{ r: 5 }}
           name="Organic"
+          animationDuration={600}
         />
         <Line
           type="monotone"
@@ -58,6 +75,7 @@ export default function ReachOverTimeChart() {
           dot={{ r: 3, fill: '#fbbf24' }}
           activeDot={{ r: 5 }}
           name="Paid"
+          animationDuration={600}
         />
         <Line
           type="monotone"
@@ -68,6 +86,7 @@ export default function ReachOverTimeChart() {
           dot={{ r: 3, fill: '#0058be' }}
           activeDot={{ r: 5 }}
           name="Combined"
+          animationDuration={600}
         />
       </LineChart>
     </ResponsiveContainer>

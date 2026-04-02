@@ -1,8 +1,35 @@
 'use client';
 
 import { useState } from 'react';
-import { postsData } from '@/lib/demo-data';
+import { postsData, type PostItem } from '@/lib/demo-data';
 import { formatNumber, formatCurrency } from '@/lib/utils';
+
+function exportToCSV(posts: PostItem[]) {
+  const headers = ['Platform', 'Date', 'Type', 'Caption', 'Org Reach', 'Impressions', 'Likes', 'Comments', 'Shares', 'Saves', 'Eng Rate (%)', 'Boosted', 'Spend'];
+  const rows = posts.map((p) => [
+    p.platform,
+    p.date,
+    p.type,
+    `"${p.caption.replace(/"/g, '""')}"`,
+    p.orgReach,
+    p.impressions,
+    p.likes,
+    p.comments,
+    p.shares,
+    p.saves,
+    p.engRate.toFixed(2),
+    p.isBoosted ? 'Yes' : 'No',
+    p.spend ?? 0,
+  ]);
+  const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `pulse-posts-${new Date().toISOString().slice(0, 10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
 
 export default function PostsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -80,6 +107,16 @@ export default function PostsPage() {
           </div>
           <div className="h-6 w-[1px] bg-outline-variant/30 hidden lg:block" />
           <span className="text-on-surface-variant text-xs font-semibold px-2">{filtered.length} posts</span>
+          <div className="ml-auto">
+            <button
+              id="export-csv-btn"
+              onClick={() => exportToCSV(filtered)}
+              className="flex items-center gap-2 bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant hover:text-primary hover:border-primary/30 px-4 py-2 rounded-lg text-sm font-semibold transition-all active:scale-95"
+            >
+              <span className="material-symbols-outlined text-sm">download</span>
+              Export CSV
+            </button>
+          </div>
         </div>
 
         {/* Data Table */}

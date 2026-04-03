@@ -1,4 +1,4 @@
-import PostsSkeleton from '@/components/ui/PostsSkeleton';
+import { PostsSkeleton } from '@/components/skeletons';
 
 export default function Loading() {
   return <PostsSkeleton />;

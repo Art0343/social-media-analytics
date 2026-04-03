@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" width="1400" height="900">
+  <!-- Background -->
+  <rect width="1400" height="900" fill="#1a1a2e"/>
+  
+  <!-- Title -->
+  <text x="700" y="40" text-anchor="middle" fill="#e94560" font-size="28" font-weight="bold" font-family="Inter, sans-serif">Pulse Analytics — Project Structure</text>
+  
+  <!-- Root: pulse-analytics/ -->
+  <rect x="20" y="70" width="200" height="35" rx="5" fill="#0f3460" stroke="#e94560" stroke-width="2"/>
+  <text x="120" y="93" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Inter, sans-serif">📁 pulse-analytics/</text>
+  
+  <!-- prisma/ branch -->
+  <line x1="220" y1="87" x2="280" y2="87" stroke="#533483" stroke-width="2"/>
+  <line x1="280" y1="87" x2="280" y2="140" stroke="#533483" stroke-width="2"/>
+  <line x1="280" y1="140" x2="300" y2="140" stroke="#533483" stroke-width="2"/>
+  
+  <rect x="300" y="125" width="220" height="30" rx="4" fill="#16213e" stroke="#e94560" stroke-width="1.5"/>
+  <text x="410" y="145" text-anchor="middle" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">📁 prisma/</text>
+  
+  <!-- prisma files -->
+  <line x1="520" y1="140" x2="550" y2="140" stroke="#533483" stroke-width="1.5"/>
+  <line x1="550" y1="140" x2="550" y2="200" stroke="#533483" stroke-width="1.5"/>
+  <line x1="550" y1="165" x2="570" y2="165" stroke="#533483" stroke-width="1.5"/>
+  <line x1="550" y1="195" x2="570" y2="195" stroke="#533483" stroke-width="1.5"/>
+  
+  <rect x="570" y="150" width="220" height="28" rx="3" fill="#1a1a2e" stroke="#0f3460" stroke-width="1"/>
+  <text x="680" y="169" text-anchor="middle" fill="#a0a0a0" font-size="11" font-family="Inter, sans-serif">📄 schema.prisma</text>
+  
+  <rect x="570" y="180" width="220" height="28" rx="3" fill="#1a1a2e" stroke="#0f3460" stroke-width="1"/>
+  <text x="680" y="199" text-anchor="middle" fill="#a0a0a0" font-size="11" font-family="Inter, sans-serif">📄 seed.ts</text>
+  
+  <!-- src/ branch -->
+  <line x1="220" y1="87" x2="260" y2="87" stroke="#533483" stroke-width="2"/>
+  <line x1="260" y1="87" x2="260" y2="650" stroke="#533483" stroke-width="2"/>
+  
+  <!-- app/ -->
+  <line x1="260" y1="240" x2="300" y2="240" stroke="#533483" stroke-width="1.5"/>
+  <rect x="300" y="225" width="180" height="30" rx="4" fill="#16213e" stroke="#e94560" stroke-width="1.5"/>
+  <text x="390" y="245" text-anchor="middle" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">📁 app/</text>
+  
+  <!-- (dashboard)/ -->
+  <line x1="480" y1="240" x2="510" y2="240" stroke="#533483" stroke-width="1.5"/>
+  <line x1="510" y1="240" x2="510" y2="420" stroke="#533483" stroke-width="1.5"/>
+  <line x1="510" y1="265" x2="530" y2="265" stroke="#533483" stroke-width="1.5"/>
+  
+  <rect x="530" y="250" width="200" height="28" rx="3" fill="#1a1a2e" stroke="#0f3460" stroke-width="1"/>
+  <text x="630" y="269" text-anchor="middle" fill="#e94560" font-size="11" font-family="Inter, sans-serif">📁 (dashboard)/</text>
+  
+  <!-- dashboard pages -->
+  <line x1="730" y1="265" x2="750" y2="265" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="265" x2="750" y2="420" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="280" x2="770" y2="280" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="300" x2="770" y2="300" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="320" x2="770" y2="320" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="340" x2="770" y2="340" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="360" x2="770" y2="360" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="380" x2="770" y2="380" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="400" x2="770" y2="400" stroke="#533483" stroke-width="1"/>
+  
+  <rect x="770" y="270" width="150" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="845" y="283" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 dashboard/</text>
+  
+  <rect x="770" y="290" width="150" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="845" y="303" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 posts/</text>
+  
+  <rect x="770" y="310" width="150" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="845" y="323" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 paid/</text>
+  
+  <rect x="770" y="330" width="150" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="845" y="343" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 insights/</text>
+  
+  <rect x="770" y="350" width="150" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="845" y="363" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 report/</text>
+  
+  <rect x="770" y="370" width="150" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="845" y="383" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 settings/</text>
+  
+  <rect x="770" y="390" width="150" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="845" y="403" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 layout.tsx</text>
+  
+  <!-- api/ -->
+  <line x1="510" y1="435" x2="530" y2="435" stroke="#533483" stroke-width="1.5"/>
+  <rect x="530" y="420" width="200" height="28" rx="3" fill="#1a1a2e" stroke="#0f3460" stroke-width="1"/>
+  <text x="630" y="439" text-anchor="middle" fill="#e94560" font-size="11" font-family="Inter, sans-serif">📁 api/</text>
+  
+  <!-- api routes -->
+  <line x1="730" y1="435" x2="750" y2="435" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="435" x2="750" y2="530" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="450" x2="770" y2="450" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="470" x2="770" y2="470" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="490" x2="770" y2="490" stroke="#533483" stroke-width="1"/>
+  <line x1="750" y1="510" x2="770" y2="510" stroke="#533483" stroke-width="1"/>
+  
+  <rect x="770" y="440" width="160" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="850" y="453" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 auth/[...nextauth]/</text>
+  
+  <rect x="770" y="460" width="160" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="850" y="473" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 platforms/</text>
+  
+  <rect x="770" y="480" width="160" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="850" y="493" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 connected-accounts/</text>
+  
+  <rect x="770" y="500" width="160" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="850" y="513" text-anchor="middle" fill="#a0a0a0" font-size="9" font-family="Inter, sans-serif">📄 dashboard/, posts/, team/</text>
+  
+  <!-- login/ -->
+  <line x1="510" y1="545" x2="530" y2="545" stroke="#533483" stroke-width="1.5"/>
+  <rect x="530" y="530" width="200" height="28" rx="3" fill="#1a1a2e" stroke="#0f3460" stroke-width="1"/>
+  <text x="630" y="549" text-anchor="middle" fill="#a0a0a0" font-size="11" font-family="Inter, sans-serif">📄 login/</text>
+  
+  <!-- components/ -->
+  <line x1="260" y1="600" x2="300" y2="600" stroke="#533483" stroke-width="1.5"/>
+  <rect x="300" y="585" width="180" height="30" rx="4" fill="#16213e" stroke="#e94560" stroke-width="1.5"/>
+  <text x="390" y="605" text-anchor="middle" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">📁 components/</text>
+  
+  <!-- component folders -->
+  <line x1="480" y1="600" x2="510" y2="600" stroke="#533483" stroke-width="1.5"/>
+  <line x1="510" y1="600" x2="510" y2="750" stroke="#533483" stroke-width="1.5"/>
+  <line x1="510" y1="615" x2="530" y2="615" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="635" x2="530" y2="635" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="655" x2="530" y2="655" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="675" x2="530" y2="675" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="695" x2="530" y2="695" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="715" x2="530" y2="715" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="735" x2="530" y2="735" stroke="#533483" stroke-width="1"/>
+  
+  <rect x="530" y="605" width="180" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="620" y="618" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter, sans-serif">📁 charts/ (5 Recharts)</text>
+  
+  <rect x="530" y="625" width="180" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="620" y="638" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter, sans-serif">📁 layout/ (Sidebar, TopHeader)</text>
+  
+  <rect x="530" y="645" width="180" height="18" rx="2" fill="#e94560" stroke="#fff" stroke-width="2"/>
+  <text x="620" y="658" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold" font-family="Inter, sans-serif">📁 skeletons/ (NEW)</text>
+  
+  <rect x="530" y="665" width="180" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="620" y="678" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter, sans-serif">📁 ui/ (KpiCard, Modal)</text>
+  
+  <rect x="530" y="685" width="180" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="620" y="698" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter, sans-serif">📁 platforms/, pdf/, providers/</text>
+  
+  <rect x="530" y="705" width="180" height="18" rx="2" fill="#e94560" stroke="#fff" stroke-width="2"/>
+  <text x="620" y="718" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold" font-family="Inter, sans-serif">📄 index.ts (barrel exports)</text>
+  
+  <!-- lib/ -->
+  <line x1="260" y1="780" x2="300" y2="780" stroke="#533483" stroke-width="1.5"/>
+  <rect x="300" y="765" width="180" height="30" rx="4" fill="#16213e" stroke="#e94560" stroke-width="1.5"/>
+  <text x="390" y="785" text-anchor="middle" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">📁 lib/</text>
+  
+  <!-- lib contents -->
+  <line x1="480" y1="780" x2="510" y2="780" stroke="#533483" stroke-width="1.5"/>
+  <line x1="510" y1="780" x2="510" y2="860" stroke="#533483" stroke-width="1.5"/>
+  <line x1="510" y1="795" x2="530" y2="795" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="815" x2="530" y2="815" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="835" x2="530" y2="835" stroke="#533483" stroke-width="1"/>
+  <line x1="510" y1="855" x2="530" y2="855" stroke="#533483" stroke-width="1"/>
+  
+  <rect x="530" y="785" width="180" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="620" y="798" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter, sans-serif">📄 auth.ts, prisma.ts, encryption.ts</text>
+  
+  <rect x="530" y="805" width="180" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="620" y="818" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter, sans-serif">📁 types/, stores/</text>
+  
+  <rect x="530" y="825" width="180" height="18" rx="2" fill="#e94560" stroke="#fff" stroke-width="2"/>
+  <text x="620" y="838" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold" font-family="Inter, sans-serif">📄 index.ts (NEW barrel export)</text>
+  
+  <rect x="530" y="845" width="180" height="18" rx="2" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="620" y="858" text-anchor="middle" fill="#a0a0a0" font-size="10" font-family="Inter, sans-serif">📄 utils.ts, demo-data.ts</text>
+  
+  <!-- Legend -->
+  <rect x="1000" y="120" width="380" height="200" rx="8" fill="#16213e" stroke="#0f3460" stroke-width="2"/>
+  <text x="1190" y="150" text-anchor="middle" fill="#e94560" font-size="16" font-weight="bold" font-family="Inter, sans-serif">Legend</text>
+  
+  <rect x="1020" y="170" width="15" height="15" rx="3" fill="#e94560" stroke="#fff" stroke-width="2"/>
+  <text x="1050" y="182" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">New/Modified in this commit</text>
+  
+  <rect x="1020" y="200" width="15" height="15" rx="3" fill="#16213e" stroke="#e94560" stroke-width="1.5"/>
+  <text x="1050" y="212" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">Main folders</text>
+  
+  <rect x="1020" y="230" width="15" height="15" rx="3" fill="#1a1a2e" stroke="#0f3460" stroke-width="1"/>
+  <text x="1050" y="242" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">Subfolders</text>
+  
+  <rect x="1020" y="260" width="15" height="15" rx="3" fill="#2d2d44" stroke="#0f3460" stroke-width="1"/>
+  <text x="1050" y="272" fill="#a0a0a0" font-size="12" font-family="Inter, sans-serif">Files</text>
+  
+  <!-- Tech Stack Box -->
+  <rect x="1000" y="340" width="380" height="280" rx="8" fill="#16213e" stroke="#0f3460" stroke-width="2"/>
+  <text x="1190" y="370" text-anchor="middle" fill="#e94560" font-size="16" font-weight="bold" font-family="Inter, sans-serif">Tech Stack</text>
+  
+  <text x="1020" y="400" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Framework:</tspan> Next.js 16 + React 19</text>
+  <text x="1020" y="425" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Styling:</tspan> Tailwind CSS v4 + M3</text>
+  <text x="1020" y="450" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Database:</tspan> PostgreSQL (Neon) + Prisma</text>
+  <text x="1020" y="475" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Auth:</tspan> NextAuth v5 (dev bypass)</text>
+  <text x="1020" y="500" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">State:</tspan> Zustand (date, theme)</text>
+  <text x="1020" y="525" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Data Fetching:</tspan> TanStack Query</text>
+  <text x="1020" y="550" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Charts:</tspan> Recharts</text>
+  <text x="1020" y="575" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Currency:</tspan> INR (₹)</text>
+  <text x="1020" y="600" fill="#eaeaea" font-size="13" font-family="Inter, sans-serif"><tspan font-weight="bold">Security:</tspan> AES-256-GCM encryption</text>
+  
+  <!-- Architecture Notes -->
+  <rect x="1000" y="640" width="380" height="240" rx="8" fill="#16213e" stroke="#0f3460" stroke-width="2"/>
+  <text x="1190" y="670" text-anchor="middle" fill="#e94560" font-size="16" font-weight="bold" font-family="Inter, sans-serif">Architecture Pattern</text>
+  
+  <text x="1020" y="700" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">1. <tspan font-weight="bold">Server Components</tspan> fetch data</text>
+  <text x="1020" y="725" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">2. Pass props to <tspan font-weight="bold">Client Components</tspan></text>
+  <text x="1020" y="750" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">3. Client handles interactivity</text>
+  <text x="1020" y="775" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">4. <tspan font-weight="bold">Barrel exports</tspan> for clean imports</text>
+  <text x="1020" y="800" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">5. <tspan font-weight="bold">Loading.tsx</tspan> in every route</text>
+  <text x="1020" y="825" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">6. <tspan font-weight="bold">API routes</tspan> for client fetching</text>
+  <text x="1020" y="850" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">7. <tspan font-weight="bold">Zustand</tspan> for global state</text>
+  <text x="1020" y="865" fill="#eaeaea" font-size="12" font-family="Inter, sans-serif">   (date range, dark mode)</text>
+</svg>

@@ -1,4 +1,4 @@
-import PaidSkeleton from '@/components/ui/PaidSkeleton';
+import { PaidSkeleton } from '@/components/skeletons';
 
 export default function Loading() {
   return <PaidSkeleton />;

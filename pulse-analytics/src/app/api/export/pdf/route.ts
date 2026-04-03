@@ -6,6 +6,9 @@ import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, STRICT_CONFIG } from '@/lib/rate-limit';
 import MonthlyReportPDF from '@/components/pdf/MonthlyReportPDF';
 
+// Check if we're in development mode
+const isDev = process.env.NODE_ENV === 'development';
+
 // Force Node.js runtime for PDF generation
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -15,11 +18,15 @@ export async function GET(request: NextRequest) {
   try {
     console.log('[PDF Export] Starting PDF generation...');
     
-    const session = await auth();
-    console.log('[PDF Export] Auth check complete:', session?.user ? 'Authenticated' : 'Not authenticated');
-    
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Skip auth in dev mode
+    let session = null;
+    if (!isDev) {
+      session = await auth();
+      console.log('[PDF Export] Auth check complete:', session?.user ? 'Authenticated' : 'Not authenticated');
+      
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     // Rate limiting (strict for PDF generation)
@@ -38,7 +45,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
     const days = parseInt(searchParams.get('days') || '30', 10);
     
     console.log(`[PDF Export] Workspace: ${workspaceId}, Days: ${days}`);
@@ -81,6 +88,7 @@ export async function GET(request: NextRequest) {
       }),
       // Platforms for names
       prisma.socialPlatform.findMany({ where: { isActive: true } }),
+      // Skip workspace check in dev mode
     ]);
 
     // Calculate stats

@@ -4,12 +4,19 @@ import { subDays, format as formatDate } from 'date-fns';
 import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, STRICT_CONFIG } from '@/lib/rate-limit';
 
+// Check if we're in development mode
+const isDev = process.env.NODE_ENV === 'development';
+
 // GET /api/export/posts?workspaceId=xxx&format=csv&days=30
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Skip auth in dev mode
+    let session = null;
+    if (!isDev) {
+      session = await auth();
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     // Rate limiting (strict for exports)
@@ -28,12 +35,29 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
     const format = searchParams.get('format') || 'csv';
     const days = parseInt(searchParams.get('days') || '30', 10);
 
     const endDate = new Date();
     const startDate = subDays(endDate, days);
+
+    // Verify user has access to this workspace (skip in dev mode)
+    if (!isDev && session?.user?.id) {
+      const workspaceUser = await prisma.workspaceUser.findFirst({
+        where: {
+          workspaceId,
+          userId: session.user.id,
+        },
+      });
+
+      if (!workspaceUser) {
+        return NextResponse.json(
+          { error: 'Access denied to this workspace' },
+          { status: 403 }
+        );
+      }
+    }
 
     // Fetch posts for export
     const posts = await prisma.post.findMany({

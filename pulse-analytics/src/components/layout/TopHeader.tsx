@@ -1,7 +1,48 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import { useDateRange, type DateRange } from '@/lib/stores/useDateRange';
+
+// Function to export page as PDF using server-side Playwright
+const exportToPDF = async (setIsExporting: (v: boolean) => void, currentUrl: string, pageTitle: string) => {
+  console.log('[PDF Export] Starting server-side PDF generation...');
+  try {
+    setIsExporting(true);
+    
+    // Call the server-side API
+    const response = await fetch(`/api/export/page-pdf?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(pageTitle)}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.details || error.error || 'Failed to generate PDF');
+    }
+    
+    // Get PDF blob
+    const blob = await response.blob();
+    const filename = `${pageTitle}-export-${new Date().toISOString().split('T')[0]}.pdf`;
+    
+    // Download the PDF
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+    
+    console.log('[PDF Export] Success!');
+    setIsExporting(false);
+  } catch (error) {
+    console.error('[PDF Export] Error:', error);
+    alert('Failed to export PDF: ' + (error instanceof Error ? error.message : String(error)));
+    setIsExporting(false);
+  }
+};
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Overview',
@@ -31,6 +72,7 @@ interface TopHeaderProps {
 export default function TopHeader({ onMenuClick }: TopHeaderProps) {
   const pathname = usePathname();
   const { range, setRange } = useDateRange();
+  const [isExporting, setIsExporting] = useState(false);
 
   const pageTitle = pageTitles[pathname] || 'Pulse Analytics';
   const showDateFilter = ['/dashboard', '/posts', '/paid', '/insights', '/report'].includes(pathname);
@@ -73,10 +115,12 @@ export default function TopHeader({ onMenuClick }: TopHeaderProps) {
 
         <button
           id="export-pdf-btn"
-          className="hidden sm:flex items-center gap-2 bg-[#f4f6fa] dark:bg-[#2d3048] text-[#505f76] dark:text-[#8892b0] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#e8eaf0] dark:hover:bg-[#3d4066] active:opacity-80 transition-all"
+          onClick={() => exportToPDF(setIsExporting, window.location.href, pageTitle)}
+          disabled={isExporting}
+          className="hidden sm:flex items-center gap-2 bg-[#f4f6fa] dark:bg-[#2d3048] text-[#505f76] dark:text-[#8892b0] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#e8eaf0] dark:hover:bg-[#3d4066] active:opacity-80 transition-all disabled:opacity-50"
         >
-          <span className="material-symbols-outlined text-sm">picture_as_pdf</span>
-          Export PDF
+          <span className="material-symbols-outlined text-sm">{isExporting ? 'hourglass_top' : 'picture_as_pdf'}</span>
+          {isExporting ? 'Exporting...' : 'Export PDF'}
         </button>
 
         <button

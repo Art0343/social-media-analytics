@@ -1,8 +1,41 @@
 'use client';
 
-import { connectedAccountsData } from '@/lib/demo-data';
+import { useState } from 'react';
+import { connectedAccountsData, demoPlatforms } from '@/lib/demo-data';
+import ConnectAccountModal from './ConnectAccountModal';
 
 export default function ConnectAccountsPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<typeof demoPlatforms[0] | null>(null);
+
+  const handleConnectClick = (platformSlug: string) => {
+    const platform = demoPlatforms.find((p: { slug: string }) => p.slug === platformSlug);
+    if (platform) {
+      setSelectedPlatform(platform);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleConnect = async (data: { platformId: string; accountName: string; accountHandle: string; accessToken: string }) => {
+    // API call to connect the account
+    const response = await fetch('/api/connected-accounts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        platformId: data.platformId,
+        accountName: data.accountName,
+        accountHandle: data.accountHandle,
+        accessToken: data.accessToken,
+      }),
+    });
+
+    if (response.ok) {
+      // Refresh the page or update the UI
+      window.location.reload();
+    } else {
+      alert('Failed to connect account. Please try again.');
+    }
+  };
   return (
     <div className="p-8 max-w-7xl mx-auto">
       {/* Header */}
@@ -14,8 +47,8 @@ export default function ConnectAccountsPage() {
       </div>
 
       {/* Platform Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {connectedAccountsData.map((account) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {connectedAccountsData.map((account: { id: string; platform: string; platformSlug: string; platformColor: string; icon: string; accountName: string; isConnected: boolean; lastSynced?: string; accountHandle?: string; description?: string }) => (
           <div key={account.id} className="bg-surface-container-lowest p-6 rounded-xl border border-transparent hover:shadow-[0_8px_24px_rgba(19,27,46,0.06)] transition-all group">
             <div className="flex justify-between items-start mb-6">
               <div
@@ -59,7 +92,9 @@ export default function ConnectAccountsPage() {
                 </button>
               </div>
             ) : (
-              <button className="w-full px-4 py-3 bg-linear-to-br from-primary to-primary-container text-on-primary font-bold rounded-lg shadow-sm hover:opacity-95 transition-all flex items-center justify-center gap-2">
+              <button 
+                onClick={() => handleConnectClick(account.platformSlug)}
+                className="w-full px-4 py-3 bg-linear-to-br from-primary to-primary-container text-on-primary font-bold rounded-lg shadow-sm hover:opacity-95 transition-all flex items-center justify-center gap-2">
                 <span className="material-symbols-outlined text-[18px]">add</span> Connect Account
               </button>
             )}
@@ -104,6 +139,12 @@ export default function ConnectAccountsPage() {
           </p>
         </div>
       </div>
+      <ConnectAccountModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        platform={selectedPlatform}
+        onConnect={handleConnect}
+      />
     </div>
   );
 }

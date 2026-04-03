@@ -2,7 +2,7 @@
 
 > **Project:** Social Media Analytics SaaS Dashboard  
 > **Version:** 0.2 (Phase 2.5 Complete + Project Organization + INR Currency)  
-> **Last Updated:** 2026-04-02
+> **Last Updated:** 2026-04-03
 
 ---
 
@@ -305,7 +305,7 @@ src/
 
 ```bash
 # Required
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://user:password@host/dbname"  # Neon PostgreSQL
 NEXTAUTH_SECRET="your-secret-here"
 NEXTAUTH_URL="http://localhost:3000"
 

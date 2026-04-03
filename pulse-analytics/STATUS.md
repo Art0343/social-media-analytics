@@ -1,8 +1,8 @@
 # Pulse Analytics — Project Status
 
-> **Last updated:** 2026-04-02  
+> **Last updated:** 2026-04-03  
 > **Current Phase:** Phase 2.5 — Frontend-to-DB Hookup ✅ COMPLETE  
-> **Stack:** Next.js 16 · TypeScript · Tailwind CSS v4 · Prisma (SQLite) · NextAuth v5 · Recharts · Zustand
+> **Stack:** Next.js 16 · TypeScript · Tailwind CSS v4 · Prisma (PostgreSQL) · NextAuth v5 · Recharts · Zustand
 
 ---
 
@@ -110,7 +110,7 @@
 - [ ] CSV data export
 
 ### Priority 4: Production Hardening
-- [ ] PostgreSQL migration (Neon) — switch from SQLite
+- [x] **PostgreSQL migration (Neon)** — ✅ Completed, switched from SQLite
 - [ ] Role-based access control enforcement (Admin/Member/Viewer)
 - [ ] Multi-workspace switching
 - [ ] Rate limiting on API routes
@@ -179,9 +179,9 @@ pulse-analytics/
 ```bash
 cd pulse-analytics
 npm install
-npx prisma db push       # Create SQLite tables
-npx prisma db seed        # Populate demo data
-npm run dev               # Start dev server at http://localhost:3000
+npx prisma db push       # Create PostgreSQL tables
+npx prisma db seed       # Populate demo data
+npm run dev              # Start dev server at http://localhost:3000
 ```
 
 ### Environment Variables
@@ -190,7 +190,7 @@ Copy `.env.example` to `.env` and fill in:
 
 | Variable | Purpose | Required? |
 |---|---|---|
-| `DATABASE_URL` | SQLite connection string | ✅ Pre-configured |
+| `DATABASE_URL` | PostgreSQL connection string (Neon) | ✅ Required |
 | `NEXTAUTH_SECRET` | JWT signing secret | ✅ For auth |
 | `NEXTAUTH_URL` | App URL | ✅ For auth |
 | `GOOGLE_CLIENT_ID` | Google OAuth | ⚠️ For login |

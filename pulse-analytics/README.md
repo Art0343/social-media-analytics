@@ -10,9 +10,10 @@
 
 - **Framework:** Next.js 16 (App Router) & React 19
 - **Styling:** Tailwind CSS v4 & Material Design 3 UI tokens
-- **Database:** Prisma ORM with SQLite (ready for PostgreSQL migration)
-- **Authentication:** NextAuth.js v5 (Google OAuth)
-- **State Management:** Zustand (for Global Date Range & Theme persistence)
+- **Database:** Prisma ORM with PostgreSQL (Neon) ✅ Migrated from SQLite
+- **Authentication:** NextAuth.js v5 (Dev bypass mode — Google OAuth pending)
+- **State Management:** Zustand (Global Date Range & Theme persistence)
+- **Data Fetching:** TanStack Query (React Query) for client-side data
 - **Charts:** Recharts
 - **Icons:** Material Symbols Outlined
 

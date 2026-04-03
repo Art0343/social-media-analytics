@@ -12,12 +12,19 @@ interface Totals {
   followers: number;
 }
 
+// Check if we're in development mode
+const isDev = process.env.NODE_ENV === 'development';
+
 // GET /api/dashboard/summary?days=30&workspaceId=xxx
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Skip auth in dev mode
+    let session = null;
+    if (!isDev) {
+      session = await auth();
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     // Rate limiting
@@ -39,19 +46,21 @@ export async function GET(request: NextRequest) {
     const days = parseInt(searchParams.get('days') || '30', 10);
     const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
 
-    // Verify user has access to this workspace
-    const workspaceUser = await prisma.workspaceUser.findFirst({
-      where: {
-        workspaceId,
-        userId: session.user.id,
-      },
-    });
+    // Verify user has access to this workspace (skip in dev mode)
+    if (!isDev && session?.user?.id) {
+      const workspaceUser = await prisma.workspaceUser.findFirst({
+        where: {
+          workspaceId,
+          userId: session.user.id,
+        },
+      });
 
-    if (!workspaceUser) {
-      return NextResponse.json(
-        { error: 'Access denied to this workspace' },
-        { status: 403 }
-      );
+      if (!workspaceUser) {
+        return NextResponse.json(
+          { error: 'Access denied to this workspace' },
+          { status: 403 }
+        );
+      }
     }
 
     const endDate = new Date();
@@ -196,6 +205,9 @@ export async function GET(request: NextRequest) {
         },
       ],
       platformMix: await getPlatformMix(workspaceId, startDate, endDate),
+      summaries: summaries,
+      totals: totals,
+      platforms: await prisma.socialPlatform.findMany({ where: { isActive: true } }),
     }, { headers });
   } catch (error) {
     console.error('Dashboard summary error:', error);

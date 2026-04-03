@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { formatNumber, formatCurrency } from '@/lib/utils';
+import { useDateRange } from '@/lib/stores/useDateRange';
 
 interface Post {
   id: string;
@@ -61,6 +62,7 @@ function exportToCSV(posts: Post[]) {
 }
 
 export default function PostsPage() {
+  const { days } = useDateRange();
   const [searchQuery, setSearchQuery] = useState('');
   const [platformFilter, setPlatformFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
@@ -68,36 +70,43 @@ export default function PostsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
+  const [metrics, setMetrics] = useState({ totalReach: 0, avgEngagement: 0 });
+
+  const fetchPosts = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({
+        days: days.toString(),
+        workspaceId: 'ws-demo-pulse',
+        search: searchQuery,
+        platform: platformFilter === 'all' ? '' : platformFilter,
+        postType: typeFilter === 'all' ? '' : typeFilter,
+        page: '1',
+        limit: '50',
+      });
+
+      const response = await fetch(`/api/posts?${params}`);
+      if (!response.ok) throw new Error('Failed to fetch posts');
+
+      const data: PostsApiResponse = await response.json();
+      setPosts(data.posts);
+      setTotalCount(data.pagination.totalCount);
+      // Calculate metrics from posts
+      const totalReach = data.posts.reduce((sum, p) => sum + (p.orgReach || 0), 0);
+      const avgEngagement = data.posts.length > 0 
+        ? data.posts.reduce((sum, p) => sum + (p.engRate || 0), 0) / data.posts.length 
+        : 0;
+      setMetrics({ totalReach, avgEngagement });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch posts');
+    } finally {
+      setLoading(false);
+    }
+  }, [days, searchQuery, platformFilter, typeFilter]);
 
   useEffect(() => {
-    async function fetchPosts() {
-      try {
-        setLoading(true);
-        const params = new URLSearchParams({
-          days: '30',
-          workspaceId: 'demo-workspace',
-          search: searchQuery,
-          platform: platformFilter === 'all' ? '' : platformFilter,
-          postType: typeFilter === 'all' ? '' : typeFilter,
-          page: '1',
-          limit: '50',
-        });
-
-        const response = await fetch(`/api/posts?${params}`);
-        if (!response.ok) throw new Error('Failed to fetch posts');
-
-        const data: PostsApiResponse = await response.json();
-        setPosts(data.posts);
-        setTotalCount(data.pagination.totalCount);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch posts');
-      } finally {
-        setLoading(false);
-      }
-    }
-
     fetchPosts();
-  }, [searchQuery, platformFilter, typeFilter]);
+  }, [fetchPosts]);
 
   const filtered = posts;
 
@@ -112,14 +121,14 @@ export default function PostsPage() {
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col justify-center">
             <span className="text-secondary text-xs font-bold uppercase tracking-widest">Total Reach</span>
-            <span className="text-2xl font-black text-on-surface">1,429,082</span>
+            <span className="text-2xl font-black text-on-surface">{formatNumber(metrics.totalReach)}</span>
             <span className="text-tertiary text-xs font-medium flex items-center gap-1 mt-1">
               <span className="material-symbols-outlined text-[14px]">arrow_upward</span> 12.4% vs last month
             </span>
           </div>
           <div className="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col justify-center">
             <span className="text-secondary text-xs font-bold uppercase tracking-widest">Avg. Engagement</span>
-            <span className="text-2xl font-black text-on-surface">4.82%</span>
+            <span className="text-2xl font-black text-on-surface">{metrics.avgEngagement.toFixed(2)}%</span>
             <span className="text-tertiary text-xs font-medium flex items-center gap-1 mt-1">
               <span className="material-symbols-outlined text-[14px]">arrow_upward</span> 0.9% vs last month
             </span>

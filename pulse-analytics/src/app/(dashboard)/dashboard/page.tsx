@@ -27,7 +27,7 @@ interface Totals {
   adSpend: number;
 }
 
-async function getDashboardData(days: number = 30, workspaceId: string = 'demo-workspace') {
+async function getDashboardData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
   const startDate = subDays(endDate, days);
 
@@ -41,6 +41,12 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'demo-w
       },
     },
   });
+
+  console.log('DEBUG - Date range:', { startDate, endDate, days });
+  console.log('DEBUG - WorkspaceId:', workspaceId);
+  console.log('DEBUG - Summaries count:', summaries.length);
+  console.log('DEBUG - First summary:', summaries[0]);
+  console.log('DEBUG - Last summary:', summaries[summaries.length - 1]);
 
   // Calculate totals
   const totals = summaries.reduce<Totals>(

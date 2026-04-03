@@ -7,7 +7,18 @@ import {
 import { reachOverTimeData } from '@/lib/demo-data';
 import { useDateRange } from '@/lib/stores/useDateRange';
 
-function sliceByRange(range: string) {
+interface DataPoint {
+  month: string;
+  organic: number;
+  paid: number;
+  combined: number;
+}
+
+interface ReachOverTimeChartProps {
+  data?: DataPoint[];
+}
+
+function sliceByRange(range: string): DataPoint[] {
   switch (range) {
     case '7d':  return reachOverTimeData.slice(-1);
     case '30d': return reachOverTimeData.slice(-2);
@@ -18,9 +29,63 @@ function sliceByRange(range: string) {
   }
 }
 
-export default function ReachOverTimeChart() {
+function processSummaries(summaries: Array<{
+  platformSlug: string;
+  orgReach: number | null;
+  paidReach: number | null;
+  date?: Date;
+}> | undefined): DataPoint[] {
+  if (!summaries || summaries.length === 0) {
+    return sliceByRange('30d');
+  }
+
+  // Group by date
+  const byDate = summaries.reduce((acc, s) => {
+    const dateKey = s.date ? new Date(s.date).toISOString().split('T')[0] : 'unknown';
+    if (!acc[dateKey]) {
+      acc[dateKey] = { organic: 0, paid: 0 };
+    }
+    acc[dateKey].organic += s.orgReach || 0;
+    acc[dateKey].paid += s.paidReach || 0;
+    return acc;
+  }, {} as Record<string, { organic: number; paid: number }>);
+
+  // Convert to array and sort by date
+  const sortedDates = Object.keys(byDate).sort();
+  
+  // Group into monthly buckets for display
+  const monthlyData: Record<string, { organic: number; paid: number; count: number }> = {};
+  
+  sortedDates.forEach(dateKey => {
+    const date = new Date(dateKey);
+    const monthKey = date.toLocaleDateString('en-US', { month: 'short' });
+    
+    if (!monthlyData[monthKey]) {
+      monthlyData[monthKey] = { organic: 0, paid: 0, count: 0 };
+    }
+    monthlyData[monthKey].organic += byDate[dateKey].organic;
+    monthlyData[monthKey].paid += byDate[dateKey].paid;
+    monthlyData[monthKey].count += 1;
+  });
+
+  // Get last 6 months
+  const monthKeys = Object.keys(monthlyData).slice(-6);
+  
+  return monthKeys.map(month => ({
+    month,
+    organic: Math.round(monthlyData[month].organic / monthlyData[month].count),
+    paid: Math.round(monthlyData[month].paid / monthlyData[month].count),
+    combined: Math.round((monthlyData[month].organic + monthlyData[month].paid) / monthlyData[month].count),
+  }));
+}
+
+export default function ReachOverTimeChart({ data: propData }: ReachOverTimeChartProps) {
   const { range } = useDateRange();
-  const data = sliceByRange(range);
+  
+  // Use prop data if available, otherwise use demo data
+  const data = propData && propData.length > 0 
+    ? propData 
+    : sliceByRange(range);
 
   return (
     <ResponsiveContainer width="100%" height={280}>

@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { subDays, format } from 'date-fns';
 import ReportClient from './ReportClient';
 
-async function getReportData(days: number = 30, workspaceId: string = 'demo-workspace') {
+async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
   const startDate = subDays(endDate, days);
 
@@ -165,6 +165,7 @@ async function getReportData(days: number = 30, workspaceId: string = 'demo-work
 }
 
 export default async function ReportPage() {
-  const data = await getReportData(30);
-  return <ReportClient data={data} />;
+  const days = 30;
+  const data = await getReportData(days);
+  return <ReportClient initialData={data} initialDays={days} />;
 }

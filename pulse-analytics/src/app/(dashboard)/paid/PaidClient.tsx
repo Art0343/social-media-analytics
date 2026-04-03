@@ -1,7 +1,9 @@
 'use client';
 
+import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { formatCurrency, formatNumber } from '@/lib/utils';
+import { useDateRange } from '@/lib/stores/useDateRange';
 
 const AdSpendChart = dynamic(() => import('@/components/charts/AdSpendChart'), { ssr: false });
 
@@ -34,7 +36,8 @@ interface PaidData {
 }
 
 interface PaidClientProps {
-  data: PaidData;
+  initialData: PaidData;
+  initialDays: number;
 }
 
 function calcDelta(current: number, previous: number): { value: string; positive: boolean } {
@@ -46,7 +49,35 @@ function calcDelta(current: number, previous: number): { value: string; positive
   };
 }
 
-export default function PaidClient({ data }: PaidClientProps) {
+export default function PaidClient({ initialData, initialDays }: PaidClientProps) {
+  const { days } = useDateRange();
+  const [data, setData] = useState<PaidData>(initialData);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    if (days === initialDays) {
+      setData(initialData);
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/paid/summary?days=${days}&workspaceId=ws-demo-pulse`);
+      if (response.ok) {
+        const newData = await response.json();
+        setData(newData);
+      }
+    } catch (error) {
+      console.error('Failed to fetch paid data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [days, initialDays, initialData]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   const {
     totalSpend,
     totalPaidReach,

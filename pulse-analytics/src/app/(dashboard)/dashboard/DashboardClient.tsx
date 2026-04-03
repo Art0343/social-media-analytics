@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { formatNumber, formatCurrency } from '@/lib/utils';
 import { useDateRange } from '@/lib/stores/useDateRange';
@@ -42,6 +43,7 @@ interface DashboardData {
     orgReach: number | null;
     paidReach: number | null;
     adSpend: number | null;
+    date?: Date;
   }>;
   platforms: Array<{
     slug: string;
@@ -56,9 +58,84 @@ interface DashboardClientProps {
   days: number;
 }
 
-export default function DashboardClient({ initialData }: DashboardClientProps) {
-  const { label } = useDateRange();
-  const { kpis, platformMix, totals, summaries, platforms } = initialData;
+export default function DashboardClient({ initialData, days: initialDays }: DashboardClientProps) {
+  const { label, days, range } = useDateRange();
+  const [data, setData] = useState<DashboardData>(initialData);
+  const [isLoading, setIsLoading] = useState(false);
+
+  console.log('DEBUG - DashboardClient:', { days, initialDays, range, label });
+
+  // Fetch data when date range changes
+  const fetchDashboardData = useCallback(async () => {
+    console.log('DEBUG - fetchDashboardData called:', { days, initialDays, isMatch: days === initialDays });
+    if (days === initialDays) {
+      console.log('DEBUG - Using initialData');
+      setData(initialData);
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      const url = `/api/dashboard/summary?days=${days}&workspaceId=ws-demo-pulse`;
+      console.log('DEBUG - Fetching:', url);
+      const response = await fetch(url, { cache: 'no-store', credentials: 'include' });
+      console.log('DEBUG - Response status:', response.status);
+      if (response.ok) {
+        const newData = await response.json();
+        console.log('DEBUG - New data received:', { kpisCount: newData.kpis?.length, summariesCount: newData.summaries?.length });
+        setData(newData);
+      } else {
+        console.error('DEBUG - Fetch failed:', response.status, await response.text());
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [days, initialDays, initialData]);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [fetchDashboardData]);
+
+  const { kpis, platformMix, totals, summaries, platforms } = data;
+
+  // Helper to process summaries for ReachOverTimeChart
+  const processSummaries = (summaries: Array<{
+    platformSlug: string;
+    orgReach: number | null;
+    paidReach: number | null;
+    date?: Date;
+  }> | undefined) => {
+    if (!summaries || summaries.length === 0) return [];
+
+    // Group by date
+    const byDate = summaries.reduce((acc, s) => {
+      const dateKey = s.date ? new Date(s.date).toISOString().split('T')[0] : 'unknown';
+      if (!acc[dateKey]) acc[dateKey] = { organic: 0, paid: 0 };
+      acc[dateKey].organic += s.orgReach || 0;
+      acc[dateKey].paid += s.paidReach || 0;
+      return acc;
+    }, {} as Record<string, { organic: number; paid: number }>);
+
+    // Group into monthly buckets
+    const monthlyData: Record<string, { organic: number; paid: number; count: number }> = {};
+    Object.keys(byDate).forEach(dateKey => {
+      const date = new Date(dateKey);
+      const monthKey = date.toLocaleDateString('en-US', { month: 'short' });
+      if (!monthlyData[monthKey]) monthlyData[monthKey] = { organic: 0, paid: 0, count: 0 };
+      monthlyData[monthKey].organic += byDate[dateKey].organic;
+      monthlyData[monthKey].paid += byDate[dateKey].paid;
+      monthlyData[monthKey].count += 1;
+    });
+
+    return Object.keys(monthlyData).map(month => ({
+      month,
+      organic: Math.round(monthlyData[month].organic / monthlyData[month].count),
+      paid: Math.round(monthlyData[month].paid / monthlyData[month].count),
+      combined: Math.round((monthlyData[month].organic + monthlyData[month].paid) / monthlyData[month].count),
+    }));
+  };
 
   // Calculate platform performance data from real data
   const platformPerformanceData = platforms.map((platform) => {
@@ -138,13 +215,17 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
               <p className="text-secondary text-xs">Comparison between Organic and Paid channels ({label})</p>
             </div>
           </div>
-          <ReachOverTimeChart />
+          <div className="h-[280px]">
+            <ReachOverTimeChart data={processSummaries(summaries)} />
+          </div>
         </div>
 
         {/* Platform Mix */}
         <div className="lg:col-span-4 bg-surface-container-lowest p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
           <h4 className="text-xl font-bold text-on-surface mb-6 w-full">Platform Mix</h4>
-          <PlatformMixChart data={platformMix} />
+          <div className="h-[280px]">
+            <PlatformMixChart data={platformMix} />
+          </div>
         </div>
       </div>
 
@@ -152,15 +233,21 @@ export default function DashboardClient({ initialData }: DashboardClientProps) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
           <h4 className="text-lg font-bold text-on-surface mb-6">Engagement Rate (%)</h4>
-          <EngagementRateChart />
+          <div className="h-[200px]">
+            <EngagementRateChart />
+          </div>
         </div>
         <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
           <h4 className="text-lg font-bold text-on-surface mb-6">Ad Spend (₹)</h4>
-          <AdSpendChart />
+          <div className="h-[200px]">
+            <AdSpendChart />
+          </div>
         </div>
         <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
           <h4 className="text-lg font-bold text-on-surface mb-6">Follower Growth</h4>
-          <FollowerGrowthChart />
+          <div className="h-[200px]">
+            <FollowerGrowthChart />
+          </div>
         </div>
       </div>
 

@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import MonthlyReportPDF from '@/components/pdf/MonthlyReportPDF';
+import { useDateRange } from '@/lib/stores/useDateRange';
 
 interface TopPost {
   rank: string;
@@ -44,12 +45,41 @@ interface ReportData {
 }
 
 interface ReportClientProps {
-  data: ReportData;
+  initialData: ReportData;
+  initialDays: number;
 }
 
-export default function ReportClient({ data }: ReportClientProps) {
-  const { monthYear, stats, topOrganicPosts, topPaidPosts, insights, contentPlan } = data;
+export default function ReportClient({ initialData, initialDays }: ReportClientProps) {
+  const { days, label } = useDateRange();
+  const [data, setData] = useState<ReportData>(initialData);
+  const [isLoading, setIsLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+
+  const fetchData = useCallback(async () => {
+    if (days === initialDays) {
+      setData(initialData);
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/report/summary?days=${days}&workspaceId=ws-demo-pulse`);
+      if (response.ok) {
+        const newData = await response.json();
+        setData(newData);
+      }
+    } catch (error) {
+      console.error('Failed to fetch report data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [days, initialDays, initialData]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const { monthYear, stats, topOrganicPosts, topPaidPosts, insights, contentPlan } = data;
 
   const handleDownloadPDF = useCallback(async () => {
     try {

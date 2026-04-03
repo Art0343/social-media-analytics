@@ -9,7 +9,7 @@ function isPublicPath(pathname: string): boolean {
   );
 }
 
-export default function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Dev bypass — remove to enforce auth in production

@@ -264,26 +264,42 @@ async function main() {
   console.log(`  ✅ ${posts.length} demo posts seeded`);
 
   // ──────────────────────────────────────────────
-  // 7. Platform Daily Summaries (6 months)
+  // 7. Platform Daily Summaries (last 365 days)
   // ──────────────────────────────────────────────
-  const monthlyData = [
-    { month: '2025-10', ig: { org: 42000, paid: 18000, imp: 64000, eng: 4.2, spend: 280, followers: 12000 }, tk: { org: 38000, paid: 5000, imp: 52000, eng: 6.8, spend: 60, followers: 8000 }, yt: { org: 22000, paid: 8000, imp: 34000, eng: 3.8, spend: 120, followers: 5000 }, fb: { org: 12000, paid: 9000, imp: 24000, eng: 1.2, spend: 200, followers: 9500 }, li: { org: 6000, paid: 5000, imp: 11000, eng: 5.4, spend: 80, followers: 3000 } },
-    { month: '2025-11', ig: { org: 48000, paid: 22000, imp: 74000, eng: 4.5, spend: 350, followers: 13500 }, tk: { org: 52000, paid: 6000, imp: 72000, eng: 7.2, spend: 80, followers: 10200 }, yt: { org: 26000, paid: 9000, imp: 38000, eng: 4.0, spend: 150, followers: 5800 }, fb: { org: 13000, paid: 10000, imp: 26000, eng: 1.4, spend: 250, followers: 9800 }, li: { org: 7000, paid: 6000, imp: 13500, eng: 5.8, spend: 100, followers: 3200 } },
-    { month: '2025-12', ig: { org: 52000, paid: 24000, imp: 80000, eng: 4.8, spend: 480, followers: 14200 }, tk: { org: 62000, paid: 7000, imp: 84000, eng: 7.8, spend: 100, followers: 12400 }, yt: { org: 28000, paid: 10000, imp: 42000, eng: 4.2, spend: 180, followers: 6200 }, fb: { org: 14000, paid: 11000, imp: 28000, eng: 1.6, spend: 320, followers: 10000 }, li: { org: 8000, paid: 6500, imp: 15000, eng: 6.0, spend: 120, followers: 3500 } },
-    { month: '2026-01', ig: { org: 58000, paid: 28000, imp: 92000, eng: 5.0, spend: 550, followers: 15800 }, tk: { org: 78000, paid: 8000, imp: 102000, eng: 8.4, spend: 120, followers: 15000 }, yt: { org: 32000, paid: 12000, imp: 48000, eng: 4.4, spend: 200, followers: 6800 }, fb: { org: 15000, paid: 13000, imp: 32000, eng: 1.8, spend: 380, followers: 10200 }, li: { org: 9000, paid: 7000, imp: 17000, eng: 6.2, spend: 150, followers: 3800 } },
-    { month: '2026-02', ig: { org: 64000, paid: 32000, imp: 104000, eng: 5.2, spend: 600, followers: 17000 }, tk: { org: 92000, paid: 9000, imp: 124000, eng: 9.0, spend: 140, followers: 18500 }, yt: { org: 36000, paid: 14000, imp: 54000, eng: 4.5, spend: 210, followers: 7400 }, fb: { org: 16000, paid: 14000, imp: 34000, eng: 2.0, spend: 400, followers: 10500 }, li: { org: 10000, paid: 8000, imp: 19000, eng: 6.4, spend: 200, followers: 4100 } },
-    { month: '2026-03', ig: { org: 71000, paid: 52000, imp: 128000, eng: 5.4, spend: 650, followers: 18500 }, tk: { org: 105000, paid: 15000, imp: 148000, eng: 9.6, spend: 160, followers: 22000 }, yt: { org: 40000, paid: 18000, imp: 62000, eng: 4.8, spend: 220, followers: 8200 }, fb: { org: 26000, paid: 27000, imp: 58000, eng: 2.8, spend: 420, followers: 10800 }, li: { org: 18500, paid: 12000, imp: 32000, eng: 6.8, spend: 270, followers: 4500 } },
-  ];
+  const today = new Date();
+  const dailyData = [];
+  
+  // Generate data for last 365 days to support all date ranges (7D, 30D, 90D, 6M, 1Y)
+  for (let i = 364; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    
+    // Add some variation to make it look realistic
+    // Use a sine wave for seasonal variation + random noise
+    const dayOfYear = 365 - i;
+    const seasonalFactor = 1 + 0.2 * Math.sin((dayOfYear / 365) * 2 * Math.PI); // ±20% seasonal
+    const randomFactor = 1 + (Math.random() * 0.4 - 0.2); // ±20% daily variation
+    const dayFactor = seasonalFactor * randomFactor;
+    
+    dailyData.push({
+      date: date.toISOString().split('T')[0],
+      ig: { org: Math.round(2400 * dayFactor), paid: Math.round(1800 * dayFactor), imp: Math.round(4200 * dayFactor), eng: 4.5, spend: Math.round(22 * dayFactor), followers: 125 },
+      tk: { org: Math.round(3500 * dayFactor), paid: Math.round(500 * dayFactor), imp: Math.round(4800 * dayFactor), eng: 7.2, spend: Math.round(5 * dayFactor), followers: 75 },
+      yt: { org: Math.round(1300 * dayFactor), paid: Math.round(600 * dayFactor), imp: Math.round(2100 * dayFactor), eng: 4.2, spend: Math.round(7 * dayFactor), followers: 27 },
+      fb: { org: Math.round(850 * dayFactor), paid: Math.round(900 * dayFactor), imp: Math.round(1850 * dayFactor), eng: 1.5, spend: Math.round(14 * dayFactor), followers: 35 },
+      li: { org: Math.round(600 * dayFactor), paid: Math.round(400 * dayFactor), imp: Math.round(1050 * dayFactor), eng: 6.0, spend: Math.round(9 * dayFactor), followers: 15 },
+    });
+  }
 
   let summaryCount = 0;
-  for (const m of monthlyData) {
-    const date = new Date(m.month + '-15');
+  for (const d of dailyData) {
+    const date = new Date(d.date);
     const entries = [
-      { platformSlug: 'instagram', ...m.ig },
-      { platformSlug: 'tiktok', ...m.tk },
-      { platformSlug: 'youtube', ...m.yt },
-      { platformSlug: 'facebook', ...m.fb },
-      { platformSlug: 'linkedin', ...m.li },
+      { platformSlug: 'instagram', ...d.ig },
+      { platformSlug: 'tiktok', ...d.tk },
+      { platformSlug: 'youtube', ...d.yt },
+      { platformSlug: 'facebook', ...d.fb },
+      { platformSlug: 'linkedin', ...d.li },
     ];
 
     for (const e of entries) {

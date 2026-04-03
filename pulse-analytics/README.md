@@ -87,17 +87,21 @@ pulse-analytics/
 │   │   ├── api/               # API Routes (auth, platforms CRUD)
 │   │   └── login/             # Public login page
 │   ├── components/
-│   │   ├── charts/            # Recharts components (ReachOverTime, AdSpend, etc.)
-│   │   ├── layout/            # Sidebar, TopHeader
-│   │   ├── providers/         # NextAuth SessionProvider, TanStack Query
-│   │   └── ui/                # Generic reusable components (Modal, SkeletonLoader, StatusBadge)
+│   │   ├── charts/            # Recharts components (barrel exports)
+│   │   ├── layout/            # Sidebar, TopHeader (barrel exports)
+│   │   ├── skeletons/         # Page loading skeletons (barrel exports)
+│   │   ├── ui/                # Reusable UI components (barrel exports)
+│   │   ├── platforms/         # AddPlatformModal (barrel exports)
+│   │   ├── providers/         # Session + Query providers (barrel exports)
+│   │   └── index.ts           # Main components barrel export
 │   ├── lib/
-│   │   ├── auth.ts            # NextAuth configuration
-│   │   ├── demo-data.ts       # Mock data currently driving the UI
-│   │   ├── encryption.ts      # AES-256 encryption utilities
-│   │   ├── prisma.ts          # Prisma client singleton
-│   │   ├── stores/            # Zustand stores (useTheme, useDateRange)
-│   │   └── utils.ts           # Tailwind cn() and number/currency formatters
+│   │   ├── auth.ts            # NextAuth config
+│   │   ├── prisma.ts          # Prisma singleton
+│   │   ├── encryption.ts      # AES-256 utilities
+│   │   ├── types/             # Shared TypeScript types (barrel exports)
+│   │   ├── stores/            # Zustand stores
+│   │   ├── index.ts           # Lib barrel export
+│   │   └── demo-data.ts       # Mock data (deprecated)
 │   └── middleware.ts          # Route protection and auth middleware
 └── package.json
 ```

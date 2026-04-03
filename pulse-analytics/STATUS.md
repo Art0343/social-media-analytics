@@ -157,15 +157,19 @@ pulse-analytics/
 │   ├── components/
 │   │   ├── charts/            # 5 Recharts components
 │   │   ├── layout/            # Sidebar, TopHeader
-│   │   ├── platforms/         # AddPlatformModal
-│   │   ├── providers/         # Session + Query providers
-│   │   └── ui/                # Reusable UI components
+│   │   ├── skeletons/         # Page loading skeletons
+│   │   ├── ui/                # Reusable UI components
+│   │   ├── platforms/         # Platform components
+│   │   ├── providers/         # Context providers
+│   │   └── index.ts           # Main barrel export
 │   ├── lib/
 │   │   ├── auth.ts            # NextAuth config
-│   │   ├── prisma.ts          # Prisma client singleton
+│   │   ├── prisma.ts          # Prisma singleton
 │   │   ├── encryption.ts      # AES-256 utilities
-│   │   ├── demo-data.ts       # Mock data for UI
-│   │   └── utils.ts           # Formatters, helpers
+│   │   ├── types/             # TypeScript types
+│   │   ├── stores/            # Zustand stores
+│   │   ├── index.ts           # Lib barrel export
+│   │   └── demo-data.ts       # Mock data
 │   └── middleware.ts          # Auth route protection
 ├── .env                       # Environment variables
 ├── package.json

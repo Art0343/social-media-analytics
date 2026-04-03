@@ -285,6 +285,7 @@ src/
 ├── components/
 │   ├── charts/                   # Recharts components (barrel exports)
 │   ├── layout/                   # Sidebar, TopHeader (barrel exports)
+│   ├── skeletons/                # Page loading skeletons (barrel exports)
 │   ├── ui/                       # Reusable UI (barrel exports)
 │   ├── platforms/                # Platform icons (barrel exports)
 │   ├── pdf/                      # PDF components (barrel exports)
@@ -294,7 +295,9 @@ src/
 │   ├── auth.ts                   # NextAuth config
 │   ├── prisma.ts                 # Prisma singleton
 │   ├── encryption.ts             # AES-256 utilities
-│   ├── types/                    # Shared TypeScript types
+│   ├── types/                    # Shared TypeScript types (barrel exports)
+│   ├── stores/                   # Zustand stores
+│   ├── index.ts                  # Lib barrel export
 │   └── demo-data.ts              # Mock data (deprecated)
 └── middleware.ts                 # Auth protection
 ```

@@ -43,7 +43,7 @@ export default function EngagementRateChart({ reachType = 'combined' }: Engageme
   const barColor = reachType === 'organic' ? '#00685f' : reachType === 'paid' ? '#fbbf24' : undefined;
 
   return (
-    <ResponsiveContainer width="100%" height={220}>
+    <ResponsiveContainer width="100%" height={260}>
       <BarChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
         <XAxis
           dataKey="platform"

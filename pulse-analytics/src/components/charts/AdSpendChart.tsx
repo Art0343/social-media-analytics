@@ -56,11 +56,16 @@ export default function AdSpendChart() {
           iconSize={8}
           wrapperStyle={{ fontSize: '9px', fontWeight: 700, textTransform: 'none', marginTop: '-15px' }}
         />
-        <Bar dataKey="instagram" stackId="a" fill="#E1306C" radius={[0, 0, 0, 0]} maxBarSize={30} name="Instagram" animationDuration={600} />
-        <Bar dataKey="facebook" stackId="a" fill="#1877F2" maxBarSize={30} name="Facebook" animationDuration={600} />
-        <Bar dataKey="youtube" stackId="a" fill="#FF0000" maxBarSize={30} name="YouTube" animationDuration={600} />
-        <Bar dataKey="linkedin" stackId="a" fill="#0A66C2" maxBarSize={30} name="LinkedIn" animationDuration={600} />
-        <Bar dataKey="tiktok" stackId="a" fill="#555" radius={[4, 4, 0, 0]} maxBarSize={30} name="TikTok" animationDuration={600} />
+        <Bar dataKey="instagram" stackId="a" fill="#E1306C" radius={[0, 0, 0, 0]} maxBarSize={28} name="Instagram" animationDuration={600} />
+        <Bar dataKey="facebook" stackId="a" fill="#1877F2" maxBarSize={28} name="Facebook" animationDuration={600} />
+        <Bar dataKey="youtube" stackId="a" fill="#FF0000" maxBarSize={28} name="YouTube" animationDuration={600} />
+        <Bar dataKey="linkedin" stackId="a" fill="#0A66C2" maxBarSize={28} name="LinkedIn" animationDuration={600} />
+        <Bar dataKey="tiktok" stackId="a" fill="#555" maxBarSize={28} name="TikTok" animationDuration={600} />
+        <Bar dataKey="twitter" stackId="a" fill="#1d9bf0" maxBarSize={28} name="X" animationDuration={600} />
+        <Bar dataKey="whatsapp" stackId="a" fill="#25D366" maxBarSize={28} name="WhatsApp" animationDuration={600} />
+        <Bar dataKey="google-ads" stackId="a" fill="#34a853" maxBarSize={28} name="Google Ads" animationDuration={600} />
+        <Bar dataKey="meta-ads" stackId="a" fill="#0668E1" maxBarSize={28} name="Meta Ads" animationDuration={600} />
+        <Bar dataKey="snapchat" stackId="a" fill="#e5e500" radius={[4, 4, 0, 0]} maxBarSize={28} name="Snapchat" animationDuration={600} />
       </BarChart>
     </ResponsiveContainer>
   );

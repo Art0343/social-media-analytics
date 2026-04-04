@@ -1,38 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { subDays, format, startOfDay, eachDayOfInterval } from 'date-fns';
+import { subDays, format, eachDayOfInterval } from 'date-fns';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+} from '@/lib/connected-analytics';
 
 // GET /api/dashboard/chart-data?days=30&workspaceId=xxx&type=reach|engagement|spend|followers
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const days = parseInt(searchParams.get('days') || '30', 10);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
     const chartType = searchParams.get('type') || 'reach';
 
     const endDate = new Date();
     const startDate = subDays(endDate, days);
+    const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
     // Generate date range
     const dateRange = eachDayOfInterval({ start: startDate, end: endDate });
 
-    // Fetch summaries for the period
+    // Fetch summaries for the period (connected platforms only)
     const summaries = await prisma.platformDailySummary.findMany({
-      where: {
-        workspaceId,
-        date: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
+      where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+        gte: startDate,
+        lte: endDate,
+      }),
       orderBy: { date: 'asc' },
     });
 
-    // Get active platforms
-    const platforms = await prisma.socialPlatform.findMany({
+    // Platforms list for charts — only those still connected
+    const allPlatforms = await prisma.socialPlatform.findMany({
       where: { isActive: true },
       select: { slug: true, name: true },
     });
+    const platforms =
+      activeSlugs.length === 0
+        ? []
+        : allPlatforms.filter((p) => activeSlugs.includes(p.slug));
 
     let data;
 

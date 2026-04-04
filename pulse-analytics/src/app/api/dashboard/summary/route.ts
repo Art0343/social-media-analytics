@@ -3,6 +3,11 @@ import { prisma } from '@/lib/prisma';
 import { subDays } from 'date-fns';
 import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, DEFAULT_CONFIG } from '@/lib/rate-limit';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+  postWhereConnected,
+} from '@/lib/connected-analytics';
 
 interface Totals {
   orgReach: number;
@@ -44,7 +49,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const days = parseInt(searchParams.get('days') || '30', 10);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
 
     // Verify user has access to this workspace (skip in dev mode)
     if (!isDev && session?.user?.id) {
@@ -65,16 +70,14 @@ export async function GET(request: NextRequest) {
 
     const endDate = new Date();
     const startDate = subDays(endDate, days);
+    const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
-    // Aggregate metrics from PlatformDailySummary
+    // Aggregate metrics from PlatformDailySummary (connected platforms only)
     const summaries = await prisma.platformDailySummary.findMany({
-      where: {
-        workspaceId,
-        date: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
+      where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+        gte: startDate,
+        lte: endDate,
+      }),
     });
 
     // Calculate totals
@@ -92,13 +95,10 @@ export async function GET(request: NextRequest) {
     // Get previous period for delta calculation
     const prevStartDate = subDays(startDate, days);
     const prevSummaries = await prisma.platformDailySummary.findMany({
-      where: {
-        workspaceId,
-        date: {
-          gte: prevStartDate,
-          lt: startDate,
-        },
-      },
+      where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+        gte: prevStartDate,
+        lt: startDate,
+      }),
     });
 
     const prevTotals = prevSummaries.reduce<Totals>(
@@ -124,13 +124,10 @@ export async function GET(request: NextRequest) {
 
     // Calculate engagement rate from posts
     const posts = await prisma.post.findMany({
-      where: {
-        workspaceId,
-        publishedAt: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
+      where: postWhereConnected(workspaceId, {
+        gte: startDate,
+        lte: endDate,
+      }),
     });
 
     const avgEngRate =
@@ -139,13 +136,10 @@ export async function GET(request: NextRequest) {
         : 0;
 
     const prevPosts = await prisma.post.findMany({
-      where: {
-        workspaceId,
-        publishedAt: {
-          gte: prevStartDate,
-          lt: startDate,
-        },
-      },
+      where: postWhereConnected(workspaceId, {
+        gte: prevStartDate,
+        lt: startDate,
+      }),
     });
 
     const prevAvgEngRate =
@@ -155,12 +149,9 @@ export async function GET(request: NextRequest) {
 
     // Get follower growth (current vs start of period)
     const startOfPeriodSummary = await prisma.platformDailySummary.findFirst({
-      where: {
-        workspaceId,
-        date: {
-          gte: startDate,
-        },
-      },
+      where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+        gte: startDate,
+      }),
       orderBy: { date: 'asc' },
     });
 
@@ -204,7 +195,7 @@ export async function GET(request: NextRequest) {
           iconColor: 'text-on-surface',
         },
       ],
-      platformMix: await getPlatformMix(workspaceId, startDate, endDate),
+      platformMix: await getPlatformMix(workspaceId, startDate, endDate, activeSlugs),
       summaries: summaries,
       totals: totals,
       platforms: await prisma.socialPlatform.findMany({ where: { isActive: true } }),
@@ -235,17 +226,15 @@ interface PlatformInfo {
 async function getPlatformMix(
   workspaceId: string,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
+  activeSlugs: string[]
 ): Promise<Array<{ name: string; slug: string; value: number; color: string; icon: string }>> {
   const summaries = await prisma.platformDailySummary.groupBy({
     by: ['platformSlug'],
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    }),
     _sum: {
       orgReach: true,
       paidReach: true,
@@ -271,6 +260,11 @@ async function getPlatformMix(
     whatsapp: '#25D366',
     'google-ads': '#4285F4',
     'google-maps': '#4285F4',
+    snapchat: '#000000',
+    'meta-ads': '#1877F2',
+    'linkedin-ads': '#0A66C2',
+    'tiktok-ads': '#000000',
+    'snapchat-ads': '#e5e500',
   };
 
   const platformIconMap: Record<string, string> = {
@@ -283,6 +277,11 @@ async function getPlatformMix(
     whatsapp: 'chat_bubble',
     'google-ads': 'ads_click',
     'google-maps': 'location_on',
+    snapchat: 'photo_camera',
+    'meta-ads': 'campaign',
+    'linkedin-ads': 'campaign',
+    'tiktok-ads': 'campaign',
+    'snapchat-ads': 'campaign',
   };
 
   return summaries.map((s: GroupedSummary) => {

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { subDays, format as formatDate } from 'date-fns';
 import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, STRICT_CONFIG } from '@/lib/rate-limit';
+import { postWhereConnected } from '@/lib/connected-analytics';
 
 // Check if we're in development mode
 const isDev = process.env.NODE_ENV === 'development';
@@ -59,15 +60,12 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Fetch posts for export
+    // Fetch posts for export (still-connected accounts only)
     const posts = await prisma.post.findMany({
-      where: {
-        workspaceId,
-        publishedAt: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
+      where: postWhereConnected(workspaceId, {
+        gte: startDate,
+        lte: endDate,
+      }),
       orderBy: { publishedAt: 'desc' },
       include: {
         connectedAccount: {

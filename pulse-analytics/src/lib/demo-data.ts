@@ -52,11 +52,17 @@ export const kpiCards = [
 ];
 
 export const platformMixData = [
-  { name: 'Instagram', slug: 'instagram', value: 32.0, color: '#E1306C', icon: 'photo_camera' },
-  { name: 'TikTok', slug: 'tiktok', value: 31.2, color: '#000000', icon: 'music_note' },
-  { name: 'YouTube', slug: 'youtube', value: 15.1, color: '#FF0000', icon: 'smart_display' },
-  { name: 'Facebook', slug: 'facebook', value: 13.8, color: '#1877F2', icon: 'thumb_up' },
-  { name: 'LinkedIn', slug: 'linkedin', value: 7.9, color: '#0A66C2', icon: 'work' },
+  { name: 'Instagram', slug: 'instagram', value: 22.0, color: '#E1306C', icon: 'photo_camera' },
+  { name: 'TikTok', slug: 'tiktok', value: 20.5, color: '#000000', icon: 'music_note' },
+  { name: 'YouTube', slug: 'youtube', value: 12.0, color: '#FF0000', icon: 'smart_display' },
+  { name: 'Facebook', slug: 'facebook', value: 11.0, color: '#1877F2', icon: 'thumb_up' },
+  { name: 'LinkedIn', slug: 'linkedin', value: 8.5, color: '#0A66C2', icon: 'work' },
+  { name: 'Snapchat', slug: 'snapchat', value: 6.2, color: '#000000', icon: 'photo_camera' },
+  { name: 'X / Twitter', slug: 'twitter', value: 5.8, color: '#000000', icon: 'flutter' },
+  { name: 'WhatsApp', slug: 'whatsapp', value: 4.5, color: '#25D366', icon: 'chat_bubble' },
+  { name: 'Google Business', slug: 'google-maps', value: 4.0, color: '#4285F4', icon: 'location_on' },
+  { name: 'Meta Ads', slug: 'meta-ads', value: 2.8, color: '#1877F2', icon: 'campaign' },
+  { name: 'Google Ads', slug: 'google-ads', value: 2.7, color: '#4285F4', icon: 'ads_click' },
 ];
 
 export const postsData = [
@@ -78,6 +84,24 @@ export const postsData = [
     date: '2026-03-30', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
     caption: 'Behind the scenes of our biggest launch', orgReach: 185000, impressions: 280000,
     likes: 15200, comments: 840, shares: 2100, saves: 11200, engRate: 8.4, isBoosted: false, spend: null,
+  },
+  {
+    id: 'recent-4', platform: 'X / Twitter', platformSlug: 'twitter', platformColor: '#000000',
+    date: '2026-03-29', type: 'POST', typeBadgeColor: 'bg-slate-100 text-slate-800',
+    caption: 'Dark mode ships this week — here is what is new', orgReach: 22000, impressions: 48000,
+    likes: 1100, comments: 156, shares: 420, saves: 0, engRate: 3.8, isBoosted: false, spend: null,
+  },
+  {
+    id: 'recent-5', platform: 'Snapchat', platformSlug: 'snapchat', platformColor: '#000000',
+    date: '2026-03-28', type: 'STORY', typeBadgeColor: 'bg-yellow-100 text-yellow-800',
+    caption: 'Studio tour in 60 seconds', orgReach: 14000, impressions: 24000,
+    likes: 0, comments: 0, shares: 0, saves: 0, engRate: 5.2, isBoosted: false, spend: null,
+  },
+  {
+    id: 'recent-6', platform: 'WhatsApp', platformSlug: 'whatsapp', platformColor: '#25D366',
+    date: '2026-03-27', type: 'STATUS', typeBadgeColor: 'bg-green-100 text-green-800',
+    caption: 'New client report template inside the Pulse dashboard', orgReach: 5100, impressions: 7800,
+    likes: 240, comments: 92, shares: 38, saves: 0, engRate: 2.0, isBoosted: false, spend: null,
   },
   // Posts from Feb-Mar 2026 (1-3 months ago)
   {
@@ -236,6 +260,18 @@ export const roiTableData = [
     cpe: '₹2.40', totalReach: '12k', roiScore: 48, roiColor: 'text-error',
     recommendation: 'Cut budget', recColor: 'text-error', recBg: 'bg-error/10',
   },
+  {
+    id: '5', title: 'Product teaser thread', platform: 'X / Twitter', platformSlug: 'twitter',
+    platformColor: '#000000', type: 'Post', organicER: '3.9%', paidSpend: '₹180',
+    cpe: '₹0.55', totalReach: '28k', roiScore: 76, roiColor: 'text-primary',
+    recommendation: 'Boost this', recColor: 'text-primary', recBg: 'bg-primary/10',
+  },
+  {
+    id: '6', title: 'Spotlight: BTS shoot', platform: 'Snapchat', platformSlug: 'snapchat',
+    platformColor: '#000000', type: 'Spotlight', organicER: '6.4%', paidSpend: '₹95',
+    cpe: '₹0.31', totalReach: '18k', roiScore: 81, roiColor: 'text-tertiary',
+    recommendation: 'Scale up', recColor: 'text-tertiary', recBg: 'bg-tertiary/10',
+  },
 ];
 
 /** Organic & profile integrations (pages, channels, messaging, local listings) */
@@ -252,13 +288,13 @@ export const socialProfileAccountsData = [
   },
   {
     id: 's3', accountKind: 'social' as const, platform: 'LinkedIn', platformSlug: 'linkedin', platformColor: '#0A66C2',
-    icon: 'work', accountName: 'LinkedIn Company', isConnected: false,
-    description: 'Track corporate reach and employee advocacy metrics.',
+    icon: 'work', accountName: 'LinkedIn Company', accountHandle: 'Pulse Analytics Inc.',
+    isConnected: true, lastSynced: '22 mins ago',
   },
   {
     id: 's4', accountKind: 'social' as const, platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
-    icon: 'music_note', accountName: 'TikTok Creator', isConnected: false,
-    description: 'Analyze short-form video performance and viral trends.',
+    icon: 'music_note', accountName: 'TikTok Creator', accountHandle: '@pulse_analytics',
+    isConnected: true, lastSynced: '8 mins ago',
   },
   {
     id: 's5', accountKind: 'social' as const, platform: 'YouTube', platformSlug: 'youtube', platformColor: '#FF0000',
@@ -267,18 +303,18 @@ export const socialProfileAccountsData = [
   },
   {
     id: 's6', accountKind: 'social' as const, platform: 'WhatsApp Business', platformSlug: 'whatsapp', platformColor: '#25D366',
-    icon: 'chat_bubble', accountName: 'WhatsApp Business', isConnected: false,
-    description: 'Connect with customers and track messaging metrics.',
+    icon: 'chat_bubble', accountName: 'WhatsApp Business', accountHandle: '+1 555 Pulse',
+    isConnected: true, lastSynced: '1 hour ago',
   },
   {
     id: 's7', accountKind: 'social' as const, platform: 'Google Maps', platformSlug: 'google-maps', platformColor: '#4285F4',
-    icon: 'location_on', accountName: 'Google Business Profile', isConnected: false,
-    description: 'Monitor local business visibility and reviews.',
+    icon: 'location_on', accountName: 'Google Business Profile', accountHandle: 'Pulse HQ — Austin',
+    isConnected: true, lastSynced: '3 hours ago',
   },
   {
     id: 's8', accountKind: 'social' as const, platform: 'Snapchat', platformSlug: 'snapchat', platformColor: '#000000',
-    icon: 'photo_camera', accountName: 'Snapchat', isConnected: false,
-    description: 'Stories, Spotlight, and metrics from your public profile.',
+    icon: 'photo_camera', accountName: 'Snapchat', accountHandle: '@pulse.official',
+    isConnected: true, lastSynced: '35 mins ago',
   },
 ];
 
@@ -301,21 +337,18 @@ export const adAccountsData = [
   },
   {
     id: 'a4', accountKind: 'ad' as const, platform: 'TikTok', platformSlug: 'tiktok-ads', platformColor: '#000000',
-    icon: 'campaign', accountName: 'TikTok Ads', isConnected: false,
-    description: 'Short-form paid campaigns, pixels, and attribution.',
-    subtext: 'TikTok for Business',
+    icon: 'campaign', accountName: 'TikTok Ads', isConnected: true, lastSynced: '52 mins ago',
+    subtext: 'TikTok for Business', monthlySpendLabel: '$340/mo',
   },
   {
     id: 'a5', accountKind: 'ad' as const, platform: 'Twitter / X', platformSlug: 'twitter', platformColor: '#000000',
-    icon: 'flutter', accountName: 'X / Twitter Ads', isConnected: false,
-    description: 'Measure real-time engagement and paid campaign impact.',
-    subtext: 'X Advertising',
+    icon: 'flutter', accountName: 'X / Twitter Ads', isConnected: true, lastSynced: '2 hours ago',
+    subtext: 'X Advertising', monthlySpendLabel: '$190/mo',
   },
   {
     id: 'a6', accountKind: 'ad' as const, platform: 'Snapchat', platformSlug: 'snapchat-ads', platformColor: '#000000',
-    icon: 'campaign', accountName: 'Snapchat Ads', isConnected: false,
-    description: 'Reach audiences on Snapchat and the Snap Audience Network.',
-    subtext: 'Snap Audience Network',
+    icon: 'campaign', accountName: 'Snapchat Ads', isConnected: true, lastSynced: '1 hour ago',
+    subtext: 'Snap Audience Network', monthlySpendLabel: '$95/mo',
   },
 ];
 
@@ -341,12 +374,12 @@ export const demoPlatforms = [
 
 // Chart data exports for backward compatibility
 export const adSpendData = [
-  { month: 'Oct', instagram: 420, facebook: 280, youtube: 120, linkedin: 90, tiktok: 160 },
-  { month: 'Nov', instagram: 580, facebook: 320, youtube: 140, linkedin: 110, tiktok: 180 },
-  { month: 'Dec', instagram: 520, facebook: 290, youtube: 100, linkedin: 85, tiktok: 150 },
-  { month: 'Jan', instagram: 680, facebook: 340, youtube: 160, linkedin: 130, tiktok: 220 },
-  { month: 'Feb', instagram: 820, facebook: 380, youtube: 180, linkedin: 140, tiktok: 240 },
-  { month: 'Mar', instagram: 950, facebook: 420, youtube: 220, linkedin: 160, tiktok: 270 },
+  { month: 'Oct', instagram: 420, facebook: 280, youtube: 120, linkedin: 90, tiktok: 160, twitter: 40, whatsapp: 25, 'google-ads': 95, 'meta-ads': 210, snapchat: 35 },
+  { month: 'Nov', instagram: 580, facebook: 320, youtube: 140, linkedin: 110, tiktok: 180, twitter: 48, whatsapp: 28, 'google-ads': 102, 'meta-ads': 225, snapchat: 38 },
+  { month: 'Dec', instagram: 520, facebook: 290, youtube: 100, linkedin: 85, tiktok: 150, twitter: 42, whatsapp: 22, 'google-ads': 98, 'meta-ads': 218, snapchat: 32 },
+  { month: 'Jan', instagram: 680, facebook: 340, youtube: 160, linkedin: 130, tiktok: 220, twitter: 55, whatsapp: 30, 'google-ads': 110, 'meta-ads': 240, snapchat: 44 },
+  { month: 'Feb', instagram: 820, facebook: 380, youtube: 180, linkedin: 140, tiktok: 240, twitter: 62, whatsapp: 34, 'google-ads': 118, 'meta-ads': 255, snapchat: 48 },
+  { month: 'Mar', instagram: 950, facebook: 420, youtube: 220, linkedin: 160, tiktok: 270, twitter: 70, whatsapp: 38, 'google-ads': 128, 'meta-ads': 270, snapchat: 52 },
 ];
 
 export const engagementRateData = [
@@ -355,15 +388,19 @@ export const engagementRateData = [
   { platform: 'LI', slug: 'linkedin', rate: 6.1, organicRate: 5.5, paidRate: 7.2, color: '#0A66C2' },
   { platform: 'YT', slug: 'youtube', rate: 4.5, organicRate: 4.8, paidRate: 3.2, color: '#FF0000' },
   { platform: 'TK', slug: 'tiktok', rate: 7.1, organicRate: 8.4, paidRate: 5.2, color: '#000000' },
+  { platform: 'X', slug: 'twitter', rate: 3.4, organicRate: 3.1, paidRate: 3.9, color: '#1d9bf0' },
+  { platform: 'SC', slug: 'snapchat', rate: 5.6, organicRate: 5.9, paidRate: 4.8, color: '#a16207' },
+  { platform: 'WA', slug: 'whatsapp', rate: 2.2, organicRate: 2.0, paidRate: 2.5, color: '#25D366' },
+  { platform: 'GMB', slug: 'google-maps', rate: 1.9, organicRate: 1.7, paidRate: 2.1, color: '#4285F4' },
 ];
 
 export const followerGrowthData = [
-  { month: 'Oct', instagram: 12500, tiktok: 4200, youtube: 850 },
-  { month: 'Nov', instagram: 14200, tiktok: 5800, youtube: 920 },
-  { month: 'Dec', instagram: 13800, tiktok: 6200, youtube: 880 },
-  { month: 'Jan', instagram: 18400, tiktok: 8400, youtube: 1100 },
-  { month: 'Feb', instagram: 22100, tiktok: 11200, youtube: 1350 },
-  { month: 'Mar', instagram: 26300, tiktok: 14500, youtube: 1680 },
+  { month: 'Oct', instagram: 12500, tiktok: 4200, youtube: 850, facebook: 6200, linkedin: 2100, snapchat: 1800, twitter: 3200 },
+  { month: 'Nov', instagram: 14200, tiktok: 5800, youtube: 920, facebook: 6400, linkedin: 2280, snapchat: 1950, twitter: 3450 },
+  { month: 'Dec', instagram: 13800, tiktok: 6200, youtube: 880, facebook: 6300, linkedin: 2240, snapchat: 1920, twitter: 3380 },
+  { month: 'Jan', instagram: 18400, tiktok: 8400, youtube: 1100, facebook: 7100, linkedin: 2560, snapchat: 2240, twitter: 3900 },
+  { month: 'Feb', instagram: 22100, tiktok: 11200, youtube: 1350, facebook: 7800, linkedin: 2890, snapchat: 2510, twitter: 4200 },
+  { month: 'Mar', instagram: 26300, tiktok: 14500, youtube: 1680, facebook: 8400, linkedin: 3100, snapchat: 2780, twitter: 4580 },
 ];
 
 export const reachOverTimeData = [

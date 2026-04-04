@@ -1,10 +1,16 @@
 import { prisma } from '@/lib/prisma';
 import { subDays } from 'date-fns';
 import InsightsClient from './InsightsClient';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+  postWhereConnected,
+} from '@/lib/connected-analytics';
 
-async function getInsightsData(days: number = 30, workspaceId: string = 'demo-workspace') {
+async function getInsightsData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
   const startDate = subDays(endDate, days);
+  const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
   // Get AI insight reports
   const aiReport = await prisma.aIInsightReport.findFirst({
@@ -17,13 +23,10 @@ async function getInsightsData(days: number = 30, workspaceId: string = 'demo-wo
 
   // Get top performing posts
   const topPosts = await prisma.post.findMany({
-    where: {
-      workspaceId,
-      publishedAt: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: postWhereConnected(workspaceId, {
+      gte: startDate,
+      lte: endDate,
+    }),
     orderBy: { engRate: 'desc' },
     take: 10,
   });
@@ -43,6 +46,11 @@ async function getInsightsData(days: number = 30, workspaceId: string = 'demo-wo
     whatsapp: '#25D366',
     'google-ads': '#4285F4',
     'google-maps': '#4285F4',
+    snapchat: '#000000',
+    'meta-ads': '#1877F2',
+    'linkedin-ads': '#0A66C2',
+    'tiktok-ads': '#000000',
+    'snapchat-ads': '#e5e500',
   };
 
   // Format ROI table data
@@ -149,13 +157,10 @@ async function getInsightsData(days: number = 30, workspaceId: string = 'demo-wo
 
   // Get platform summaries for hero metrics
   const summaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    }),
   });
 
   const tiktokGrowth = summaries

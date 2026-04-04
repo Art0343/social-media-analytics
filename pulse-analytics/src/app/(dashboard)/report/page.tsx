@@ -1,20 +1,23 @@
 import { prisma } from '@/lib/prisma';
 import { subDays, format } from 'date-fns';
 import ReportClient from './ReportClient';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+  postWhereConnected,
+} from '@/lib/connected-analytics';
 
 async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
   const startDate = subDays(endDate, days);
+  const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
-  // Get platform summaries for the period
+  // Get platform summaries for the period (connected platforms only)
   const summaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    }),
   });
 
   // Calculate totals
@@ -28,13 +31,10 @@ async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-p
 
   // Get top organic posts
   const topOrganicPosts = await prisma.post.findMany({
-    where: {
-      workspaceId,
-      publishedAt: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: postWhereConnected(workspaceId, {
+      gte: startDate,
+      lte: endDate,
+    }),
     orderBy: { orgReach: 'desc' },
     take: 3,
   });
@@ -42,12 +42,11 @@ async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-p
   // Get top paid/boosted posts
   const topPaidPosts = await prisma.post.findMany({
     where: {
-      workspaceId,
-      isBoosted: true,
-      publishedAt: {
+      ...postWhereConnected(workspaceId, {
         gte: startDate,
         lte: endDate,
-      },
+      }),
+      isBoosted: true,
     },
     orderBy: { paidReach: 'desc' },
     take: 3,

@@ -1,20 +1,23 @@
 import { prisma } from '@/lib/prisma';
 import { subDays } from 'date-fns';
 import PaidClient from './PaidClient';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+  postWhereConnected,
+} from '@/lib/connected-analytics';
 
 async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
   const startDate = subDays(endDate, days);
+  const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
-  // Get platform summaries for paid metrics
+  // Get platform summaries for paid metrics (connected platforms only)
   const summaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    }),
   });
 
   // Calculate totals
@@ -24,12 +27,11 @@ async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pul
   // Get boosted posts
   const boostedPosts = await prisma.post.findMany({
     where: {
-      workspaceId,
-      isBoosted: true,
-      publishedAt: {
+      ...postWhereConnected(workspaceId, {
         gte: startDate,
         lte: endDate,
-      },
+      }),
+      isBoosted: true,
     },
     orderBy: { paidSpend: 'desc' },
     take: 10,
@@ -50,6 +52,11 @@ async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pul
     whatsapp: '#25D366',
     'google-ads': '#4285F4',
     'google-maps': '#4285F4',
+    snapchat: '#000000',
+    'meta-ads': '#1877F2',
+    'linkedin-ads': '#0A66C2',
+    'tiktok-ads': '#000000',
+    'snapchat-ads': '#e5e500',
   };
 
   // Calculate platform performance
@@ -72,13 +79,10 @@ async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pul
   // Calculate previous period for comparison
   const prevStartDate = subDays(startDate, days);
   const prevSummaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: prevStartDate,
-        lt: startDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: prevStartDate,
+      lt: startDate,
+    }),
   });
 
   const prevSpend = prevSummaries.reduce((sum: number, s: { adSpend: number | null }) => sum + (s.adSpend || 0), 0);
@@ -87,6 +91,9 @@ async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pul
   // Calculate metrics
   const avgCPE = totalPaidReach > 0 ? totalSpend / (totalPaidReach / 1000) : 0;
   const prevAvgCPE = prevPaidReach > 0 ? prevSpend / (prevPaidReach / 1000) : 0;
+
+  const blendedRoas = totalSpend > 0 ? totalPaidReach / (20 * totalSpend) : 0;
+  const prevBlendedRoas = prevSpend > 0 ? prevPaidReach / (20 * prevSpend) : 0;
 
   // Format boosted posts with platform info
   const formattedBoostedPosts = boostedPosts.map((post: { id: string; platformSlug: string; caption: string; orgReach: number; paidReach: number | null; paidSpend: number | null }) => {
@@ -112,6 +119,8 @@ async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pul
     totalSpend,
     totalPaidReach,
     avgCPE,
+    blendedRoas,
+    prevBlendedRoas,
     prevSpend,
     prevPaidReach,
     prevAvgCPE,

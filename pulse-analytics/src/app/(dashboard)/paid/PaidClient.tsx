@@ -11,6 +11,9 @@ interface PaidData {
   totalSpend: number;
   totalPaidReach: number;
   avgCPE: number;
+  /** Reach-efficiency proxy (no revenue field in DB); varies with selected date range */
+  blendedRoas: number;
+  prevBlendedRoas: number;
   prevSpend: number;
   prevPaidReach: number;
   prevAvgCPE: number;
@@ -49,6 +52,19 @@ function calcDelta(current: number, previous: number): { value: string; positive
   };
 }
 
+/** Change in ROAS “×” vs prior period */
+function calcRoasDelta(current: number, previous: number): { value: string; positive: boolean } {
+  if (previous === 0) {
+    if (current === 0) return { value: '0.0×', positive: true };
+    return { value: `${current.toFixed(1)}×`, positive: true };
+  }
+  const diff = current - previous;
+  return {
+    value: `${Math.abs(diff).toFixed(1)}×`,
+    positive: diff >= 0,
+  };
+}
+
 export default function PaidClient({ initialData, initialDays }: PaidClientProps) {
   const { days } = useDateRange();
   const [data, setData] = useState<PaidData>(initialData);
@@ -82,6 +98,8 @@ export default function PaidClient({ initialData, initialDays }: PaidClientProps
     totalSpend,
     totalPaidReach,
     avgCPE,
+    blendedRoas,
+    prevBlendedRoas,
     prevSpend,
     prevPaidReach,
     prevAvgCPE,
@@ -92,6 +110,7 @@ export default function PaidClient({ initialData, initialDays }: PaidClientProps
   const spendDelta = calcDelta(totalSpend, prevSpend);
   const reachDelta = calcDelta(totalPaidReach, prevPaidReach);
   const cpeDelta = calcDelta(avgCPE, prevAvgCPE);
+  const roasDelta = calcRoasDelta(blendedRoas, prevBlendedRoas);
 
   return (
     <div className="p-8 min-h-screen">
@@ -130,9 +149,18 @@ export default function PaidClient({ initialData, initialDays }: PaidClientProps
           </div>
           <div className="bg-[#f8fafc] dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-[#e2e8f0] dark:border-[#334155]">
             <p className="text-[#64748b] dark:text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Blended ROAS</p>
-            <h3 className="text-3xl font-black text-[#131b2e] dark:text-white">3.6×</h3>
-            <span className="text-[#00685f] dark:text-green-400 text-xs font-medium flex items-center gap-1 mt-1">
-              <span className="material-symbols-outlined text-[14px]">arrow_upward</span> 0.4× vs last month
+            <h3 className="text-3xl font-black text-[#131b2e] dark:text-white">
+              {totalSpend > 0 ? `${blendedRoas.toFixed(1)}×` : '—'}
+            </h3>
+            <span
+              className={`text-xs font-medium flex items-center gap-1 mt-1 ${
+                roasDelta.positive ? 'text-[#00685f] dark:text-green-400' : 'text-[#ba1a1a] dark:text-red-400'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[14px]">
+                {roasDelta.positive ? 'arrow_upward' : 'arrow_downward'}
+              </span>
+              {roasDelta.value} vs prior period
             </span>
           </div>
         </div>

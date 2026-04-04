@@ -3,7 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { subDays } from 'date-fns';
 import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, DEFAULT_CONFIG } from '@/lib/rate-limit';
+import type { Prisma } from '@prisma/client';
 import { postsData } from '@/lib/demo-data';
+import { getActiveConnectedPlatformSlugs, postWhereConnected } from '@/lib/connected-analytics';
 
 // Check if we're in development mode
 const isDev = process.env.NODE_ENV === 'development';
@@ -37,7 +39,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const days = parseInt(searchParams.get('days') || '30', 10);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
 
     // Verify user has access to this workspace (skip in dev mode)
     if (!isDev && session?.user?.id) {
@@ -66,21 +68,18 @@ export async function GET(request: NextRequest) {
 
     const endDate = new Date();
     const startDate = subDays(endDate, days);
+    const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
-    // Build where clause
-    const where: any = {
-      workspaceId,
-      publishedAt: {
+    // Build where clause — only posts tied to still-connected accounts
+    const where: Prisma.PostWhereInput = {
+      ...postWhereConnected(workspaceId, {
         gte: startDate,
         lte: endDate,
-      },
+      }),
     };
 
     if (search) {
-      where.caption = {
-        contains: search,
-        mode: 'insensitive',
-      };
+      where.caption = { contains: search };
     }
 
     if (platform) {
@@ -116,8 +115,12 @@ export async function GET(request: NextRequest) {
       console.log('POSTS API - endDate:', endDate.toISOString());
       console.log('POSTS API - startDate:', startDate.toISOString());
       
-      // Filter demo data by date range
+      const slugSet = new Set(activeSlugs);
+      // Filter demo data by date range and connected platforms only
       const filteredDemoPosts = postsData.filter((post) => {
+        if (activeSlugs.length === 0 || !slugSet.has(post.platformSlug)) {
+          return false;
+        }
         const postDate = new Date(post.date);
         // Set both dates to midnight for accurate comparison
         const postDateMidnight = new Date(postDate.getFullYear(), postDate.getMonth(), postDate.getDate());

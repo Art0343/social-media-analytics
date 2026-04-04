@@ -5,6 +5,11 @@ import { subDays, format as formatDate } from 'date-fns';
 import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, STRICT_CONFIG } from '@/lib/rate-limit';
 import MonthlyReportPDF from '@/components/pdf/MonthlyReportPDF';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+  postWhereConnected,
+} from '@/lib/connected-analytics';
 
 // Check if we're in development mode
 const isDev = process.env.NODE_ENV === 'development';
@@ -53,31 +58,27 @@ export async function GET(request: NextRequest) {
 
     const endDate = new Date();
     const startDate = subDays(endDate, days);
+    const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
+    const summaryWhere = summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    });
+    const postDateWhere = postWhereConnected(workspaceId, { gte: startDate, lte: endDate });
 
-    // Fetch data for the report
+    // Fetch data for the report (connected platforms / accounts only)
     const [summaries, topOrganicPosts, topPaidPosts, aiReport, platforms] = await Promise.all([
-      // Platform summaries
       prisma.platformDailySummary.findMany({
-        where: {
-          workspaceId,
-          date: { gte: startDate, lte: endDate },
-        },
+        where: summaryWhere,
       }),
-      // Top organic posts
       prisma.post.findMany({
-        where: {
-          workspaceId,
-          publishedAt: { gte: startDate, lte: endDate },
-        },
+        where: postDateWhere,
         orderBy: { orgReach: 'desc' },
         take: 5,
       }),
-      // Top paid posts
       prisma.post.findMany({
         where: {
-          workspaceId,
+          ...postDateWhere,
           isBoosted: true,
-          publishedAt: { gte: startDate, lte: endDate },
         },
         orderBy: { paidReach: 'desc' },
         take: 5,

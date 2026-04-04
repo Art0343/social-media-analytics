@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   socialProfileAccountsData,
   adAccountsData,
@@ -9,15 +9,42 @@ import {
 import type { ConnectedAccount } from '@/lib/types';
 import ConnectAccountModal from './ConnectAccountModal';
 
+const WORKSPACE_ID = 'ws-demo-pulse';
+
+type RemoteAccount = {
+  id: string;
+  platform: { slug: string; name: string; brandColor: string; iconUrl?: string };
+  accountName: string;
+  accountHandle: string | null;
+  status: string;
+  lastSynced: string | null;
+};
+
+function formatSynced(iso: string | null | undefined): string | undefined {
+  if (!iso) return undefined;
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+  } catch {
+    return undefined;
+  }
+}
+
 function ConnectAccountCard({
   account,
   onConnectClick,
+  onDisconnect,
+  disconnectingId,
 }: {
   account: ConnectedAccount;
   onConnectClick: (platformSlug: string) => void;
+  onDisconnect: (remoteAccountId: string) => void;
+  disconnectingId: string | null;
 }) {
   const connectLabel =
     account.accountKind === 'ad' ? 'Connect Ad Account' : 'Connect Account';
+  const remoteId = account.remoteAccountId;
+  const isBusy = remoteId != null && disconnectingId === remoteId;
 
   return (
     <div className="bg-[#f8fafc] dark:bg-[#1e293b] p-6 rounded-xl border border-[#e2e8f0] dark:border-[#334155] hover:shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)] transition-all group">
@@ -82,9 +109,11 @@ function ConnectAccountCard({
           </button>
           <button
             type="button"
-            className="px-4 py-2 border border-red-200 dark:border-red-500/30 text-[#ba1a1a] dark:text-red-400 text-sm font-semibold rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-all"
+            disabled={!remoteId || isBusy}
+            onClick={() => remoteId && onDisconnect(remoteId)}
+            className="px-4 py-2 border border-red-200 dark:border-red-500/30 text-[#ba1a1a] dark:text-red-400 text-sm font-semibold rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 transition-all disabled:opacity-50 disabled:pointer-events-none"
           >
-            Disconnect
+            {isBusy ? '…' : 'Disconnect'}
           </button>
         </div>
       ) : (
@@ -103,10 +132,56 @@ function ConnectAccountCard({
 
 type AccountTab = 'social' | 'ad';
 
+function mergeWithRemote(staticList: ConnectedAccount[], remote: RemoteAccount[]): ConnectedAccount[] {
+  return staticList.map((row) => {
+    const match = remote.find(
+      (r) => r.platform.slug === row.platformSlug && r.status === 'CONNECTED'
+    );
+    const synced = formatSynced(match?.lastSynced);
+    return {
+      ...row,
+      isConnected: !!match,
+      remoteAccountId: match?.id,
+      accountName: match?.accountName || row.accountName,
+      accountHandle: match?.accountHandle ?? row.accountHandle,
+      lastSynced: synced ?? row.lastSynced,
+    };
+  });
+}
+
 export default function ConnectAccountsPage() {
   const [accountTab, setAccountTab] = useState<AccountTab>('social');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState<(typeof demoPlatforms)[0] | null>(null);
+  const [remoteAccounts, setRemoteAccounts] = useState<RemoteAccount[]>([]);
+  const [loadingRemote, setLoadingRemote] = useState(true);
+  const [disconnectingId, setDisconnectingId] = useState<string | null>(null);
+
+  const loadAccounts = useCallback(async () => {
+    setLoadingRemote(true);
+    try {
+      const res = await fetch(`/api/connected-accounts?workspaceId=${WORKSPACE_ID}`);
+      if (res.ok) {
+        const data = await res.json();
+        setRemoteAccounts(data.accounts ?? []);
+      }
+    } finally {
+      setLoadingRemote(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadAccounts();
+  }, [loadAccounts]);
+
+  const socialRows = useMemo(
+    () => mergeWithRemote(socialProfileAccountsData as ConnectedAccount[], remoteAccounts),
+    [remoteAccounts]
+  );
+  const adRows = useMemo(
+    () => mergeWithRemote(adAccountsData as ConnectedAccount[], remoteAccounts),
+    [remoteAccounts]
+  );
 
   const handleConnectClick = (platformSlug: string) => {
     const platform = demoPlatforms.find((p: { slug: string }) => p.slug === platformSlug);
@@ -116,8 +191,25 @@ export default function ConnectAccountsPage() {
     }
   };
 
+  const handleDisconnect = async (remoteAccountId: string) => {
+    setDisconnectingId(remoteAccountId);
+    try {
+      const res = await fetch(
+        `/api/connected-accounts/${remoteAccountId}?workspaceId=${WORKSPACE_ID}`,
+        { method: 'DELETE' }
+      );
+      if (res.ok) {
+        await loadAccounts();
+      } else {
+        alert('Failed to disconnect. Please try again.');
+      }
+    } finally {
+      setDisconnectingId(null);
+    }
+  };
+
   const handleConnect = async (data: {
-    platformId: string;
+    platformSlug: string;
     accountName: string;
     accountHandle: string;
     accessToken: string;
@@ -126,7 +218,8 @@ export default function ConnectAccountsPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        platformId: data.platformId,
+        workspaceId: WORKSPACE_ID,
+        platformSlug: data.platformSlug,
         accountName: data.accountName,
         accountHandle: data.accountHandle,
         accessToken: data.accessToken,
@@ -134,11 +227,14 @@ export default function ConnectAccountsPage() {
     });
 
     if (response.ok) {
-      window.location.reload();
+      await loadAccounts();
     } else {
-      alert('Failed to connect account. Please try again.');
+      const err = await response.json().catch(() => ({}));
+      alert(err.error || 'Failed to connect account. Please try again.');
     }
   };
+
+  const displayRows = accountTab === 'social' ? socialRows : adRows;
 
   return (
     <div className="p-8 max-w-7xl mx-auto bg-surface dark:bg-[#0a0f1c] min-h-screen">
@@ -199,9 +295,18 @@ export default function ConnectAccountsPage() {
             ? 'Pages, channels, and business profiles for organic reach, messaging, and local presence.'
             : 'Advertising networks and campaign managers for paid spend, attribution, and ROAS.'}
         </p>
+        {loadingRemote ? (
+          <p className="text-sm text-on-surface-variant dark:text-gray-400">Loading connections…</p>
+        ) : null}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(accountTab === 'social' ? socialProfileAccountsData : adAccountsData).map((account) => (
-            <ConnectAccountCard key={account.id} account={account} onConnectClick={handleConnectClick} />
+          {displayRows.map((account) => (
+            <ConnectAccountCard
+              key={account.id}
+              account={account}
+              onConnectClick={handleConnectClick}
+              onDisconnect={handleDisconnect}
+              disconnectingId={disconnectingId}
+            />
           ))}
         </div>
       </section>

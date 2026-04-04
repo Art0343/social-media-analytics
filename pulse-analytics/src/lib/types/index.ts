@@ -87,6 +87,8 @@ export interface ConnectedAccount {
   subtext?: string;
   /** Shown for connected ad accounts, e.g. "$1,070/mo" */
   monthlySpendLabel?: string;
+  /** Set when loaded from API — used for disconnect */
+  remoteAccountId?: string;
 }
 
 export interface DemoPlatform {

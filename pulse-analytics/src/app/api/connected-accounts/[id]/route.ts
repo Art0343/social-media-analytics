@@ -2,20 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 // DELETE /api/connected-accounts/[id] - Disconnect an account
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!isDev) {
+      const session = await auth();
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     const { id } = await params;
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
 
     // Verify the account belongs to the workspace
     const account = await prisma.connectedAccount.findFirst({
@@ -58,14 +62,16 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!isDev) {
+      const session = await auth();
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     const { id } = await params;
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
 
     const body = await request.json();
     const { accountName, accountHandle, status, lastSynced } = body;

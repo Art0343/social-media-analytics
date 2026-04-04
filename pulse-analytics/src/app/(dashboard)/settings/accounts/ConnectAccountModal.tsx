@@ -14,11 +14,10 @@ interface ConnectAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
   platform: SocialPlatform | null;
-  onConnect: (data: { platformId: string; accountName: string; accountHandle: string; accessToken: string }) => void;
+  onConnect: (data: { platformSlug: string; accountName: string; accountHandle: string; accessToken: string }) => void;
 }
 
 export default function ConnectAccountModal({ isOpen, onClose, platform, onConnect }: ConnectAccountModalProps) {
-  const [accountName, setAccountName] = useState('');
   const [accountHandle, setAccountHandle] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -30,14 +29,13 @@ export default function ConnectAccountModal({ isOpen, onClose, platform, onConne
     setIsLoading(true);
     
     await onConnect({
-      platformId: platform.id,
-      accountName,
+      platformSlug: platform.slug,
+      accountName: accountHandle.trim() || 'Connected account',
       accountHandle,
       accessToken,
     });
     
     setIsLoading(false);
-    setAccountName('');
     setAccountHandle('');
     setAccessToken('');
     onClose();

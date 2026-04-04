@@ -4,12 +4,17 @@ import { encrypt } from '@/lib/encryption';
 import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, DEFAULT_CONFIG, STRICT_CONFIG } from '@/lib/rate-limit';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 // GET /api/connected-accounts - List all connected accounts for the workspace
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    let session = null;
+    if (!isDev) {
+      session = await auth();
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     // Rate limiting
@@ -28,7 +33,7 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const workspaceId = searchParams.get('workspaceId') || 'demo-workspace';
+    const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
 
     const accounts = await prisma.connectedAccount.findMany({
       where: { workspaceId },
@@ -77,9 +82,11 @@ export async function GET(request: NextRequest) {
 // POST /api/connected-accounts - Add a new connected account
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!isDev) {
+      const session = await auth();
+      if (!session?.user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
     }
 
     const body = await request.json();
@@ -100,7 +107,7 @@ export async function POST(request: NextRequest) {
     }
 
     const {
-      workspaceId = 'demo-workspace',
+      workspaceId = 'ws-demo-pulse',
       platformSlug,
       accountName,
       accountHandle,

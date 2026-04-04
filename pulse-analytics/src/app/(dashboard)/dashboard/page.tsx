@@ -1,6 +1,11 @@
 import { prisma } from '@/lib/prisma';
 import { subDays } from 'date-fns';
 import DashboardClient from './DashboardClient';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+  postWhereConnected,
+} from '@/lib/connected-analytics';
 
 interface KpiData {
   title: string;
@@ -30,16 +35,14 @@ interface Totals {
 async function getDashboardData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
   const startDate = subDays(endDate, days);
+  const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
-  // Aggregate metrics from PlatformDailySummary
+  // Aggregate metrics from PlatformDailySummary (only connected platforms)
   const summaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    }),
   });
 
   console.log('DEBUG - Date range:', { startDate, endDate, days });
@@ -63,13 +66,10 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
   // Get previous period for delta calculation
   const prevStartDate = subDays(startDate, days);
   const prevSummaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: prevStartDate,
-        lt: startDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: prevStartDate,
+      lt: startDate,
+    }),
   });
 
   const prevTotals = prevSummaries.reduce<Totals>(
@@ -95,13 +95,10 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
 
   // Calculate engagement rate from posts
   const posts = await prisma.post.findMany({
-    where: {
-      workspaceId,
-      publishedAt: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: postWhereConnected(workspaceId, {
+      gte: startDate,
+      lte: endDate,
+    }),
   });
 
   const avgEngRate =
@@ -110,13 +107,10 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
       : 0;
 
   const prevPosts = await prisma.post.findMany({
-    where: {
-      workspaceId,
-      publishedAt: {
-        gte: prevStartDate,
-        lt: startDate,
-      },
-    },
+    where: postWhereConnected(workspaceId, {
+      gte: prevStartDate,
+      lt: startDate,
+    }),
   });
 
   const prevAvgEngRate =
@@ -126,12 +120,9 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
 
   // Get follower growth
   const startOfPeriodSummary = await prisma.platformDailySummary.findFirst({
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+    }),
     orderBy: { date: 'asc' },
   });
 
@@ -176,13 +167,10 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
   // Platform Mix
   const groupedSummaries = await prisma.platformDailySummary.groupBy({
     by: ['platformSlug'],
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    }),
     _sum: {
       orgReach: true,
       paidReach: true,
@@ -208,6 +196,11 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
     whatsapp: '#25D366',
     'google-ads': '#4285F4',
     'google-maps': '#4285F4',
+    snapchat: '#000000',
+    'meta-ads': '#1877F2',
+    'linkedin-ads': '#0A66C2',
+    'tiktok-ads': '#000000',
+    'snapchat-ads': '#e5e500',
   };
 
   const platformIconMap: Record<string, string> = {
@@ -220,6 +213,11 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
     whatsapp: 'chat_bubble',
     'google-ads': 'ads_click',
     'google-maps': 'location_on',
+    snapchat: 'photo_camera',
+    'meta-ads': 'campaign',
+    'linkedin-ads': 'campaign',
+    'tiktok-ads': 'campaign',
+    'snapchat-ads': 'campaign',
   };
 
   const platformMix: PlatformMixItem[] = groupedSummaries.map((s: { platformSlug: string; _sum: { orgReach: number | null; paidReach: number | null } }) => {

@@ -13,6 +13,8 @@ const lines = [
   { key: 'youtube', color: '#FF0000', name: 'YouTube' },
   { key: 'facebook', color: '#1877F2', name: 'Facebook' },
   { key: 'linkedin', color: '#0A66C2', name: 'LinkedIn' },
+  { key: 'snapchat', color: '#e5e500', name: 'Snapchat' },
+  { key: 'twitter', color: '#1d9bf0', name: 'X / Twitter' },
 ];
 
 function sliceByRange(range: string) {
@@ -38,11 +40,15 @@ export default function FollowerGrowthChart({ reachType = 'combined' }: { reachT
   };
   const multiplier = typeMultipliers[reachType] ?? 1.0;
   
-  const data = baseData.map(d => ({
+  const data = baseData.map((d) => ({
     ...d,
     instagram: Math.round(d.instagram * multiplier),
     tiktok: Math.round(d.tiktok * multiplier),
     youtube: Math.round(d.youtube * multiplier),
+    facebook: Math.round((d.facebook ?? 0) * multiplier),
+    linkedin: Math.round((d.linkedin ?? 0) * multiplier),
+    snapchat: Math.round((d.snapchat ?? 0) * multiplier),
+    twitter: Math.round((d.twitter ?? 0) * multiplier),
   }));
 
   return (

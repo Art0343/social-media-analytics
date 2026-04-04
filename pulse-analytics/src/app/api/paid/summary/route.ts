@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { subDays } from 'date-fns';
+import {
+  getActiveConnectedPlatformSlugs,
+  summaryWhereForConnectedPlatforms,
+  postWhereConnected,
+} from '@/lib/connected-analytics';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -9,16 +14,14 @@ export async function GET(request: Request) {
 
   const endDate = new Date();
   const startDate = subDays(endDate, days);
+  const activeSlugs = await getActiveConnectedPlatformSlugs(workspaceId);
 
-  // Get platform summaries for paid metrics
+  // Get platform summaries for paid metrics (connected platforms only)
   const summaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: startDate,
-        lte: endDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: startDate,
+      lte: endDate,
+    }),
   });
 
   // Calculate totals
@@ -28,12 +31,11 @@ export async function GET(request: Request) {
   // Get boosted posts
   const boostedPosts = await prisma.post.findMany({
     where: {
-      workspaceId,
-      isBoosted: true,
-      publishedAt: {
+      ...postWhereConnected(workspaceId, {
         gte: startDate,
         lte: endDate,
-      },
+      }),
+      isBoosted: true,
     },
     orderBy: { paidSpend: 'desc' },
     take: 10,
@@ -54,6 +56,11 @@ export async function GET(request: Request) {
     whatsapp: '#25D366',
     'google-ads': '#4285F4',
     'google-maps': '#4285F4',
+    snapchat: '#000000',
+    'meta-ads': '#1877F2',
+    'linkedin-ads': '#0A66C2',
+    'tiktok-ads': '#000000',
+    'snapchat-ads': '#e5e500',
   };
 
   // Calculate platform performance
@@ -76,13 +83,10 @@ export async function GET(request: Request) {
   // Calculate previous period for comparison
   const prevStartDate = subDays(startDate, days);
   const prevSummaries = await prisma.platformDailySummary.findMany({
-    where: {
-      workspaceId,
-      date: {
-        gte: prevStartDate,
-        lt: startDate,
-      },
-    },
+    where: summaryWhereForConnectedPlatforms(workspaceId, activeSlugs, {
+      gte: prevStartDate,
+      lt: startDate,
+    }),
   });
 
   const prevSpend = prevSummaries.reduce((sum, s) => sum + (s.adSpend || 0), 0);
@@ -91,6 +95,10 @@ export async function GET(request: Request) {
   // Calculate metrics
   const avgCPE = totalPaidReach > 0 ? totalSpend / (totalPaidReach / 1000) : 0;
   const prevAvgCPE = prevPaidReach > 0 ? prevSpend / (prevPaidReach / 1000) : 0;
+
+  /** Proxy for blended ROAS (no revenue in DB): reach-per-spend efficiency scaled to a “×” readout */
+  const blendedRoas = totalSpend > 0 ? totalPaidReach / (20 * totalSpend) : 0;
+  const prevBlendedRoas = prevSpend > 0 ? prevPaidReach / (20 * prevSpend) : 0;
 
   // Format boosted posts with platform info
   const formattedBoostedPosts = boostedPosts.map((post) => {
@@ -116,6 +124,8 @@ export async function GET(request: Request) {
     totalSpend,
     totalPaidReach,
     avgCPE,
+    blendedRoas,
+    prevBlendedRoas,
     prevSpend,
     prevPaidReach,
     prevAvgCPE,

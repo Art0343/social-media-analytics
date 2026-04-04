@@ -1,5 +1,5 @@
 import { format, subDays, eachDayOfInterval } from 'date-fns';
-import { AD_SPEND_STACK_KEYS } from '@/lib/platform-colors';
+import { AD_SPEND_STACK_KEYS, isAdAccountPlatformSlug } from '@/lib/platform-colors';
 
 export type AdSpendChartRow = { month: string } & Record<string, string | number>;
 
@@ -13,6 +13,7 @@ type AdSpendSummaryInput = Readonly<{
 
 /**
  * Build stacked ad spend chart rows from platform daily summaries (already scoped to connected accounts).
+ * Only includes Ads Manager / ad-account slugs (`*-ads`); organic social profile rows are omitted.
  */
 export function buildAdSpendChartFromSummaries(
   summaries: ReadonlyArray<AdSpendSummaryInput>,
@@ -31,7 +32,9 @@ export function buildAdSpendChartFromSummaries(
       s.date != null && inRange(new Date(s.date))
   );
 
-  const slugSet = new Set(filtered.map((s) => s.platformSlug));
+  const adOnly = filtered.filter((s) => isAdAccountPlatformSlug(s.platformSlug));
+
+  const slugSet = new Set(adOnly.map((s) => s.platformSlug));
   const known = AD_SPEND_STACK_KEYS.filter((k) => slugSet.has(k.key));
   const unknownSlugs = [...slugSet].filter((s) => !AD_SPEND_STACK_KEYS.some((k) => k.key === s));
   const stackKeys: AdSpendStackKey[] = [
@@ -55,7 +58,7 @@ export function buildAdSpendChartFromSummaries(
 
   if (isLongPeriod) {
     const monthlyData: Record<string, Record<string, number>> = {};
-    filtered.forEach((s) => {
+    adOnly.forEach((s) => {
       const monthKey = format(new Date(s.date), 'MMM');
       if (!monthlyData[monthKey]) monthlyData[monthKey] = {};
       const spend = s.adSpend || 0;
@@ -78,7 +81,7 @@ export function buildAdSpendChartFromSummaries(
     dailyData[format(date, 'MMM dd')] = {};
   });
 
-  filtered.forEach((s) => {
+  adOnly.forEach((s) => {
     const key = format(new Date(s.date), 'MMM dd');
     if (!(key in dailyData)) return;
     const spend = s.adSpend || 0;

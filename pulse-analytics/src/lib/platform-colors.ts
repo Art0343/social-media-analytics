@@ -35,16 +35,19 @@ export const FOLLOWER_GROWTH_SERIES = [
   { key: 'twitter', name: 'X / Twitter' },
 ] as const;
 
-/** Stacked ad spend keys (must match `adSpendData` columns). */
+/**
+ * Stacked ad spend chart: dedicated ad / Ads Manager accounts only (not organic social profile slugs).
+ * Keys must match `adSpendData` columns and DB `platformSlug` for ad accounts.
+ */
 export const AD_SPEND_STACK_KEYS = [
-  { key: 'instagram', name: 'Instagram' },
-  { key: 'facebook', name: 'Facebook' },
-  { key: 'youtube', name: 'YouTube' },
-  { key: 'linkedin', name: 'LinkedIn' },
-  { key: 'tiktok', name: 'TikTok' },
-  { key: 'twitter', name: 'X' },
-  { key: 'whatsapp', name: 'WhatsApp' },
-  { key: 'google-ads', name: 'Google Ads' },
   { key: 'meta-ads', name: 'Meta Ads' },
-  { key: 'snapchat', name: 'Snapchat' },
+  { key: 'google-ads', name: 'Google Ads' },
+  { key: 'linkedin-ads', name: 'LinkedIn Ads' },
+  { key: 'tiktok-ads', name: 'TikTok Ads' },
+  { key: 'snapchat-ads', name: 'Snapchat Ads' },
 ] as const;
+
+/** Ads Manager–style accounts (`*-ads`); excludes organic social profile slugs (e.g. instagram, facebook). */
+export function isAdAccountPlatformSlug(slug: string): boolean {
+  return slug.endsWith('-ads');
+}

@@ -375,13 +375,14 @@ export const demoPlatforms = [
 ];
 
 // Chart data exports for backward compatibility
+/** Ad Manager accounts only (matches live chart filter); no organic social profile slugs. */
 export const adSpendData = [
-  { month: 'Oct', instagram: 420, facebook: 280, youtube: 120, linkedin: 90, tiktok: 160, twitter: 40, whatsapp: 25, 'google-ads': 95, 'meta-ads': 210, snapchat: 35 },
-  { month: 'Nov', instagram: 580, facebook: 320, youtube: 140, linkedin: 110, tiktok: 180, twitter: 48, whatsapp: 28, 'google-ads': 102, 'meta-ads': 225, snapchat: 38 },
-  { month: 'Dec', instagram: 520, facebook: 290, youtube: 100, linkedin: 85, tiktok: 150, twitter: 42, whatsapp: 22, 'google-ads': 98, 'meta-ads': 218, snapchat: 32 },
-  { month: 'Jan', instagram: 680, facebook: 340, youtube: 160, linkedin: 130, tiktok: 220, twitter: 55, whatsapp: 30, 'google-ads': 110, 'meta-ads': 240, snapchat: 44 },
-  { month: 'Feb', instagram: 820, facebook: 380, youtube: 180, linkedin: 140, tiktok: 240, twitter: 62, whatsapp: 34, 'google-ads': 118, 'meta-ads': 255, snapchat: 48 },
-  { month: 'Mar', instagram: 950, facebook: 420, youtube: 220, linkedin: 160, tiktok: 270, twitter: 70, whatsapp: 38, 'google-ads': 128, 'meta-ads': 270, snapchat: 52 },
+  { month: 'Oct', 'meta-ads': 210, 'google-ads': 95, 'linkedin-ads': 58, 'tiktok-ads': 42, 'snapchat-ads': 28 },
+  { month: 'Nov', 'meta-ads': 225, 'google-ads': 102, 'linkedin-ads': 62, 'tiktok-ads': 48, 'snapchat-ads': 30 },
+  { month: 'Dec', 'meta-ads': 218, 'google-ads': 98, 'linkedin-ads': 55, 'tiktok-ads': 44, 'snapchat-ads': 26 },
+  { month: 'Jan', 'meta-ads': 240, 'google-ads': 110, 'linkedin-ads': 68, 'tiktok-ads': 52, 'snapchat-ads': 34 },
+  { month: 'Feb', 'meta-ads': 255, 'google-ads': 118, 'linkedin-ads': 72, 'tiktok-ads': 56, 'snapchat-ads': 36 },
+  { month: 'Mar', 'meta-ads': 270, 'google-ads': 128, 'linkedin-ads': 78, 'tiktok-ads': 60, 'snapchat-ads': 38 },
 ];
 
 export const engagementRateData = [

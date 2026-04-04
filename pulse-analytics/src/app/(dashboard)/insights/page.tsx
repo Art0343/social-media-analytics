@@ -6,6 +6,7 @@ import {
   summaryWhereForConnectedPlatforms,
   postWhereConnected,
 } from '@/lib/connected-analytics';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 async function getInsightsData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
@@ -35,23 +36,6 @@ async function getInsightsData(days: number = 30, workspaceId: string = 'ws-demo
   const platforms = await prisma.socialPlatform.findMany({
     where: { isActive: true },
   });
-
-  const platformColorMap: Record<string, string> = {
-    instagram: '#E1306C',
-    tiktok: '#000000',
-    youtube: '#FF0000',
-    facebook: '#1877F2',
-    linkedin: '#0A66C2',
-    twitter: '#000000',
-    whatsapp: '#25D366',
-    'google-ads': '#4285F4',
-    'google-maps': '#4285F4',
-    snapchat: '#000000',
-    'meta-ads': '#1877F2',
-    'linkedin-ads': '#0A66C2',
-    'tiktok-ads': '#000000',
-    'snapchat-ads': '#e5e500',
-  };
 
   // Format ROI table data
   const roiTableData = topPosts.map((post: { id: string; platformSlug: string; caption: string; orgReach: number; paidReach: number | null; paidSpend: number | null; postType: string; engRate: number }) => {
@@ -85,7 +69,7 @@ async function getInsightsData(days: number = 30, workspaceId: string = 'ws-demo
       title: post.caption.slice(0, 40) + (post.caption.length > 40 ? '...' : ''),
       platform: platform?.name || post.platformSlug,
       platformSlug: post.platformSlug,
-      platformColor: platform?.brandColor || platformColorMap[post.platformSlug] || '#666',
+      platformColor: getPlatformColor(post.platformSlug),
       type: post.postType,
       organicER: `${post.engRate.toFixed(1)}%`,
       paidSpend: post.paidSpend ? `₹${post.paidSpend.toFixed(0)}` : '₹0',

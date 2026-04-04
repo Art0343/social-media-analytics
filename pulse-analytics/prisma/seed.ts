@@ -1,4 +1,5 @@
 import { prisma } from '../src/lib/prisma';
+import { getPlatformColor } from '../src/lib/platform-colors';
 
 async function main() {
   console.log('🌱 Seeding database...\n');
@@ -10,7 +11,6 @@ async function main() {
     {
       name: 'Instagram',
       slug: 'instagram',
-      brandColor: '#E1306C',
       isBuiltIn: true,
       authUrl: 'https://api.instagram.com/oauth/authorize',
       tokenUrl: 'https://api.instagram.com/oauth/access_token',
@@ -20,7 +20,6 @@ async function main() {
     {
       name: 'Facebook',
       slug: 'facebook',
-      brandColor: '#1877F2',
       isBuiltIn: true,
       authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
       tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
@@ -30,7 +29,6 @@ async function main() {
     {
       name: 'LinkedIn',
       slug: 'linkedin',
-      brandColor: '#0A66C2',
       isBuiltIn: true,
       authUrl: 'https://www.linkedin.com/oauth/v2/authorization',
       tokenUrl: 'https://www.linkedin.com/oauth/v2/accessToken',
@@ -40,7 +38,6 @@ async function main() {
     {
       name: 'YouTube',
       slug: 'youtube',
-      brandColor: '#FF0000',
       isBuiltIn: true,
       authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
       tokenUrl: 'https://oauth2.googleapis.com/token',
@@ -50,7 +47,6 @@ async function main() {
     {
       name: 'TikTok',
       slug: 'tiktok',
-      brandColor: '#000000',
       isBuiltIn: true,
       authUrl: 'https://www.tiktok.com/v2/auth/authorize/',
       tokenUrl: 'https://open.tiktokapis.com/v2/oauth/token/',
@@ -60,7 +56,6 @@ async function main() {
     {
       name: 'Twitter / X',
       slug: 'twitter',
-      brandColor: '#000000',
       isBuiltIn: true,
       authUrl: 'https://twitter.com/i/oauth2/authorize',
       tokenUrl: 'https://api.twitter.com/2/oauth2/token',
@@ -70,7 +65,6 @@ async function main() {
     {
       name: 'WhatsApp Business',
       slug: 'whatsapp',
-      brandColor: '#25D366',
       isBuiltIn: true,
       authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
       tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
@@ -80,7 +74,6 @@ async function main() {
     {
       name: 'Google Ads',
       slug: 'google-ads',
-      brandColor: '#4285F4',
       isBuiltIn: true,
       authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
       tokenUrl: 'https://oauth2.googleapis.com/token',
@@ -90,7 +83,6 @@ async function main() {
     {
       name: 'Google Maps',
       slug: 'google-maps',
-      brandColor: '#4285F4',
       isBuiltIn: true,
       authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
       tokenUrl: 'https://oauth2.googleapis.com/token',
@@ -100,7 +92,6 @@ async function main() {
     {
       name: 'Meta Ads',
       slug: 'meta-ads',
-      brandColor: '#1877F2',
       isBuiltIn: true,
       authUrl: 'https://www.facebook.com/v18.0/dialog/oauth',
       tokenUrl: 'https://graph.facebook.com/v18.0/oauth/access_token',
@@ -110,7 +101,6 @@ async function main() {
     {
       name: 'LinkedIn Ads',
       slug: 'linkedin-ads',
-      brandColor: '#0A66C2',
       isBuiltIn: true,
       authUrl: 'https://www.linkedin.com/oauth/v2/authorization',
       tokenUrl: 'https://www.linkedin.com/oauth/v2/accessToken',
@@ -120,7 +110,6 @@ async function main() {
     {
       name: 'TikTok Ads',
       slug: 'tiktok-ads',
-      brandColor: '#000000',
       isBuiltIn: true,
       authUrl: 'https://business-api.tiktok.com/oauth',
       tokenUrl: 'https://business-api.tiktok.com/open_api/v1.3/oauth2/token/',
@@ -130,7 +119,6 @@ async function main() {
     {
       name: 'Snapchat Ads',
       slug: 'snapchat-ads',
-      brandColor: '#FFFC00',
       isBuiltIn: true,
       authUrl: 'https://accounts.snapchat.com/login/oauth2',
       tokenUrl: 'https://accounts.snapchat.com/login/oauth2/access_token',
@@ -140,7 +128,6 @@ async function main() {
     {
       name: 'Snapchat',
       slug: 'snapchat',
-      brandColor: '#000000',
       isBuiltIn: true,
       authUrl: 'https://accounts.snapchat.com/login/oauth2',
       tokenUrl: 'https://accounts.snapchat.com/login/oauth2/access_token',
@@ -150,13 +137,14 @@ async function main() {
   ];
 
   for (const p of platforms) {
+    const brandColor = getPlatformColor(p.slug);
     await prisma.socialPlatform.upsert({
       where: { slug: p.slug },
-      update: {},
+      update: { brandColor },
       create: {
         name: p.name,
         slug: p.slug,
-        brandColor: p.brandColor,
+        brandColor,
         isBuiltIn: p.isBuiltIn,
         isActive: true,
         authUrl: p.authUrl,

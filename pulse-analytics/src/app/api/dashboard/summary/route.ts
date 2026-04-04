@@ -8,6 +8,7 @@ import {
   summaryWhereForConnectedPlatforms,
   postWhereConnected,
 } from '@/lib/connected-analytics';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 interface Totals {
   orgReach: number;
@@ -250,23 +251,6 @@ async function getPlatformMix(
     0
   );
 
-  const platformColorMap: Record<string, string> = {
-    instagram: '#E1306C',
-    tiktok: '#000000',
-    youtube: '#FF0000',
-    facebook: '#1877F2',
-    linkedin: '#0A66C2',
-    twitter: '#000000',
-    whatsapp: '#25D366',
-    'google-ads': '#4285F4',
-    'google-maps': '#4285F4',
-    snapchat: '#000000',
-    'meta-ads': '#1877F2',
-    'linkedin-ads': '#0A66C2',
-    'tiktok-ads': '#000000',
-    'snapchat-ads': '#e5e500',
-  };
-
   const platformIconMap: Record<string, string> = {
     instagram: 'photo_camera',
     tiktok: 'music_note',
@@ -293,7 +277,7 @@ async function getPlatformMix(
       name: platform?.name || s.platformSlug,
       slug: s.platformSlug,
       value: parseFloat(percentage.toFixed(1)),
-      color: platform?.brandColor || platformColorMap[s.platformSlug] || '#666',
+      color: getPlatformColor(s.platformSlug),
       icon: platformIconMap[s.platformSlug] || 'public',
     };
   });

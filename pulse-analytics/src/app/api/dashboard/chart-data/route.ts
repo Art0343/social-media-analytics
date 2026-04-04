@@ -5,6 +5,7 @@ import {
   getActiveConnectedPlatformSlugs,
   summaryWhereForConnectedPlatforms,
 } from '@/lib/connected-analytics';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 // GET /api/dashboard/chart-data?days=30&workspaceId=xxx&type=reach|engagement|spend|followers
 export async function GET(request: NextRequest) {
@@ -137,22 +138,13 @@ function formatEngagementData(summaries: any[], platforms: any[]) {
     }
   });
 
-  const platformColors: Record<string, string> = {
-    instagram: '#E1306C',
-    tiktok: '#000000',
-    youtube: '#FF0000',
-    facebook: '#1877F2',
-    linkedin: '#0A66C2',
-    twitter: '#000000',
-  };
-
   return Object.entries(platformEngagement)
     .filter(([_, data]) => data.count > 0)
     .map(([slug, data]) => ({
       platform: slug.substring(0, 2).toUpperCase(),
       slug,
       rate: parseFloat((data.total / data.count).toFixed(1)),
-      color: platformColors[slug] || '#666',
+      color: getPlatformColor(slug),
     }));
 }
 

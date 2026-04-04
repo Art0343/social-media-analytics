@@ -2,6 +2,7 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { platformMixData as defaultPlatformMixData } from '@/lib/demo-data';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 interface PlatformMixItem {
   name: string;
@@ -16,11 +17,15 @@ interface PlatformMixChartProps {
 }
 
 export default function PlatformMixChart({ data }: PlatformMixChartProps) {
-  const chartData = data || defaultPlatformMixData;
+  const raw = data || defaultPlatformMixData;
+  const chartData = raw.map((entry) => ({
+    ...entry,
+    color: getPlatformColor(entry.slug),
+  }));
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-48 h-48 mb-4">
+    <div className="flex h-full min-h-0 w-full flex-col gap-3">
+      <div className="relative mx-auto h-40 w-40 shrink-0 sm:h-44 sm:w-44">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -50,21 +55,26 @@ export default function PlatformMixChart({ data }: PlatformMixChartProps) {
             />
           </PieChart>
         </ResponsiveContainer>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-2xl font-black text-on-surface">{chartData.length}</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+          <span className="text-2xl font-black text-on-surface dark:text-white">{chartData.length}</span>
           <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Platforms</span>
         </div>
       </div>
-      <div className="w-full space-y-2">
-        {chartData.map((item) => (
-          <div key={item.slug} className="flex justify-between items-center text-xs">
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-              {item.name}
-            </span>
-            <span className="font-bold">{item.value.toFixed(1)}%</span>
-          </div>
-        ))}
+      <div className="min-h-0 flex-1 w-full overflow-y-auto overscroll-contain pr-1 [-ms-overflow-style:none] [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-outline-variant/40">
+        <div className="space-y-1.5 pb-1">
+          {chartData.map((item) => (
+            <div
+              key={item.slug}
+              className="flex justify-between items-center gap-2 text-xs text-on-surface dark:text-gray-100"
+            >
+              <span className="flex min-w-0 items-center gap-2">
+                <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
+                <span className="truncate font-medium">{item.name}</span>
+              </span>
+              <span className="shrink-0 font-bold tabular-nums">{item.value.toFixed(1)}%</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

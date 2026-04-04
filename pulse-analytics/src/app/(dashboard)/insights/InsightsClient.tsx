@@ -1,5 +1,7 @@
 'use client';
 
+import { getPlatformColor } from '@/lib/platform-colors';
+
 interface InsightCard {
   id: string;
   icon: string;
@@ -90,9 +92,25 @@ export default function InsightsClient({ data }: InsightsClientProps) {
                 <h3 className="text-xl font-bold text-on-surface dark:text-white mb-2">{card.title}</h3>
                 <p className="text-on-surface-variant dark:text-gray-400 text-sm leading-relaxed mb-6">{card.description}</p>
                 {card.id === 'top-performing' && (
-                  <div className="flex items-center gap-2">
-                    <span className="bg-[#E1306C1A] text-[#E1306C] px-3 py-1 rounded-full text-xs font-bold">Instagram Reels</span>
-                    <span className="bg-[#0000001A] text-[#000000] px-3 py-1 rounded-full text-xs font-bold">TikTok</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className="rounded-full px-3 py-1 text-xs font-bold"
+                      style={{
+                        backgroundColor: `${getPlatformColor('instagram')}26`,
+                        color: getPlatformColor('instagram'),
+                      }}
+                    >
+                      Instagram Reels
+                    </span>
+                    <span
+                      className="rounded-full px-3 py-1 text-xs font-bold"
+                      style={{
+                        backgroundColor: `${getPlatformColor('tiktok')}26`,
+                        color: getPlatformColor('tiktok'),
+                      }}
+                    >
+                      TikTok
+                    </span>
                   </div>
                 )}
                 {card.id === 'wasted-spend' && (

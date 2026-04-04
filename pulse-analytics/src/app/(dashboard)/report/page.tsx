@@ -6,6 +6,7 @@ import {
   summaryWhereForConnectedPlatforms,
   postWhereConnected,
 } from '@/lib/connected-analytics';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
@@ -57,18 +58,6 @@ async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-p
     where: { isActive: true },
   });
 
-  const platformColorMap: Record<string, string> = {
-    instagram: '#E1306C',
-    tiktok: '#000000',
-    youtube: '#FF0000',
-    facebook: '#1877F2',
-    linkedin: '#0A66C2',
-    twitter: '#000000',
-    whatsapp: '#25D366',
-    'google-ads': '#4285F4',
-    'google-maps': '#4285F4',
-  };
-
   // Format top organic posts
   const formattedOrganicPosts = topOrganicPosts.map((post: { id: string; platformSlug: string; caption: string; publishedAt: Date; orgReach: number }, index: number) => {
     const platform = platforms.find((p: { slug: string; name: string; brandColor: string | null }) => p.slug === post.platformSlug);
@@ -76,7 +65,7 @@ async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-p
       rank: String(index + 1).padStart(2, '0'),
       title: `"${post.caption.slice(0, 30)}${post.caption.length > 30 ? '...' : ''}"`,
       platform: platform?.name || post.platformSlug,
-      platformColor: platform?.brandColor || platformColorMap[post.platformSlug] || '#666',
+      platformColor: getPlatformColor(post.platformSlug),
       meta: format(post.publishedAt, 'MMM d'),
       value: post.orgReach >= 1000 ? `${(post.orgReach / 1000).toFixed(1)}K` : String(post.orgReach),
       label: 'Views',
@@ -93,7 +82,7 @@ async function getReportData(days: number = 30, workspaceId: string = 'ws-demo-p
       rank: String(index + 1).padStart(2, '0'),
       title: `"${post.caption.slice(0, 30)}${post.caption.length > 30 ? '...' : ''}"`,
       platform: platform?.name || post.platformSlug,
-      platformColor: platform?.brandColor || platformColorMap[post.platformSlug] || '#666',
+      platformColor: getPlatformColor(post.platformSlug),
       meta: `₹${post.paidSpend?.toFixed(0) || '0'} Spend`,
       value: `${roas}×`,
       label: 'ROAS',

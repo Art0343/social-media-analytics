@@ -1,8 +1,9 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { engagementRateData } from '@/lib/demo-data';
 import { useDateRange } from '@/lib/stores/useDateRange';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 // Simulate slight variation per date range to make the filter feel responsive
 const rangeMultipliers: Record<string, number> = {
@@ -27,7 +28,7 @@ export default function EngagementRateChart({ reachType = 'combined' }: Engageme
     return {
       platform: d.platform,
       slug: d.slug,
-      color: d.color,
+      color: getPlatformColor(d.slug),
       // For organic mode: show only organic
       organic: organicRate,
       // For paid mode: show only paid
@@ -40,11 +41,11 @@ export default function EngagementRateChart({ reachType = 'combined' }: Engageme
   // For organic/paid single mode, we use one bar
   const isSingleMode = reachType === 'organic' || reachType === 'paid';
   const dataKey = reachType === 'organic' ? 'organic' : reachType === 'paid' ? 'paid' : 'combined';
-  const barColor = reachType === 'organic' ? '#00685f' : reachType === 'paid' ? '#fbbf24' : undefined;
 
   return (
-    <ResponsiveContainer width="100%" height={260}>
-      <BarChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+    <div className="h-full min-h-[188px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={data} margin={{ top: 4, right: 8, left: -6, bottom: 4 }}>
         <XAxis
           dataKey="platform"
           tick={{ fontSize: 10, fontWeight: 700, fill: '#505f76' }}
@@ -95,6 +96,7 @@ export default function EngagementRateChart({ reachType = 'combined' }: Engageme
           </>
         )}
       </BarChart>
-    </ResponsiveContainer>
+      </ResponsiveContainer>
+    </div>
   );
 }

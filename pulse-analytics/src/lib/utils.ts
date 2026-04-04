@@ -64,11 +64,14 @@ export const platformIcons: Record<string, string> = {
   tiktok: 'music_note',
 };
 
+export { getPlatformColor, PLATFORM_SLUG_COLORS } from './platform-colors';
+
+/** @deprecated Use getPlatformColor(slug) for full slug coverage */
 export const platformColors: Record<string, string> = {
-  instagram: '#E1306C',
-  facebook: '#1877F2',
-  linkedin: '#0A66C2',
-  youtube: '#FF0000',
-  twitter: '#000000',
-  tiktok: '#000000',
+  instagram: '#E11D48',
+  facebook: '#2563EB',
+  linkedin: '#0369A1',
+  youtube: '#DC2626',
+  twitter: '#475569',
+  tiktok: '#18181B',
 };

@@ -6,6 +6,7 @@ import { rateLimit, getRateLimitHeaders, DEFAULT_CONFIG } from '@/lib/rate-limit
 import type { Prisma } from '@prisma/client';
 import { postsData } from '@/lib/demo-data';
 import { getActiveConnectedPlatformSlugs, postWhereConnected } from '@/lib/connected-analytics';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 // Check if we're in development mode
 const isDev = process.env.NODE_ENV === 'development';
@@ -182,15 +183,6 @@ export async function GET(request: NextRequest) {
         (ca: { id: string; platform?: { name: string } }) => ca.id === post.connectedAccountId
       );
 
-      const platformColors: Record<string, string> = {
-        instagram: '#E1306C',
-        tiktok: '#000000',
-        youtube: '#FF0000',
-        facebook: '#1877F2',
-        linkedin: '#0A66C2',
-        twitter: '#000000',
-      };
-
       const typeBadgeColors: Record<string, string> = {
         REEL: 'bg-purple-100 text-purple-700',
         VIDEO: 'bg-red-100 text-red-700',
@@ -203,7 +195,7 @@ export async function GET(request: NextRequest) {
         id: post.id,
         platform: account?.platform?.name || post.platform || post.platformSlug,
         platformSlug: post.platformSlug,
-        platformColor: platformColors[post.platformSlug] || post.platformColor || '#666',
+        platformColor: getPlatformColor(post.platformSlug),
         date: post.date || post.publishedAt.toISOString().split('T')[0],
         type: post.type || post.postType,
         typeBadgeColor: typeBadgeColors[post.postType] || post.typeBadgeColor || 'bg-gray-100 text-gray-700',

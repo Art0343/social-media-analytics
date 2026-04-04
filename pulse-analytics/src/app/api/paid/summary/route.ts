@@ -6,6 +6,7 @@ import {
   summaryWhereForConnectedPlatforms,
   postWhereConnected,
 } from '@/lib/connected-analytics';
+import { getPlatformColor } from '@/lib/platform-colors';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -46,23 +47,6 @@ export async function GET(request: Request) {
     where: { isActive: true },
   });
 
-  const platformColorMap: Record<string, string> = {
-    instagram: '#E1306C',
-    tiktok: '#000000',
-    youtube: '#FF0000',
-    facebook: '#1877F2',
-    linkedin: '#0A66C2',
-    twitter: '#000000',
-    whatsapp: '#25D366',
-    'google-ads': '#4285F4',
-    'google-maps': '#4285F4',
-    snapchat: '#000000',
-    'meta-ads': '#1877F2',
-    'linkedin-ads': '#0A66C2',
-    'tiktok-ads': '#000000',
-    'snapchat-ads': '#e5e500',
-  };
-
   // Calculate platform performance
   const platformData = platforms.map((platform) => {
     const platformSummaries = summaries.filter((s) => s.platformSlug === platform.slug);
@@ -73,7 +57,7 @@ export async function GET(request: Request) {
     return {
       name: platform.name,
       slug: platform.slug,
-      color: platform.brandColor || platformColorMap[platform.slug] || '#666',
+      color: getPlatformColor(platform.slug),
       spend,
       paidReach,
       orgReach,
@@ -111,7 +95,7 @@ export async function GET(request: Request) {
       id: post.id,
       title: post.caption.slice(0, 50) + (post.caption.length > 50 ? '...' : ''),
       platform: platform?.name || post.platformSlug,
-      color: platform?.brandColor || platformColorMap[post.platformSlug] || '#666',
+      color: getPlatformColor(post.platformSlug),
       orgReach: post.orgReach,
       paidReach: post.paidReach || 0,
       spend: post.paidSpend || 0,

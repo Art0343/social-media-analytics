@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { getPlatformColor } from '@/lib/platform-colors';
 import dynamic from 'next/dynamic';
 import { formatNumber, formatCurrency, parseFormattedNumber } from '@/lib/utils';
 import { useDateRange } from '@/lib/stores/useDateRange';
@@ -275,6 +276,11 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
         whatsapp: 'chat_bubble',
         'google-ads': 'ads_click',
         'google-maps': 'location_on',
+        snapchat: 'photo_camera',
+        'meta-ads': 'campaign',
+        'linkedin-ads': 'campaign',
+        'tiktok-ads': 'campaign',
+        'snapchat-ads': 'campaign',
       };
 
       // Filter based on reach type
@@ -299,7 +305,7 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
       return {
         name: platform.name,
         slug: platform.slug,
-        color: platform.brandColor || '#666',
+        color: getPlatformColor(platform.slug),
         icon: platformIconMap[platform.slug] || 'public',
         orgReach: filteredOrg,
         paidReach: filteredPaid,
@@ -402,7 +408,7 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
       </div>
 
       {/* Main Charts Row */}
-      <div key={`charts-${reachType}`} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div key={`charts-${reachType}`} className="grid grid-cols-1 items-stretch lg:grid-cols-12 gap-8">
         {/* Reach Over Time */}
         <div className="lg:col-span-8 bg-surface-container-lowest dark:bg-[#1e293b] p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
           <div className="flex justify-between items-center mb-6">
@@ -420,12 +426,12 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
           </div>
         </div>
 
-        {/* Platform Mix */}
-        <div className="lg:col-span-4 bg-surface-container-lowest dark:bg-[#1e293b] p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
-          <h4 className="text-xl font-bold text-on-surface dark:text-white mb-6 w-full">Platform Mix</h4>
-          <div className="h-[280px]">
+        {/* Platform Mix — scrollable legend so long lists stay inside the card */}
+        <div className="lg:col-span-4 flex min-h-[min(520px,72vh)] flex-col bg-surface-container-lowest dark:bg-[#1e293b] p-6 sm:p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="mb-4 shrink-0 text-xl font-bold text-on-surface dark:text-white">Platform Mix</h4>
+          <div className="min-h-0 flex-1">
             {isLoading || pendingDays !== null ? (
-              <ChartSkeleton height={280} />
+              <ChartSkeleton height={320} />
             ) : (
               <PlatformMixChart data={filteredPlatformMix} />
             )}
@@ -435,25 +441,25 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
 
       {/* Detail Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
-          <h4 className="text-lg font-bold text-on-surface dark:text-white mb-6">
+        <div className="flex min-h-[280px] flex-col bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="mb-3 shrink-0 text-lg font-bold text-on-surface dark:text-white">
             {reachType === 'organic' ? 'Organic' : reachType === 'paid' ? 'Paid' : 'Organic vs Paid'} Engagement Rate (%)
           </h4>
-          <div className="h-[200px]">
+          <div className="min-h-0 flex-1">
             {isLoading || pendingDays !== null ? (
-              <ChartSkeleton height={200} />
+              <ChartSkeleton height={220} />
             ) : (
               <EngagementRateChart reachType={reachType} />
             )}
           </div>
         </div>
-        <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
-          <h4 className="text-lg font-bold text-on-surface dark:text-white mb-6">Ad Spend (₹)</h4>
-          <div className="h-[200px]">
+        <div className="flex min-h-[280px] flex-col bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="mb-3 shrink-0 text-lg font-bold text-on-surface dark:text-white">Ad Spend (₹)</h4>
+          <div className="min-h-0 flex-1">
             {isLoading || pendingDays !== null ? (
-              <ChartSkeleton height={200} />
+              <ChartSkeleton height={220} />
             ) : reachType === 'organic' ? (
-              <div className="h-full flex flex-col items-center justify-center text-secondary">
+              <div className="flex h-full min-h-[188px] flex-col items-center justify-center text-secondary">
                 <span className="material-symbols-outlined text-4xl mb-2">money_off</span>
                 <p className="text-sm font-medium">No ad spend in Organic view</p>
               </div>
@@ -462,11 +468,11 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
             )}
           </div>
         </div>
-        <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
-          <h4 className="text-lg font-bold text-on-surface dark:text-white mb-6">Follower Growth</h4>
-          <div className="h-[200px]">
+        <div className="flex min-h-[280px] flex-col bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="mb-3 shrink-0 text-lg font-bold text-on-surface dark:text-white">Follower Growth</h4>
+          <div className="min-h-0 flex-1">
             {isLoading || pendingDays !== null ? (
-              <ChartSkeleton height={200} />
+              <ChartSkeleton height={220} />
             ) : (
               <FollowerGrowthChart reachType={reachType} />
             )}

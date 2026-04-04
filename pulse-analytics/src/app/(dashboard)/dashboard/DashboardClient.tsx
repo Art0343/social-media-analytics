@@ -264,6 +264,8 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
     });
   }, [summaries, reachType]);
 
+  const AD_PLATFORM_SLUGS = ['google-ads', 'meta-ads', 'linkedin-ads', 'tiktok-ads', 'snapchat-ads'];
+
   // Memoized platform performance data
   const platformPerformanceData = useMemo(() => {
     console.log('DEBUG - Computing platformPerformanceData:', { reachType, platformsCount: platforms.length, summariesCount: summaries.length });
@@ -318,7 +320,7 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
         paidReach: filteredPaid,
         spend: filteredSpend,
       };
-    }).filter(p => p.orgReach > 0 || p.paidReach > 0);
+    }).filter(p => (p.orgReach > 0 || p.paidReach > 0) && !AD_PLATFORM_SLUGS.includes(p.slug));
   }, [platforms, summaries, reachType]);
 
   // Skeleton components for smooth loading

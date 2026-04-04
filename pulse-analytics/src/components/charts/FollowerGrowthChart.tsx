@@ -73,7 +73,7 @@ export default function FollowerGrowthChart({ reachType = 'combined' }: { reachT
             />
             <Tooltip
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter={(value: any) => [`${(Number(value) / 1000).toFixed(1)}K followers`, '']}
+              formatter={(value: any, name: any) => [`${(Number(value) / 1000).toFixed(1)}K followers`, name]}
               contentStyle={{
                 background: 'rgba(255,255,255,0.95)',
                 border: 'none',

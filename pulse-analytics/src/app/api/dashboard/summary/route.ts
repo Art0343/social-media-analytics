@@ -246,10 +246,14 @@ async function getPlatformMix(
     where: { isActive: true },
   });
 
-  const totalReach = summaries.reduce(
-    (sum: number, s: GroupedSummary) => sum + (s._sum.orgReach || 0) + (s._sum.paidReach || 0),
-    0
-  );
+  const AD_PLATFORM_SLUGS = ['google-ads', 'meta-ads', 'linkedin-ads', 'tiktok-ads', 'snapchat-ads'];
+
+  const totalReach = summaries
+    .filter((s: GroupedSummary) => !AD_PLATFORM_SLUGS.includes(s.platformSlug))
+    .reduce(
+      (sum: number, s: GroupedSummary) => sum + (s._sum.orgReach || 0) + (s._sum.paidReach || 0),
+      0
+    );
 
   const platformIconMap: Record<string, string> = {
     instagram: 'photo_camera',
@@ -268,7 +272,7 @@ async function getPlatformMix(
     'snapchat-ads': 'campaign',
   };
 
-  return summaries.map((s: GroupedSummary) => {
+  return summaries.filter((s: GroupedSummary) => !AD_PLATFORM_SLUGS.includes(s.platformSlug)).map((s: GroupedSummary) => {
     const platform = platforms.find((p: { slug: string }) => p.slug === s.platformSlug);
     const reach = (s._sum.orgReach || 0) + (s._sum.paidReach || 0);
     const percentage = totalReach > 0 ? (reach / totalReach) * 100 : 0;

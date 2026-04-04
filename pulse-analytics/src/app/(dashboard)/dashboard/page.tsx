@@ -182,10 +182,14 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
     where: { isActive: true },
   });
 
-  const totalReach = groupedSummaries.reduce(
-    (sum: number, s: { _sum: { orgReach: number | null; paidReach: number | null } }) => sum + ((s._sum.orgReach || 0) + (s._sum.paidReach || 0)),
-    0
-  );
+  const AD_PLATFORM_SLUGS = ['google-ads', 'meta-ads', 'linkedin-ads', 'tiktok-ads', 'snapchat-ads'];
+
+  const totalReach = groupedSummaries
+    .filter((s: { platformSlug: string }) => !AD_PLATFORM_SLUGS.includes(s.platformSlug))
+    .reduce(
+      (sum: number, s: { _sum: { orgReach: number | null; paidReach: number | null } }) => sum + ((s._sum.orgReach || 0) + (s._sum.paidReach || 0)),
+      0
+    );
 
   const platformIconMap: Record<string, string> = {
     instagram: 'photo_camera',
@@ -204,7 +208,7 @@ async function getDashboardData(days: number = 30, workspaceId: string = 'ws-dem
     'snapchat-ads': 'campaign',
   };
 
-  const platformMix: PlatformMixItem[] = groupedSummaries.map((s: { platformSlug: string; _sum: { orgReach: number | null; paidReach: number | null } }) => {
+  const platformMix: PlatformMixItem[] = groupedSummaries.filter((s: { platformSlug: string }) => !AD_PLATFORM_SLUGS.includes(s.platformSlug)).map((s: { platformSlug: string; _sum: { orgReach: number | null; paidReach: number | null } }) => {
     const platform = platforms.find((p: { slug: string }) => p.slug === s.platformSlug);
     const reach = (s._sum.orgReach || 0) + (s._sum.paidReach || 0);
     const percentage = totalReach > 0 ? (reach / totalReach) * 100 : 0;

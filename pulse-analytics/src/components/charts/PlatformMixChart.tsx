@@ -8,6 +8,7 @@ interface PlatformMixItem {
   name: string;
   slug: string;
   value: number;
+  reach?: number;
   color: string;
   icon: string;
 }
@@ -71,7 +72,15 @@ export default function PlatformMixChart({ data }: PlatformMixChartProps) {
                 <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
                 <span className="truncate font-medium">{item.name}</span>
               </span>
-              <span className="shrink-0 font-bold tabular-nums">{item.value.toFixed(1)}%</span>
+              <span className="shrink-0 font-bold tabular-nums">
+                {item.reach != null
+                  ? item.reach >= 1_000_000
+                    ? `${(item.reach / 1_000_000).toFixed(1)}M`
+                    : item.reach >= 1_000
+                    ? `${(item.reach / 1_000).toFixed(1)}K`
+                    : item.reach.toLocaleString()
+                  : `${item.value.toFixed(1)}%`}
+              </span>
             </div>
           ))}
         </div>

@@ -54,19 +54,24 @@ export function buildAdSpendChartFromSummaries(
     return row;
   };
 
-  const isLongPeriod = days > 90;
+  const isLongPeriod = days >= 30; // monthly grouping for 30d+
 
   if (isLongPeriod) {
     const monthlyData: Record<string, Record<string, number>> = {};
+    const monthOrder: string[] = [];
     adOnly.forEach((s) => {
-      const monthKey = format(new Date(s.date), 'MMM');
-      if (!monthlyData[monthKey]) monthlyData[monthKey] = {};
+      const monthKey = format(new Date(s.date), 'MMM yyyy');
+      if (!monthlyData[monthKey]) {
+        monthlyData[monthKey] = {};
+        monthOrder.push(monthKey);
+      }
       const spend = s.adSpend || 0;
       monthlyData[monthKey][s.platformSlug] =
         (monthlyData[monthKey][s.platformSlug] || 0) + spend;
     });
-    const data = Object.entries(monthlyData).map(([month, spending]) => {
-      const row = initRow(month);
+    const data = monthOrder.map((monthKey) => {
+      const spending = monthlyData[monthKey];
+      const row = initRow(format(new Date(monthKey), 'MMM'));
       stackKeys.forEach((k) => {
         row[k.key] = spending[k.key] || 0;
       });

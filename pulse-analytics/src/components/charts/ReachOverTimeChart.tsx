@@ -119,8 +119,8 @@ export default function ReachOverTimeChart({ data: propData }: ReachOverTimeChar
           verticalAlign="top"
           align="right"
           iconType="circle"
-          iconSize={8}
-          wrapperStyle={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}
+          iconSize={6}
+          wrapperStyle={{ fontSize: '9px', fontWeight: 700, textTransform: 'none', marginTop: '-10px' }}
         />
         <Line
           type="monotone"

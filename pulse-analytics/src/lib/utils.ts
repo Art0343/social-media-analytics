@@ -15,6 +15,19 @@ export function formatNumber(num: number): string {
   return num.toLocaleString();
 }
 
+export function parseFormattedNumber(value: string): number {
+  const cleaned = value.replace(/,/g, '').trim();
+  const num = parseFloat(cleaned);
+  
+  if (cleaned.endsWith('M')) {
+    return num * 1_000_000;
+  }
+  if (cleaned.endsWith('K')) {
+    return num * 1_000;
+  }
+  return num;
+}
+
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',

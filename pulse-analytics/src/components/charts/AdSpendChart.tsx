@@ -53,8 +53,8 @@ export default function AdSpendChart() {
           verticalAlign="top"
           align="right"
           iconType="circle"
-          iconSize={6}
-          wrapperStyle={{ fontSize: '9px', fontWeight: 700, textTransform: 'uppercase' }}
+          iconSize={8}
+          wrapperStyle={{ fontSize: '9px', fontWeight: 700, textTransform: 'none', marginTop: '-15px' }}
         />
         <Bar dataKey="instagram" stackId="a" fill="#E1306C" radius={[0, 0, 0, 0]} maxBarSize={30} name="Instagram" animationDuration={600} />
         <Bar dataKey="facebook" stackId="a" fill="#1877F2" maxBarSize={30} name="Facebook" animationDuration={600} />

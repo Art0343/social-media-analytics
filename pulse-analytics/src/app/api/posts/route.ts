@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { subDays } from 'date-fns';
 import { auth } from '@/lib/auth';
 import { rateLimit, getRateLimitHeaders, DEFAULT_CONFIG } from '@/lib/rate-limit';
+import { postsData } from '@/lib/demo-data';
 
 // Check if we're in development mode
 const isDev = process.env.NODE_ENV === 'development';
@@ -92,6 +93,7 @@ export async function GET(request: NextRequest) {
 
     // Get total count for pagination
     const totalCount = await prisma.post.count({ where });
+    console.log('POSTS API - DB query, days:', days, 'totalCount:', totalCount, 'startDate:', startDate.toISOString());
 
     // Get posts with pagination
     const posts = await prisma.post.findMany({
@@ -102,6 +104,68 @@ export async function GET(request: NextRequest) {
       skip: (page - 1) * limit,
       take: limit,
     });
+    
+    console.log('POSTS API - DB posts returned:', posts.length);
+
+    // Use demo data if no posts in DB (for dev/testing)
+    let finalPosts = posts;
+    let finalCount = totalCount;
+    
+    if (isDev && totalCount === 0) {
+      console.log('POSTS API - Using demo data, days:', days);
+      console.log('POSTS API - endDate:', endDate.toISOString());
+      console.log('POSTS API - startDate:', startDate.toISOString());
+      
+      // Filter demo data by date range
+      const filteredDemoPosts = postsData.filter((post) => {
+        const postDate = new Date(post.date);
+        // Set both dates to midnight for accurate comparison
+        const postDateMidnight = new Date(postDate.getFullYear(), postDate.getMonth(), postDate.getDate());
+        const startDateMidnight = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+        const endDateMidnight = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+        
+        const inRange = postDateMidnight >= startDateMidnight && postDateMidnight <= endDateMidnight;
+        if (inRange) {
+          console.log('POSTS API - Including post:', post.id, 'date:', post.date, 'postDate:', postDateMidnight.toISOString());
+        }
+        return inRange;
+      });
+      
+      console.log('POSTS API - Total filtered posts:', filteredDemoPosts.length);
+      
+      // Apply search filter
+      const searchFiltered = search
+        ? filteredDemoPosts.filter((p) =>
+            p.caption.toLowerCase().includes(search.toLowerCase())
+          )
+        : filteredDemoPosts;
+      
+      // Apply platform filter
+      const platformFiltered = platform
+        ? searchFiltered.filter((p) => p.platformSlug === platform)
+        : searchFiltered;
+      
+      // Apply type filter
+      const typeFiltered = postType
+        ? platformFiltered.filter((p) => p.type === postType)
+        : platformFiltered;
+      
+      finalCount = typeFiltered.length;
+      finalPosts = typeFiltered.slice((page - 1) * limit, page * limit).map((post) => ({
+        ...post,
+        publishedAt: new Date(post.date),
+        postType: post.type,
+        paidSpend: post.spend,
+        orgReach: post.orgReach,
+        engRate: post.engRate,
+        isBoosted: post.isBoosted,
+      })) as any;
+      
+      // Calculate and log total reach for debugging
+      const totalReach = finalPosts.reduce((sum, p) => sum + (p.orgReach || 0), 0);
+      const avgEng = finalPosts.length > 0 ? finalPosts.reduce((sum, p) => sum + (p.engRate || 0), 0) / finalPosts.length : 0;
+      console.log('POSTS API - Returning:', finalPosts.length, 'posts, totalReach:', totalReach, 'avgEng:', avgEng.toFixed(2) + '%');
+    }
 
     // Get connected accounts to include account info
     const connectedAccounts = await prisma.connectedAccount.findMany({
@@ -110,7 +174,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Format posts with platform info
-    const formattedPosts = posts.map((post: { id: string; connectedAccountId: string; platformSlug: string; publishedAt: Date; postType: string; caption: string; orgReach: number; impressions: number; likes: number; comments: number; shares: number; saves: number; engRate: number; isBoosted: boolean; paidSpend: number | null }) => {
+    const formattedPosts = finalPosts.map((post: { id: string; connectedAccountId?: string; platformSlug: string; publishedAt: Date; postType: string; caption: string; orgReach: number; impressions: number; likes: number; comments: number; shares: number; saves: number; engRate: number; isBoosted: boolean; paidSpend: number | null; date?: string; type?: string; platform?: string; platformColor?: string; typeBadgeColor?: string }) => {
       const account = connectedAccounts.find(
         (ca: { id: string; platform?: { name: string } }) => ca.id === post.connectedAccountId
       );
@@ -134,12 +198,12 @@ export async function GET(request: NextRequest) {
 
       return {
         id: post.id,
-        platform: account?.platform?.name || post.platformSlug,
+        platform: account?.platform?.name || post.platform || post.platformSlug,
         platformSlug: post.platformSlug,
-        platformColor: platformColors[post.platformSlug] || '#666',
-        date: post.publishedAt.toISOString().split('T')[0],
-        type: post.postType,
-        typeBadgeColor: typeBadgeColors[post.postType] || 'bg-gray-100 text-gray-700',
+        platformColor: platformColors[post.platformSlug] || post.platformColor || '#666',
+        date: post.date || post.publishedAt.toISOString().split('T')[0],
+        type: post.type || post.postType,
+        typeBadgeColor: typeBadgeColors[post.postType] || post.typeBadgeColor || 'bg-gray-100 text-gray-700',
         caption: post.caption.slice(0, 50) + (post.caption.length > 50 ? '...' : ''),
         orgReach: post.orgReach,
         impressions: post.impressions,
@@ -158,8 +222,8 @@ export async function GET(request: NextRequest) {
       pagination: {
         page,
         limit,
-        totalCount,
-        totalPages: Math.ceil(totalCount / limit),
+        totalCount: finalCount,
+        totalPages: Math.ceil(finalCount / limit),
       },
     }, { headers });
   } catch (error) {

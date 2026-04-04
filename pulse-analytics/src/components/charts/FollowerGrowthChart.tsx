@@ -26,9 +26,24 @@ function sliceByRange(range: string) {
   }
 }
 
-export default function FollowerGrowthChart() {
+export default function FollowerGrowthChart({ reachType = 'combined' }: { reachType?: 'organic' | 'paid' | 'combined' }) {
   const { range } = useDateRange();
-  const data = sliceByRange(range);
+  const baseData = sliceByRange(range);
+  
+  // Apply multipliers based on reach type
+  const typeMultipliers: Record<string, number> = {
+    organic: 1.15,
+    paid: 0.85,
+    combined: 1.0,
+  };
+  const multiplier = typeMultipliers[reachType] ?? 1.0;
+  
+  const data = baseData.map(d => ({
+    ...d,
+    instagram: Math.round(d.instagram * multiplier),
+    tiktok: Math.round(d.tiktok * multiplier),
+    youtube: Math.round(d.youtube * multiplier),
+  }));
 
   return (
     <ResponsiveContainer width="100%" height={220}>
@@ -61,8 +76,8 @@ export default function FollowerGrowthChart() {
           verticalAlign="top"
           align="right"
           iconType="circle"
-          iconSize={6}
-          wrapperStyle={{ fontSize: '9px', fontWeight: 700 }}
+          iconSize={8}
+          wrapperStyle={{ fontSize: '9px', fontWeight: 700, textTransform: 'none', marginTop: '-15px' }}
         />
         {lines.map((line) => (
           <Line

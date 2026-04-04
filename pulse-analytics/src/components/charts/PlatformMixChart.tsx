@@ -20,7 +20,7 @@ export default function PlatformMixChart({ data }: PlatformMixChartProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-48 h-48 mb-8">
+      <div className="relative w-48 h-48 mb-4">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -55,7 +55,7 @@ export default function PlatformMixChart({ data }: PlatformMixChartProps) {
           <span className="text-[10px] font-bold text-secondary uppercase tracking-widest">Platforms</span>
         </div>
       </div>
-      <div className="w-full space-y-3">
+      <div className="w-full space-y-2">
         {chartData.map((item) => (
           <div key={item.slug} className="flex justify-between items-center text-xs">
             <span className="flex items-center gap-2">

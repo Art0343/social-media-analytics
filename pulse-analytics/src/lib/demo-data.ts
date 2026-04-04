@@ -60,47 +60,111 @@ export const platformMixData = [
 ];
 
 export const postsData = [
+  // Recent posts (April 2026 - last 7 days)
   {
-    id: '1', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
-    date: '2026-03-22', type: 'REEL', typeBadgeColor: 'bg-purple-100 text-purple-700',
-    caption: 'New product launch event highlights...', orgReach: 428102, impressions: 612440,
-    likes: 12402, comments: 842, shares: 2110, saves: 5320, engRate: 5.82, isBoosted: true, spend: 1200,
+    id: 'recent-1', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
+    date: '2026-04-04', type: 'REEL', typeBadgeColor: 'bg-purple-100 text-purple-700',
+    caption: 'Today\'s big announcement is finally here! 🚀', orgReach: 245000, impressions: 380000,
+    likes: 18500, comments: 1200, shares: 3200, saves: 8500, engRate: 7.2, isBoosted: true, spend: 1500,
   },
   {
-    id: '2', platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
-    date: '2026-03-20', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
-    caption: 'Day in my life as a founder...', orgReach: 892300, impressions: 1204110,
-    likes: 142000, comments: 4320, shares: 18500, saves: 12100, engRate: 14.2, isBoosted: false, spend: null,
+    id: 'recent-2', platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
+    date: '2026-04-01', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
+    caption: 'Quick tip that changed my life ✨', orgReach: 520000, impressions: 780000,
+    likes: 65000, comments: 2100, shares: 8200, saves: 12400, engRate: 12.5, isBoosted: false, spend: null,
   },
   {
-    id: '3', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
-    date: '2026-03-18', type: 'CAROUSEL', typeBadgeColor: 'bg-blue-100 text-blue-700',
-    caption: 'Behind the scenes of our creative studio', orgReach: 45102, impressions: 72400,
-    likes: 3204, comments: 156, shares: 420, saves: 890, engRate: 4.10, isBoosted: false, spend: null,
+    id: 'recent-3', platform: 'YouTube', platformSlug: 'youtube', platformColor: '#FF0000',
+    date: '2026-03-30', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
+    caption: 'Behind the scenes of our biggest launch', orgReach: 185000, impressions: 280000,
+    likes: 15200, comments: 840, shares: 2100, saves: 11200, engRate: 8.4, isBoosted: false, spend: null,
+  },
+  // Posts from Feb-Mar 2026 (1-3 months ago)
+  {
+    id: 'month-1', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
+    date: '2026-02-18', type: 'CAROUSEL', typeBadgeColor: 'bg-blue-100 text-blue-700',
+    caption: '5 lessons I learned scaling to 100K followers', orgReach: 125000, impressions: 195000,
+    likes: 8500, comments: 420, shares: 1800, saves: 9500, engRate: 6.8, isBoosted: false, spend: null,
   },
   {
-    id: '4', platform: 'LinkedIn', platformSlug: 'linkedin', platformColor: '#0A66C2',
-    date: '2026-03-17', type: 'POST', typeBadgeColor: 'bg-green-100 text-green-700',
-    caption: 'Why we stopped cold emailing in 2026', orgReach: 12400, impressions: 18200,
-    likes: 842, comments: 94, shares: 122, saves: 210, engRate: 2.44, isBoosted: false, spend: null,
+    id: 'month-2', platform: 'LinkedIn', platformSlug: 'linkedin', platformColor: '#0A66C2',
+    date: '2026-02-01', type: 'POST', typeBadgeColor: 'bg-green-100 text-green-700',
+    caption: 'The future of social media marketing in 2026', orgReach: 42000, impressions: 65000,
+    likes: 2800, comments: 340, shares: 890, saves: 520, engRate: 5.2, isBoosted: true, spend: 800,
   },
   {
-    id: '5', platform: 'YouTube', platformSlug: 'youtube', platformColor: '#FF0000',
-    date: '2026-03-15', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
-    caption: 'How we grew to 1M users in 6 months', orgReach: 245000, impressions: 382000,
-    likes: 22100, comments: 1840, shares: 3400, saves: 15200, engRate: 9.20, isBoosted: false, spend: null,
+    id: 'month-3', platform: 'Facebook', platformSlug: 'facebook', platformColor: '#1877F2',
+    date: '2026-01-15', type: 'POST', typeBadgeColor: 'bg-green-100 text-green-700',
+    caption: 'Community update: 10K new members this month!', orgReach: 85000, impressions: 125000,
+    likes: 4200, comments: 580, shares: 1200, saves: 890, engRate: 4.1, isBoosted: false, spend: null,
+  },
+  // Posts from Oct-Dec 2025 (3-6 months ago)
+  {
+    id: 'q2-1', platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
+    date: '2025-12-28', type: 'REEL', typeBadgeColor: 'bg-purple-100 text-purple-700',
+    caption: 'This trend never gets old 😂', orgReach: 890000, impressions: 1200000,
+    likes: 125000, comments: 4500, shares: 15000, saves: 28000, engRate: 15.2, isBoosted: false, spend: null,
   },
   {
-    id: '6', platform: 'Facebook', platformSlug: 'facebook', platformColor: '#1877F2',
-    date: '2026-03-14', type: 'POST', typeBadgeColor: 'bg-green-100 text-green-700',
-    caption: '3 mistakes every new entrepreneur makes', orgReach: 152400, impressions: 245100,
-    likes: 5320, comments: 482, shares: 810, saves: 1100, engRate: 3.80, isBoosted: true, spend: 450,
+    id: 'q2-2', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
+    date: '2025-12-10', type: 'REEL', typeBadgeColor: 'bg-purple-100 text-purple-700',
+    caption: 'Product demo: watch until the end!', orgReach: 320000, impressions: 480000,
+    likes: 22000, comments: 1800, shares: 4200, saves: 11200, engRate: 8.9, isBoosted: true, spend: 2500,
   },
   {
-    id: '7', platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
-    date: '2026-03-12', type: 'REEL', typeBadgeColor: 'bg-purple-100 text-purple-700',
-    caption: 'Replying to the haters (storytime)...', orgReach: 1240000, impressions: 1820000,
-    likes: 240000, comments: 8400, shares: 32100, saves: 24500, engRate: 18.4, isBoosted: false, spend: null,
+    id: 'q2-3', platform: 'YouTube', platformSlug: 'youtube', platformColor: '#FF0000',
+    date: '2025-11-22', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
+    caption: 'Full tutorial: Advanced analytics setup', orgReach: 145000, impressions: 220000,
+    likes: 9800, comments: 620, shares: 1400, saves: 15200, engRate: 6.5, isBoosted: false, spend: null,
+  },
+  {
+    id: 'q2-4', platform: 'LinkedIn', platformSlug: 'linkedin', platformColor: '#0A66C2',
+    date: '2025-11-05', type: 'POST', typeBadgeColor: 'bg-green-100 text-green-700',
+    caption: 'We\'re hiring! Join our amazing team', orgReach: 28000, impressions: 42000,
+    likes: 1200, comments: 180, shares: 450, saves: 280, engRate: 4.2, isBoosted: true, spend: 500,
+  },
+  // Posts from Apr-Oct 2025 (6-12 months ago)
+  {
+    id: 'year-1', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
+    date: '2025-10-15', type: 'CAROUSEL', typeBadgeColor: 'bg-blue-100 text-blue-700',
+    caption: 'Year in review: our biggest wins', orgReach: 195000, impressions: 285000,
+    likes: 14200, comments: 850, shares: 2100, saves: 8900, engRate: 7.1, isBoosted: false, spend: null,
+  },
+  {
+    id: 'year-2', platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
+    date: '2025-09-20', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
+    caption: 'First viral video 🎉 Thank you all!', orgReach: 2100000, impressions: 3200000,
+    likes: 285000, comments: 12500, shares: 42000, saves: 65000, engRate: 18.5, isBoosted: false, spend: null,
+  },
+  {
+    id: 'year-3', platform: 'Facebook', platformSlug: 'facebook', platformColor: '#1877F2',
+    date: '2025-08-12', type: 'POST', typeBadgeColor: 'bg-green-100 text-green-700',
+    caption: 'Customer success story: How we helped them 10x', orgReach: 65000, impressions: 98000,
+    likes: 3200, comments: 280, shares: 850, saves: 650, engRate: 3.8, isBoosted: true, spend: 1200,
+  },
+  {
+    id: 'year-4', platform: 'YouTube', platformSlug: 'youtube', platformColor: '#FF0000',
+    date: '2025-07-08', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
+    caption: 'Getting started guide for beginners', orgReach: 85000, impressions: 135000,
+    likes: 5200, comments: 340, shares: 890, saves: 10200, engRate: 5.1, isBoosted: false, spend: null,
+  },
+  {
+    id: 'year-5', platform: 'LinkedIn', platformSlug: 'linkedin', platformColor: '#0A66C2',
+    date: '2025-06-05', type: 'POST', typeBadgeColor: 'bg-green-100 text-green-700',
+    caption: 'Our company just turned 2 years old!', orgReach: 22000, impressions: 35000,
+    likes: 980, comments: 120, shares: 320, saves: 180, engRate: 3.5, isBoosted: false, spend: null,
+  },
+  {
+    id: 'year-6', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
+    date: '2025-05-12', type: 'REEL', typeBadgeColor: 'bg-purple-100 text-purple-700',
+    caption: 'Throwback to our first office setup', orgReach: 75000, impressions: 115000,
+    likes: 5200, comments: 280, shares: 650, saves: 3200, engRate: 4.8, isBoosted: false, spend: null,
+  },
+  {
+    id: 'year-7', platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
+    date: '2025-04-20', type: 'VIDEO', typeBadgeColor: 'bg-red-100 text-red-700',
+    caption: 'POV: Your first day at a startup', orgReach: 420000, impressions: 650000,
+    likes: 52000, comments: 1800, shares: 6500, saves: 11200, engRate: 9.2, isBoosted: false, spend: null,
   },
 ];
 
@@ -245,11 +309,11 @@ export const adSpendData = [
 ];
 
 export const engagementRateData = [
-  { platform: 'IG', slug: 'instagram', rate: 5.2, color: '#E1306C' },
-  { platform: 'FB', slug: 'facebook', rate: 2.8, color: '#1877F2' },
-  { platform: 'LI', slug: 'linkedin', rate: 6.1, color: '#0A66C2' },
-  { platform: 'YT', slug: 'youtube', rate: 4.5, color: '#FF0000' },
-  { platform: 'TK', slug: 'tiktok', rate: 7.1, color: '#000000' },
+  { platform: 'IG', slug: 'instagram', rate: 5.2, organicRate: 5.8, paidRate: 4.1, color: '#E1306C' },
+  { platform: 'FB', slug: 'facebook', rate: 2.8, organicRate: 2.1, paidRate: 4.5, color: '#1877F2' },
+  { platform: 'LI', slug: 'linkedin', rate: 6.1, organicRate: 5.5, paidRate: 7.2, color: '#0A66C2' },
+  { platform: 'YT', slug: 'youtube', rate: 4.5, organicRate: 4.8, paidRate: 3.2, color: '#FF0000' },
+  { platform: 'TK', slug: 'tiktok', rate: 7.1, organicRate: 8.4, paidRate: 5.2, color: '#000000' },
 ];
 
 export const followerGrowthData = [

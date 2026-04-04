@@ -17,36 +17,64 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const url = searchParams.get('url') || 'http://localhost:3000/dashboard';
     const pageTitle = searchParams.get('title') || 'Pulse Analytics';
+    const theme = searchParams.get('theme') === 'dark' ? 'dark' : 'light';
 
-    console.log('[PDF Export API] Starting Playwright PDF generation for:', url);
+    console.log('[PDF Export API] Starting Playwright PDF generation for:', url, 'theme:', theme);
 
-    // Launch browser with larger viewport
     const browser = await chromium.launch({ headless: true });
     const context = await browser.newContext({
       viewport: { width: 1920, height: 1080 },
       deviceScaleFactor: 2,
+      colorScheme: theme === 'dark' ? 'dark' : 'light',
     });
+
+    // Match dashboard dark mode: Tailwind `dark:` uses `.dark` on <html>; zustand persists `pulse-theme`
+    if (theme === 'dark') {
+      await context.addInitScript(() => {
+        try {
+          localStorage.setItem(
+            'pulse-theme',
+            JSON.stringify({ state: { theme: 'dark' }, version: 0 })
+          );
+        } catch {
+          /* ignore */
+        }
+      });
+    }
+
     const page = await context.newPage();
 
-    // Navigate to the page
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
 
-    // Wait for content to load
     await page.waitForSelector('main', { timeout: 10000 });
-    
-    // Wait for charts to render (SVG paths or canvas elements)
-    await page.waitForFunction(() => {
-      // Check for recharts SVG elements
-      const svgs = document.querySelectorAll('svg.recharts-surface');
-      // Check for canvas charts
-      const canvases = document.querySelectorAll('canvas');
-      return svgs.length > 0 || canvases.length > 0 || document.querySelectorAll('.recharts-wrapper').length > 0;
-    }, { timeout: 10000 });
-    
-    // Wait for chart animations
-    await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Hide UI elements and expand content
+    if (theme === 'dark') {
+      await page.evaluate(() => {
+        document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
+      });
+      await new Promise((r) => setTimeout(r, 400));
+    }
+
+    try {
+      await page.waitForFunction(
+        () => {
+          const svgs = document.querySelectorAll('svg.recharts-surface');
+          const canvases = document.querySelectorAll('canvas');
+          return (
+            svgs.length > 0 ||
+            canvases.length > 0 ||
+            document.querySelectorAll('.recharts-wrapper').length > 0
+          );
+        },
+        { timeout: 10000 }
+      );
+    } catch {
+      console.log('[PDF Export API] Chart selectors not found (non-dashboard page); continuing');
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
     await page.addStyleTag({
       content: `
         #export-pdf-btn, #sidebar-toggle, #generate-report-btn, nav, header { display: none !important; }
@@ -63,7 +91,6 @@ export async function GET(request: NextRequest) {
       `,
     });
 
-    // Get full page dimensions
     const bodyHandle = await page.$('body');
     const { height: bodyHeight, width: bodyWidth } = await bodyHandle!.evaluate((el) => ({
       height: el.scrollHeight,
@@ -73,11 +100,9 @@ export async function GET(request: NextRequest) {
 
     console.log('[PDF Export API] Page dimensions:', bodyWidth, 'x', bodyHeight);
 
-    // Set viewport to full page size
     await page.setViewportSize({ width: 1920, height: Math.max(1080, bodyHeight) });
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // Generate PDF with full page capture at exact dimensions
     const pdf = await page.pdf({
       width: 1920,
       height: bodyHeight,
@@ -89,7 +114,6 @@ export async function GET(request: NextRequest) {
 
     console.log('[PDF Export API] PDF generated successfully:', pdf.length, 'bytes');
 
-    // Return PDF as response
     return new NextResponse(new Uint8Array(pdf), {
       headers: {
         'Content-Type': 'application/pdf',

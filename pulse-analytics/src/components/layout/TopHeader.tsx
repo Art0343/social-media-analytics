@@ -9,12 +9,17 @@ const exportToPDF = async (setIsExporting: (v: boolean) => void, currentUrl: str
   console.log('[PDF Export] Starting server-side PDF generation...');
   try {
     setIsExporting(true);
-    
-    // Call the server-side API
-    const response = await fetch(`/api/export/page-pdf?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(pageTitle)}`, {
-      method: 'GET',
-      credentials: 'include',
-    });
+
+    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+
+    // Call the server-side API (theme matches app dark mode so the captured page renders correctly)
+    const response = await fetch(
+      `/api/export/page-pdf?url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(pageTitle)}&theme=${theme}`,
+      {
+        method: 'GET',
+        credentials: 'include',
+      }
+    );
     
     if (!response.ok) {
       const error = await response.json();

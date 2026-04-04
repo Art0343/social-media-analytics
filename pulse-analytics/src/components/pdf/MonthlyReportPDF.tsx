@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from '@react-pdf/renderer';
 
-const styles = StyleSheet.create({
+const lightStyles = StyleSheet.create({
   page: {
     padding: 40,
     fontSize: 12,
@@ -132,6 +132,132 @@ const styles = StyleSheet.create({
   },
 });
 
+const darkStyles = StyleSheet.create({
+  page: {
+    padding: 40,
+    fontSize: 12,
+    color: '#e2e8f0',
+    backgroundColor: '#0f172a',
+  },
+  header: {
+    marginBottom: 30,
+    borderBottomWidth: 2,
+    borderBottomColor: '#3b82f6',
+    paddingBottom: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 700,
+    color: '#60a5fa',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#94a3b8',
+    marginBottom: 4,
+  },
+  date: {
+    fontSize: 12,
+    color: '#64748b',
+  },
+  section: {
+    marginBottom: 25,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 700,
+    color: '#f1f5f9',
+    marginBottom: 15,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#334155',
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 15,
+    marginBottom: 20,
+  },
+  statBox: {
+    width: '23%',
+    padding: 15,
+    backgroundColor: '#1e293b',
+    borderRadius: 8,
+  },
+  statLabel: {
+    fontSize: 10,
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    marginBottom: 8,
+    letterSpacing: 0.5,
+  },
+  statValue: {
+    fontSize: 20,
+    fontWeight: 700,
+    color: '#60a5fa',
+  },
+  table: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: '#1e293b',
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 8,
+  },
+  tableRow: {
+    flexDirection: 'row',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#334155',
+  },
+  tableCell: {
+    flex: 1,
+    fontSize: 10,
+    color: '#e2e8f0',
+  },
+  tableCellHeader: {
+    flex: 1,
+    fontSize: 10,
+    fontWeight: 700,
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+  },
+  insightBox: {
+    backgroundColor: '#1e293b',
+    padding: 15,
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#60a5fa',
+    marginBottom: 10,
+  },
+  insightTitle: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: '#60a5fa',
+    marginBottom: 6,
+  },
+  insightText: {
+    fontSize: 11,
+    color: '#cbd5e1',
+    lineHeight: 1.5,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 30,
+    left: 40,
+    right: 40,
+    textAlign: 'center',
+    fontSize: 10,
+    color: '#64748b',
+    borderTopWidth: 1,
+    borderTopColor: '#334155',
+    paddingTop: 15,
+  },
+});
+
 interface ReportData {
   monthYear: string;
   stats: {
@@ -167,9 +293,12 @@ interface ReportData {
 
 interface MonthlyReportPDFProps {
   data: ReportData;
+  /** Align PDF with app light/dark theme */
+  colorMode?: 'light' | 'dark';
 }
 
-export default function MonthlyReportPDF({ data }: MonthlyReportPDFProps) {
+export default function MonthlyReportPDF({ data, colorMode = 'light' }: MonthlyReportPDFProps) {
+  const styles = colorMode === 'dark' ? darkStyles : lightStyles;
   return (
     <Document>
       <Page size="A4" style={styles.page}>

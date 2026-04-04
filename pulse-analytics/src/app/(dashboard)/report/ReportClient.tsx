@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import MonthlyReportPDF from '@/components/pdf/MonthlyReportPDF';
 import { useDateRange } from '@/lib/stores/useDateRange';
+import { useTheme } from '@/lib/stores/useTheme';
 
 interface TopPost {
   rank: string;
@@ -50,6 +51,7 @@ interface ReportClientProps {
 }
 
 export default function ReportClient({ initialData, initialDays }: ReportClientProps) {
+  const { theme } = useTheme();
   const { days, label } = useDateRange();
   const [data, setData] = useState<ReportData>(initialData);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,7 +91,7 @@ export default function ReportClient({ initialData, initialDays }: ReportClientP
       
       // Generate PDF blob client-side
       const blob = await pdf(
-        <MonthlyReportPDF data={data} />
+        <MonthlyReportPDF data={data} colorMode={theme} />
       ).toBlob();
       
       console.log('[PDF] Blob generated, size:', blob.size);
@@ -116,7 +118,7 @@ export default function ReportClient({ initialData, initialDays }: ReportClientP
     } finally {
       setIsDownloading(false);
     }
-  }, [data]);
+  }, [data, theme]);
 
   return (
     <div className="max-w-7xl mx-auto p-12 space-y-12 bg-surface dark:bg-[#0a0f1c] min-h-screen">

@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const workspaceId = searchParams.get('workspaceId') || 'ws-demo-pulse';
     const days = parseInt(searchParams.get('days') || '30', 10);
+    const colorMode = searchParams.get('theme') === 'dark' ? 'dark' : 'light';
     
     console.log(`[PDF Export] Workspace: ${workspaceId}, Days: ${days}`);
 
@@ -179,7 +180,7 @@ export async function GET(request: NextRequest) {
     };
 
     // Generate PDF
-    const pdfBuffer = await renderToBuffer(MonthlyReportPDF({ data: reportData }));
+    const pdfBuffer = await renderToBuffer(MonthlyReportPDF({ data: reportData, colorMode }));
     console.log('[PDF Export] PDF buffer generated, size:', pdfBuffer.length);
 
     return new NextResponse(pdfBuffer as unknown as Blob, {

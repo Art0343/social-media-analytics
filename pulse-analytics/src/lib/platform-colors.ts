@@ -2,21 +2,22 @@
  * Single source of truth for platform colors across charts, tables, and badges.
  * Each slug gets a visually distinct color (organic vs ad variants differ).
  */
+/** Distinct hues for charts (readability over strict brand match). */
 export const PLATFORM_SLUG_COLORS: Record<string, string> = {
-  instagram: '#E11D48',
+  instagram: '#DB2777',
   facebook: '#2563EB',
-  'meta-ads': '#7C3AED',
-  linkedin: '#0369A1',
+  'meta-ads': '#9333EA',
+  linkedin: '#0891B2',
   'linkedin-ads': '#C026D3',
-  youtube: '#DC2626',
-  tiktok: '#18181B',
-  'tiktok-ads': '#0891B2',
-  twitter: '#475569',
+  youtube: '#EA580C',
+  tiktok: '#06B6D4',
+  'tiktok-ads': '#0E7490',
+  twitter: '#64748B',
   whatsapp: '#16A34A',
-  snapchat: '#B45309',
+  snapchat: '#CA8A04',
   'snapchat-ads': '#EA580C',
-  'google-ads': '#15803D',
-  'google-maps': '#0D9488',
+  'google-ads': '#65A30D',
+  'google-maps': '#0F766E',
 };
 
 export function getPlatformColor(slug: string): string {

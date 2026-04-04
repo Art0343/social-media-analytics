@@ -119,26 +119,26 @@ export default function ReportClient({ initialData, initialDays }: ReportClientP
   }, [data]);
 
   return (
-    <div className="max-w-7xl mx-auto p-12 space-y-12">
+    <div className="max-w-7xl mx-auto p-12 space-y-12 bg-surface dark:bg-[#0a0f1c] min-h-screen">
       {/* Page Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h2 className="text-4xl font-black text-on-surface tracking-tight">Monthly Report</h2>
-          <p className="text-on-surface-variant font-medium mt-1">Deep dive into cross-channel social performance.</p>
+          <h2 className="text-4xl font-black text-on-surface dark:text-white tracking-tight">Monthly Report</h2>
+          <p className="text-on-surface-variant dark:text-gray-400 font-medium mt-1">Deep dive into cross-channel social performance.</p>
         </div>
         <div className="flex items-center gap-3">
           <button 
             onClick={handleDownloadPDF}
             disabled={isDownloading}
-            className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-br from-primary to-primary-container text-on-primary font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-br from-primary to-primary-container dark:from-[#3b82f6] dark:to-[#60a5fa] text-on-primary dark:text-white font-bold rounded-lg shadow-lg shadow-primary/20 dark:shadow-blue-500/20 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <span className="material-symbols-outlined text-lg">{isDownloading ? 'hourglass_top' : 'download'}</span> 
             {isDownloading ? 'Generating...' : 'Download PDF Report'}
           </button>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-on-surface font-semibold rounded-lg shadow-sm border border-outline-variant/10 hover:bg-surface-container-low transition-all">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-surface-container-lowest dark:bg-[#1e293b] text-on-surface dark:text-white font-semibold rounded-lg shadow-sm border border-outline-variant/10 dark:border-[#334155] hover:bg-surface-container-low dark:hover:bg-[#334155] transition-all">
             <span className="material-symbols-outlined text-lg">link</span> Copy Share Link
           </button>
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-white text-on-surface font-semibold rounded-lg shadow-sm border border-outline-variant/10 hover:bg-surface-container-low transition-all">
+          <button className="flex items-center gap-2 px-5 py-2.5 bg-surface-container-lowest dark:bg-[#1e293b] text-on-surface dark:text-white font-semibold rounded-lg shadow-sm border border-outline-variant/10 dark:border-[#334155] hover:bg-surface-container-low dark:hover:bg-[#334155] transition-all">
             <span className="material-symbols-outlined text-lg">branding_watermark</span> White-label Brand
           </button>
         </div>
@@ -147,39 +147,39 @@ export default function ReportClient({ initialData, initialDays }: ReportClientP
       {/* Performance Overview Dark Card */}
       <section className="space-y-6">
         <div className="flex items-center gap-4">
-          <h3 className="text-2xl font-bold text-on-surface tracking-tight">{monthYear} — Performance Overview</h3>
-          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 to-transparent" />
+          <h3 className="text-2xl font-bold text-on-surface dark:text-white tracking-tight">{monthYear} — Performance Overview</h3>
+          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 dark:from-[#334155] to-transparent" />
         </div>
-        <div className="col-span-3 bg-[#131b2e] rounded-xl p-8 grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6 relative overflow-hidden">
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 blur-[100px] rounded-full" />
+        <div className="col-span-3 bg-[#131b2e] dark:bg-[#1e293b] rounded-xl p-8 grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-6 relative overflow-hidden border border-outline-variant/10 dark:border-[#334155]">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/20 dark:bg-[#3b82f6]/20 blur-[100px] rounded-full" />
           <div className="relative z-10">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Total Organic Reach</p>
+            <p className="text-slate-400 dark:text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Total Organic Reach</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-black text-[#63f9e8]">{stats.totalOrganicReach}</span>
-              <span className="text-xs text-[#63f9e8] bg-[#63f9e8]/10 px-2 py-0.5 rounded-full">+12%</span>
+              <span className="text-4xl font-black text-[#63f9e8] dark:text-[#60a5fa]">{stats.totalOrganicReach}</span>
+              <span className="text-xs text-[#63f9e8] dark:text-[#60a5fa] bg-[#63f9e8]/10 dark:bg-[#60a5fa]/10 px-2 py-0.5 rounded-full">+12%</span>
             </div>
           </div>
-          <div className="relative z-10 border-l border-white/5 pl-6">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Total Paid Reach</p>
+          <div className="relative z-10 border-l border-white/5 dark:border-[#334155] pl-6">
+            <p className="text-slate-400 dark:text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Total Paid Reach</p>
             <div className="flex items-baseline gap-2">
               <span className="text-4xl font-black text-amber-400">{stats.totalPaidReach}</span>
               <span className="text-xs text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">+4%</span>
             </div>
           </div>
-          <div className="relative z-10 border-l border-white/5 pl-6">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Total Ad Spend</p>
+          <div className="relative z-10 border-l border-white/5 dark:border-[#334155] pl-6">
+            <p className="text-slate-400 dark:text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Total Ad Spend</p>
             <span className="text-4xl font-black text-white">{stats.totalAdSpend}</span>
           </div>
           <div className="relative z-10 pt-4">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Avg Engagement Rate</p>
-            <span className="text-4xl font-black text-[#63f9e8]">{stats.avgEngRate}</span>
+            <p className="text-slate-400 dark:text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Avg Engagement Rate</p>
+            <span className="text-4xl font-black text-[#63f9e8] dark:text-[#60a5fa]">{stats.avgEngRate}</span>
           </div>
-          <div className="relative z-10 border-l border-white/5 pl-6 pt-4">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Total Followers</p>
+          <div className="relative z-10 border-l border-white/5 dark:border-[#334155] pl-6 pt-4">
+            <p className="text-slate-400 dark:text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Total Followers</p>
             <span className="text-4xl font-black text-white">{stats.totalFollowers}</span>
           </div>
-          <div className="relative z-10 border-l border-white/5 pl-6 pt-4">
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Blended ROAS</p>
+          <div className="relative z-10 border-l border-white/5 dark:border-[#334155] pl-6 pt-4">
+            <p className="text-slate-400 dark:text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">Blended ROAS</p>
             <span className="text-4xl font-black text-purple-400">{stats.roas}</span>
           </div>
         </div>
@@ -188,71 +188,71 @@ export default function ReportClient({ initialData, initialDays }: ReportClientP
       {/* Top Performing Content */}
       <section className="space-y-6">
         <div className="flex items-center gap-4">
-          <h3 className="text-2xl font-bold text-on-surface tracking-tight">Top Performing Content — {monthYear}</h3>
-          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 to-transparent" />
+          <h3 className="text-2xl font-bold text-on-surface dark:text-white tracking-tight">Top Performing Content — {monthYear}</h3>
+          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 dark:from-[#334155] to-transparent" />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Top Organic */}
-          <div className="bg-surface-container-lowest rounded-xl p-8 shadow-sm border border-outline-variant/5">
+          <div className="bg-surface-container-lowest dark:bg-[#1e293b] rounded-xl p-8 shadow-sm dark:shadow-lg dark:shadow-black/20 border border-outline-variant/5 dark:border-[#334155]">
             <div className="flex items-center justify-between mb-8">
-              <h4 className="text-sm font-black text-secondary tracking-widest uppercase">TOP ORGANIC POSTS</h4>
-              <span className="material-symbols-outlined text-primary">trending_up</span>
+              <h4 className="text-sm font-black text-secondary dark:text-gray-400 tracking-widest uppercase">TOP ORGANIC POSTS</h4>
+              <span className="material-symbols-outlined text-primary dark:text-[#60a5fa]">trending_up</span>
             </div>
             <div className="space-y-6">
               {topOrganicPosts.length > 0 ? (
                 topOrganicPosts.map((item) => (
                   <div key={item.rank} className="flex items-center justify-between group cursor-pointer">
                     <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-lg bg-surface-container-low flex items-center justify-center text-xl font-bold text-primary group-hover:bg-primary-fixed transition-colors">
+                      <div className="h-12 w-12 rounded-lg bg-surface-container-low dark:bg-[#0f172a] flex items-center justify-center text-xl font-bold text-primary dark:text-[#60a5fa] group-hover:bg-primary-fixed dark:group-hover:bg-[#3b82f6]/20 transition-colors">
                         {item.rank}
                       </div>
                       <div>
-                        <p className="font-bold text-on-surface">{item.title}</p>
-                        <p className="text-xs text-on-surface-variant flex items-center gap-1">
+                        <p className="font-bold text-on-surface dark:text-white">{item.title}</p>
+                        <p className="text-xs text-on-surface-variant dark:text-gray-400 flex items-center gap-1">
                           <span className="font-bold" style={{ color: item.platformColor }}>{item.platform}</span> • {item.meta}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-xl font-black text-on-surface">{item.value}</p>
-                      <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">{item.label}</p>
+                      <p className="text-xl font-black text-on-surface dark:text-white">{item.value}</p>
+                      <p className="text-[10px] text-on-surface-variant dark:text-gray-400 uppercase font-bold tracking-tighter">{item.label}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-secondary text-center py-4">No organic posts found for this period.</p>
+                <p className="text-secondary dark:text-gray-400 text-center py-4">No organic posts found for this period.</p>
               )}
             </div>
           </div>
           {/* Top Paid */}
-          <div className="bg-surface-container-lowest rounded-xl p-8 shadow-sm border border-outline-variant/5">
+          <div className="bg-surface-container-lowest dark:bg-[#1e293b] rounded-xl p-8 shadow-sm dark:shadow-lg dark:shadow-black/20 border border-outline-variant/5 dark:border-[#334155]">
             <div className="flex items-center justify-between mb-8">
-              <h4 className="text-sm font-black text-secondary tracking-widest uppercase">TOP PAID / BOOSTED POSTS</h4>
-              <span className="material-symbols-outlined text-primary">ads_click</span>
+              <h4 className="text-sm font-black text-secondary dark:text-gray-400 tracking-widest uppercase">TOP PAID / BOOSTED POSTS</h4>
+              <span className="material-symbols-outlined text-primary dark:text-[#60a5fa]">ads_click</span>
             </div>
             <div className="space-y-6">
               {topPaidPosts.length > 0 ? (
                 topPaidPosts.map((item) => (
                   <div key={item.rank} className="flex items-center justify-between group cursor-pointer">
                     <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 rounded-lg bg-surface-container-low flex items-center justify-center text-xl font-bold text-primary group-hover:bg-primary-fixed transition-colors">
+                      <div className="h-12 w-12 rounded-lg bg-surface-container-low dark:bg-[#0f172a] flex items-center justify-center text-xl font-bold text-primary dark:text-[#60a5fa] group-hover:bg-primary-fixed dark:group-hover:bg-[#3b82f6]/20 transition-colors">
                         {item.rank}
                       </div>
                       <div>
-                        <p className="font-bold text-on-surface">{item.title}</p>
-                        <p className="text-xs text-on-surface-variant flex items-center gap-1">
+                        <p className="font-bold text-on-surface dark:text-white">{item.title}</p>
+                        <p className="text-xs text-on-surface-variant dark:text-gray-400 flex items-center gap-1">
                           <span className="font-bold" style={{ color: item.platformColor }}>{item.platform}</span> • {item.meta}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-xl font-black text-on-surface">{item.value}</p>
-                      <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">{item.label}</p>
+                      <p className="text-xl font-black text-on-surface dark:text-white">{item.value}</p>
+                      <p className="text-[10px] text-on-surface-variant dark:text-gray-400 uppercase font-bold tracking-tighter">{item.label}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="text-secondary text-center py-4">No boosted posts found for this period.</p>
+                <p className="text-secondary dark:text-gray-400 text-center py-4">No boosted posts found for this period.</p>
               )}
             </div>
           </div>
@@ -262,16 +262,16 @@ export default function ReportClient({ initialData, initialDays }: ReportClientP
       {/* Combined Insights */}
       <section className="space-y-6">
         <div className="flex items-center gap-4">
-          <h3 className="text-2xl font-bold text-on-surface tracking-tight">Combined Insights — What Worked</h3>
-          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 to-transparent" />
+          <h3 className="text-2xl font-bold text-on-surface dark:text-white tracking-tight">Combined Insights — What Worked</h3>
+          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 dark:from-[#334155] to-transparent" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {insights.map((insight, i) => (
-            <div key={i} className={`flex items-start gap-4 p-6 rounded-xl ${insight.type === 'success' ? 'bg-surface-container-low border-l-4 border-tertiary' : 'bg-error-container/20 border-l-4 border-error/50'}`}>
+            <div key={i} className={`flex items-start gap-4 p-6 rounded-xl ${insight.type === 'success' ? 'bg-surface-container-low dark:bg-[#1e293b] border-l-4 border-tertiary dark:border-green-500' : 'bg-error-container/20 dark:bg-[#1e293b] border-l-4 border-error/50 dark:border-red-500'}`}>
               <span className="material-symbols-outlined" style={{ color: insight.type === 'success' ? '#00685f' : '#ba1a1a', fontVariationSettings: "'FILL' 1" }}>
                 {insight.type === 'success' ? 'check_circle' : 'warning'}
               </span>
-              <p className="text-on-surface font-medium">{insight.text}</p>
+              <p className="text-on-surface dark:text-white font-medium">{insight.text}</p>
             </div>
           ))}
         </div>
@@ -280,18 +280,18 @@ export default function ReportClient({ initialData, initialDays }: ReportClientP
       {/* AI Content Plan */}
       <section className="space-y-6">
         <div className="flex items-center gap-4">
-          <h3 className="text-2xl font-bold text-on-surface tracking-tight">AI-Generated Content Plan</h3>
-          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 to-transparent" />
+          <h3 className="text-2xl font-bold text-on-surface dark:text-white tracking-tight">AI-Generated Content Plan</h3>
+          <div className="h-[1px] flex-1 bg-linear-to-r from-outline-variant/50 dark:from-[#334155] to-transparent" />
         </div>
-        <div className="bg-white rounded-xl p-1 shadow-sm overflow-hidden border border-outline-variant/10">
-          <div className="border-l-8 border-primary bg-surface-container-low p-8">
+        <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-3 rounded-xl shadow-sm dark:shadow-lg dark:shadow-black/20 overflow-hidden border border-outline-variant/10 dark:border-[#334155]">
+          <div className="border-l-8 border-primary dark:border-[#3b82f6] bg-surface-container-low dark:bg-[#0f172a] p-8">
             <div className="max-w-3xl space-y-8">
               {contentPlan.map((item) => (
                 <div key={item.num} className="flex items-center gap-6">
-                  <span className="text-6xl font-black text-primary/10">{item.num}</span>
+                  <span className="text-6xl font-black text-primary/10 dark:text-[#3b82f6]/20">{item.num}</span>
                   <div className="space-y-1">
-                    <h5 className="text-xl font-black text-on-surface">{item.title}</h5>
-                    <p className="text-on-surface-variant">{item.desc}</p>
+                    <h5 className="text-xl font-black text-on-surface dark:text-white">{item.title}</h5>
+                    <p className="text-on-surface-variant dark:text-gray-400">{item.desc}</p>
                   </div>
                 </div>
               ))}

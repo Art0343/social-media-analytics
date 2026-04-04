@@ -48,21 +48,21 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
   };
 
   return (
-    <div className="p-8 max-w-7xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto bg-surface dark:bg-[#0a0f1c] min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-start mb-10">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-4xl font-black text-on-surface tracking-tight">Platform Registry</h1>
-            <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase rounded-full">Admin Only</span>
+            <h1 className="text-4xl font-black text-on-surface dark:text-white tracking-tight">Platform Registry</h1>
+            <span className="px-2 py-0.5 bg-primary/10 dark:bg-[#3b82f6]/20 text-primary dark:text-[#60a5fa] text-[10px] font-bold uppercase rounded-full">Admin Only</span>
           </div>
-          <p className="text-on-surface-variant text-lg max-w-2xl">
+          <p className="text-on-surface-variant dark:text-gray-400 text-lg max-w-2xl">
             Manage social media platform configurations. Add new platforms entirely from the UI — no code changes required.
           </p>
         </div>
         <button
           onClick={() => { setEditingPlatform(null); setIsModalOpen(true); }}
-          className="flex items-center gap-2 px-6 py-3 bg-linear-to-br from-primary to-primary-container text-white font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+          className="flex items-center gap-2 px-6 py-3 bg-linear-to-br from-primary to-primary-container dark:from-[#3b82f6] dark:to-[#60a5fa] text-white font-bold rounded-lg shadow-lg shadow-primary/20 dark:shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all"
         >
           <span className="material-symbols-outlined text-lg">add</span>
           Add New Platform
@@ -74,8 +74,8 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
         {platforms.map((platform) => (
           <div
             key={platform.id}
-            className={`bg-surface-container-lowest p-6 rounded-xl shadow-sm hover:shadow-[0_8px_24px_rgba(19,27,46,0.06)] transition-all border-2 ${
-              platform.isActive ? 'border-transparent' : 'border-error/20 opacity-60'
+            className={`bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-sm dark:shadow-lg dark:shadow-black/20 hover:shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.3)] transition-all border-2 ${
+              platform.isActive ? 'border-transparent dark:border-[#334155]' : 'border-error/20 dark:border-red-500/30 opacity-60'
             }`}
           >
             <div className="flex justify-between items-start mb-5">
@@ -92,14 +92,14 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
                   <span className="material-symbols-outlined text-xl">{platform.icon}</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-on-surface">{platform.name}</h3>
-                  <p className="text-xs text-on-surface-variant font-mono">/{platform.slug}</p>
+                  <h3 className="text-lg font-bold text-on-surface dark:text-white">{platform.name}</h3>
+                  <p className="text-xs text-on-surface-variant dark:text-gray-400 font-mono">/{platform.slug}</p>
                 </div>
               </div>
               <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
                 platform.isActive
-                  ? 'bg-tertiary/10 text-tertiary'
-                  : 'bg-error/10 text-error'
+                  ? 'bg-tertiary/10 dark:bg-green-500/20 text-tertiary dark:text-green-400'
+                  : 'bg-error/10 dark:bg-red-500/20 text-error dark:text-red-400'
               }`}>
                 {platform.isActive ? 'Active' : 'Inactive'}
               </span>
@@ -107,9 +107,9 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
 
             <div className="flex items-center gap-2 mb-5">
               <span className="w-4 h-4 rounded-full border-2" style={{ borderColor: platform.brandColor, backgroundColor: `${platform.brandColor}30` }} />
-              <span className="text-xs font-mono text-on-surface-variant">{platform.brandColor}</span>
+              <span className="text-xs font-mono text-on-surface-variant dark:text-gray-400">{platform.brandColor}</span>
               {platform.isBuiltIn && (
-                <span className="ml-auto px-2 py-0.5 bg-surface-container text-[10px] font-bold text-secondary rounded-full">
+                <span className="ml-auto px-2 py-0.5 bg-surface-container dark:bg-[#334155] text-[10px] font-bold text-secondary dark:text-gray-400 rounded-full">
                   Built-in
                 </span>
               )}
@@ -118,7 +118,7 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
             <div className="flex gap-2">
               <button
                 onClick={() => { setEditingPlatform(platform); setIsModalOpen(true); }}
-                className="flex-1 px-3 py-2 bg-primary/5 text-primary text-xs font-semibold rounded-lg hover:bg-primary/10 transition-all"
+                className="flex-1 px-3 py-2 bg-primary/5 dark:bg-[#3b82f6]/10 text-primary dark:text-[#60a5fa] text-xs font-semibold rounded-lg hover:bg-primary/10 dark:hover:bg-[#3b82f6]/20 transition-all"
               >
                 Edit
               </button>
@@ -126,8 +126,8 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
                 onClick={() => handleToggleActive(platform.id)}
                 className={`px-3 py-2 text-xs font-semibold rounded-lg transition-all ${
                   platform.isActive
-                    ? 'border border-amber-300/30 text-amber-700 hover:bg-amber-50'
-                    : 'border border-tertiary/20 text-tertiary hover:bg-tertiary/5'
+                    ? 'border border-amber-300/30 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10'
+                    : 'border border-tertiary/20 dark:border-green-500/30 text-tertiary dark:text-green-400 hover:bg-tertiary/5 dark:hover:bg-green-500/10'
                 }`}
               >
                 {platform.isActive ? 'Deactivate' : 'Activate'}
@@ -137,13 +137,13 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
                   <div className="flex gap-1">
                     <button
                       onClick={() => handleDelete(platform.id)}
-                      className="px-3 py-2 bg-error text-white text-xs font-bold rounded-lg"
+                      className="px-3 py-2 bg-error dark:bg-red-500 text-white text-xs font-bold rounded-lg"
                     >
                       Confirm
                     </button>
                     <button
                       onClick={() => setDeleteConfirm(null)}
-                      className="px-3 py-2 text-xs font-semibold text-on-surface-variant rounded-lg hover:bg-surface-container"
+                      className="px-3 py-2 text-xs font-semibold text-on-surface-variant dark:text-gray-400 rounded-lg hover:bg-surface-container dark:hover:bg-[#334155]"
                     >
                       Cancel
                     </button>
@@ -151,7 +151,7 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
                 ) : (
                   <button
                     onClick={() => setDeleteConfirm(platform.id)}
-                    className="px-3 py-2 border border-error/20 text-error text-xs font-semibold rounded-lg hover:bg-error/5 transition-all"
+                    className="px-3 py-2 border border-error/20 dark:border-red-500/30 text-error dark:text-red-400 text-xs font-semibold rounded-lg hover:bg-error/5 dark:hover:bg-red-500/10 transition-all"
                   >
                     Delete
                   </button>
@@ -163,13 +163,13 @@ export default function PlatformsClient({ initialPlatforms }: PlatformsClientPro
       </div>
 
       {/* Info Banner */}
-      <div className="mt-12 bg-surface-container-low p-8 rounded-2xl flex items-start gap-4">
-        <div className="p-3 bg-white rounded-xl">
-          <span className="material-symbols-outlined text-primary">info</span>
+      <div className="mt-12 bg-surface-container-low dark:bg-[#1e293b] p-8 rounded-2xl flex items-start gap-4 border border-outline-variant/10 dark:border-[#334155]">
+        <div className="p-3 bg-surface-container-high dark:bg-[#334155] rounded-xl">
+          <span className="material-symbols-outlined text-primary dark:text-[#60a5fa]">info</span>
         </div>
         <div>
-          <h4 className="text-lg font-bold text-on-surface mb-1">How Platform Registry Works</h4>
-          <p className="text-sm text-on-surface-variant leading-relaxed">
+          <h4 className="text-lg font-bold text-on-surface dark:text-white mb-1">How Platform Registry Works</h4>
+          <p className="text-sm text-on-surface-variant dark:text-gray-400 leading-relaxed">
             Every platform is stored as a database record. When you add a new platform, the system automatically generates
             OAuth redirect URIs, configures the generic sync engine to use your field mappings, and makes the platform
             available across the dashboard — all without any code changes or redeployment.

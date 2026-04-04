@@ -78,7 +78,7 @@ export default function TopHeader({ onMenuClick }: TopHeaderProps) {
   const showDateFilter = ['/dashboard', '/posts', '/paid', '/insights', '/report'].includes(pathname);
 
   return (
-    <header className="sticky top-0 z-40 w-full flex justify-between items-center px-6 py-3 bg-white/80 backdrop-blur-md border-b border-[#e8eaf0] dark:bg-[#1a1c2e]/80 dark:border-[#2d3048]">
+    <header className="sticky top-0 z-40 w-full flex justify-between items-center px-6 py-3 bg-white/80 dark:bg-[#0f172a]/95 backdrop-blur-md border-b border-[#e8eaf0] dark:border-[#1e293b]">
       {/* Left: Hamburger (mobile) + Page title */}
       <div className="flex items-center gap-4">
         <button
@@ -95,7 +95,7 @@ export default function TopHeader({ onMenuClick }: TopHeaderProps) {
       {/* Right: Date range + actions */}
       <div className="flex items-center gap-3">
         {showDateFilter && (
-          <div className="flex items-center gap-1 bg-[#f4f6fa] dark:bg-[#2d3048] rounded-xl p-1">
+          <div className="flex items-center gap-1 bg-[#f4f6fa] dark:bg-[#1e293b] rounded-xl p-1">
             {DATE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
@@ -103,8 +103,8 @@ export default function TopHeader({ onMenuClick }: TopHeaderProps) {
                 onClick={() => setRange(opt.value)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
                   range === opt.value
-                    ? 'bg-white dark:bg-[#3d4066] text-[#0058be] shadow-sm'
-                    : 'text-[#505f76] hover:text-[#0058be] dark:text-[#8892b0]'
+                    ? 'bg-white dark:bg-[#3b82f6] text-[#0058be] dark:text-white shadow-sm'
+                    : 'text-[#505f76] dark:text-gray-400 hover:text-[#0058be] dark:hover:text-white'
                 }`}
               >
                 {opt.label}
@@ -117,7 +117,7 @@ export default function TopHeader({ onMenuClick }: TopHeaderProps) {
           id="export-pdf-btn"
           onClick={() => exportToPDF(setIsExporting, window.location.href, pageTitle)}
           disabled={isExporting}
-          className="hidden sm:flex items-center gap-2 bg-[#f4f6fa] dark:bg-[#2d3048] text-[#505f76] dark:text-[#8892b0] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#e8eaf0] dark:hover:bg-[#3d4066] active:opacity-80 transition-all disabled:opacity-50"
+          className="hidden sm:flex items-center gap-2 bg-[#f4f6fa] dark:bg-[#1e293b] text-[#505f76] dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#e8eaf0] dark:hover:bg-[#334155] active:opacity-80 transition-all disabled:opacity-50"
         >
           <span className="material-symbols-outlined text-sm">{isExporting ? 'hourglass_top' : 'picture_as_pdf'}</span>
           {isExporting ? 'Exporting...' : 'Export PDF'}

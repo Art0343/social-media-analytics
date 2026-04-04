@@ -94,12 +94,12 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
   };
 
   const sidebarContent = (
-    <aside className="flex flex-col h-full w-[240px] p-4 bg-[#faf8ff] dark:bg-[#12142a] border-r border-transparent">
+    <aside className="flex flex-col h-full w-[240px] p-4 bg-[#faf8ff] dark:bg-[#0f172a] border-r border-transparent dark:border-[#1e293b]">
       {/* Logo */}
       <div className="mb-6 px-2 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-black text-[#131b2e] dark:text-white leading-tight">Pulse Analytics</h1>
-          <p className="text-xs font-medium text-[#505f76] dark:text-[#8892b0] tracking-wider uppercase">SaaS Dashboard</p>
+          <p className="text-xs font-medium text-[#505f76] dark:text-gray-400 tracking-wider uppercase">SaaS Dashboard</p>
         </div>
         {/* Mobile close button */}
         <button
@@ -116,10 +116,10 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
         <div className="relative">
           <button
             onClick={() => setWorkspaceMenuOpen(!workspaceMenuOpen)}
-            className="w-full flex items-center justify-between gap-2 px-3 py-2.5 bg-[#d8e2ff]/50 dark:bg-[#1e2d5a]/50 rounded-lg text-[#131b2e] dark:text-white hover:bg-[#d8e2ff] dark:hover:bg-[#1e2d5a] transition-colors"
+            className="w-full flex items-center justify-between gap-2 px-3 py-2.5 bg-[#d8e2ff]/50 dark:bg-[#1e293b] rounded-lg text-[#131b2e] dark:text-white hover:bg-[#d8e2ff] dark:hover:bg-[#334155] transition-colors"
           >
             <div className="flex items-center gap-2 overflow-hidden">
-              <div className="w-6 h-6 rounded bg-[#0058be] dark:bg-[#82b0ff] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+              <div className="w-6 h-6 rounded bg-[#0058be] dark:bg-[#3b82f6] flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                 {currentWorkspace?.name?.charAt(0).toUpperCase() || 'W'}
               </div>
               <span className="text-sm font-medium truncate">
@@ -133,32 +133,32 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
 
           {/* Workspace Dropdown */}
           {workspaceMenuOpen && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#1e2d5a] rounded-lg shadow-lg border border-[#e8eaf0] dark:border-[#2d3048] z-50 max-h-60 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-[#1e293b] rounded-lg shadow-lg border border-[#e8eaf0] dark:border-[#334155] z-50 max-h-60 overflow-y-auto">
               {workspaces.map((workspace) => (
                 <button
                   key={workspace.id}
                   onClick={() => handleWorkspaceSwitch(workspace)}
-                  className={`w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-[#d8e2ff]/50 dark:hover:bg-[#2d3048] transition-colors ${
-                    currentWorkspace?.id === workspace.id ? 'bg-[#d8e2ff]/30 dark:bg-[#2d3048]/50' : ''
+                  className={`w-full flex items-center gap-2 px-3 py-2.5 text-left hover:bg-[#334155] transition-colors ${
+                    currentWorkspace?.id === workspace.id ? 'bg-[#334155]/50' : ''
                   }`}
                 >
-                  <div className="w-6 h-6 rounded bg-[#0058be]/10 dark:bg-[#82b0ff]/10 flex items-center justify-center text-[#0058be] dark:text-[#82b0ff] text-xs font-bold">
+                  <div className="w-6 h-6 rounded bg-[#0058be]/10 dark:bg-[#3b82f6]/20 flex items-center justify-center text-[#0058be] dark:text-[#60a5fa] text-xs font-bold">
                     {workspace.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-[#131b2e] dark:text-white truncate">{workspace.name}</p>
-                    <p className="text-[10px] text-[#505f76] dark:text-[#8892b0] capitalize">{workspace.role.toLowerCase()}</p>
+                    <p className="text-[10px] text-[#505f76] dark:text-gray-400 capitalize">{workspace.role.toLowerCase()}</p>
                   </div>
                   {currentWorkspace?.id === workspace.id && (
-                    <span className="material-symbols-outlined text-[#0058be] dark:text-[#82b0ff] text-[18px]">check</span>
+                    <span className="material-symbols-outlined text-[#0058be] dark:text-[#3b82f6] text-[18px]">check</span>
                   )}
                 </button>
               ))}
-              <div className="border-t border-[#e8eaf0] dark:border-[#2d3048] p-2">
+              <div className="border-t border-[#e8eaf0] dark:border-[#334155] p-2">
                 <Link
                   href="/settings?tab=workspaces"
                   onClick={() => setWorkspaceMenuOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm text-[#505f76] dark:text-[#8892b0] hover:text-[#0058be] dark:hover:text-[#82b0ff] transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-[#505f76] dark:text-gray-400 hover:text-[#0058be] dark:hover:text-[#60a5fa] transition-colors"
                 >
                   <span className="material-symbols-outlined text-[18px]">add</span>
                   New Workspace
@@ -179,8 +179,8 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
                 active
-                  ? 'text-[#0058be] font-bold bg-[#d8e2ff] dark:bg-[#1e2d5a] dark:text-[#82b0ff]'
-                  : 'text-[#505f76] dark:text-[#8892b0] hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e2d5a]/50'
+                  ? 'text-[#0058be] font-bold bg-[#d8e2ff] dark:bg-[#1e293b] dark:text-[#60a5fa]'
+                  : 'text-[#505f76] dark:text-gray-400 hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e293b]/50'
               }`}
             >
               <span
@@ -196,7 +196,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
       </nav>
 
       {/* Bottom Section */}
-      <div className="mt-auto pt-4 border-t border-[#e8eaf0] dark:border-[#2d3048] space-y-1">
+      <div className="mt-auto pt-4 border-t border-[#e8eaf0] dark:border-[#1e293b] space-y-1">
         {bottomItems.map((item) => {
           const active = isActive(item.href);
           return (
@@ -205,8 +205,8 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                 active
-                  ? 'text-[#0058be] font-bold bg-[#d8e2ff] dark:bg-[#1e2d5a] dark:text-[#82b0ff]'
-                  : 'text-[#505f76] dark:text-[#8892b0] hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e2d5a]/50'
+                  ? 'text-[#0058be] font-bold bg-[#d8e2ff] dark:bg-[#1e293b] dark:text-[#60a5fa]'
+                  : 'text-[#505f76] dark:text-gray-400 hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e293b]/50'
               }`}
             >
               <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
@@ -219,7 +219,7 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
         <button
           id="theme-toggle"
           onClick={toggleTheme}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[#505f76] dark:text-[#8892b0] hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e2d5a]/50 transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[#505f76] dark:text-gray-400 hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e293b]/50 transition-colors"
           aria-label="Toggle dark mode"
         >
           <span className="material-symbols-outlined text-[20px]">
@@ -229,19 +229,19 @@ export default function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
         </button>
 
         {/* Support link */}
-        <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[#505f76] dark:text-[#8892b0] hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e2d5a]/50 transition-colors">
+        <button className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[#505f76] dark:text-gray-400 hover:bg-[#d8e2ff]/50 dark:hover:bg-[#1e293b]/50 transition-colors">
           <span className="material-symbols-outlined text-[20px]">help</span>
           <span className="text-sm">Support</span>
         </button>
 
         {/* User Profile */}
-        <div className="flex items-center gap-3 mt-4 px-2 pt-3 border-t border-[#e8eaf0] dark:border-[#2d3048]">
-          <div className="w-8 h-8 rounded-full bg-[#d8e2ff] dark:bg-[#1e2d5a] flex items-center justify-center text-[#0058be] dark:text-[#82b0ff] text-sm font-bold flex-shrink-0">
+        <div className="flex items-center gap-3 mt-4 px-2 pt-3 border-t border-[#e8eaf0] dark:border-[#1e293b]">
+          <div className="w-8 h-8 rounded-full bg-[#d8e2ff] dark:bg-[#3b82f6]/20 flex items-center justify-center text-[#0058be] dark:text-[#60a5fa] text-sm font-bold flex-shrink-0">
             AR
           </div>
           <div className="overflow-hidden">
             <p className="text-sm font-bold text-[#131b2e] dark:text-white truncate">Alex Rivera</p>
-            <p className="text-[10px] text-[#505f76] dark:text-[#8892b0] truncate">Growth Manager</p>
+            <p className="text-[10px] text-[#505f76] dark:text-gray-400 truncate">Growth Manager</p>
           </div>
         </div>
       </div>

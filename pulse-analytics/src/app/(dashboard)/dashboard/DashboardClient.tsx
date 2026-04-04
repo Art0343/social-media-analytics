@@ -310,63 +310,63 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
 
   // Skeleton components for smooth loading
   const KpiSkeleton = () => (
-    <div className="bg-surface-container-lowest p-6 rounded-xl border-none shadow-[0_8px_24px_rgba(19,27,46,0.06)] animate-pulse">
+    <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl border border-outline-variant/10 dark:border-[#334155] shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 animate-pulse">
       <div className="flex justify-between items-start mb-4">
-        <div className="w-10 h-10 bg-surface-container-high rounded-lg" />
-        <div className="w-12 h-4 bg-surface-container-high rounded" />
+        <div className="w-10 h-10 bg-surface-container-high dark:bg-[#334155] rounded-lg" />
+        <div className="w-12 h-4 bg-surface-container-high dark:bg-[#334155] rounded" />
       </div>
-      <div className="w-24 h-3 bg-surface-container-high rounded mb-2" />
-      <div className="w-20 h-8 bg-surface-container-high rounded" />
+      <div className="w-24 h-3 bg-surface-container-high dark:bg-[#334155] rounded mb-2" />
+      <div className="w-20 h-8 bg-surface-container-high dark:bg-[#334155] rounded" />
     </div>
   );
 
   const ChartSkeleton = ({ height = 280 }: { height?: number }) => (
     <div className="animate-pulse">
-      <div className="h-6 w-32 bg-surface-container-high rounded mb-4" />
-      <div style={{ height }} className="bg-surface-container-high rounded-lg" />
+      <div className="h-6 w-32 bg-surface-container-high dark:bg-[#334155] rounded mb-4" />
+      <div style={{ height }} className="bg-surface-container-high dark:bg-[#334155] rounded-lg" />
     </div>
   );
 
   const PlatformSkeleton = () => (
     <div className="grid grid-cols-12 items-center gap-4 py-3 animate-pulse">
       <div className="col-span-2 flex items-center gap-3">
-        <div className="w-10 h-10 bg-surface-container-high rounded-full" />
-        <div className="w-20 h-4 bg-surface-container-high rounded" />
+        <div className="w-10 h-10 bg-surface-container-high dark:bg-[#334155] rounded-full" />
+        <div className="w-20 h-4 bg-surface-container-high dark:bg-[#334155] rounded" />
       </div>
       <div className="col-span-6 space-y-2">
         <div className="flex justify-between">
-          <div className="w-16 h-3 bg-surface-container-high rounded" />
-          <div className="w-16 h-3 bg-surface-container-high rounded" />
+          <div className="w-16 h-3 bg-surface-container-high dark:bg-[#334155] rounded" />
+          <div className="w-16 h-3 bg-surface-container-high dark:bg-[#334155] rounded" />
         </div>
-        <div className="h-3 w-full bg-surface-container-high rounded-full" />
+        <div className="h-3 w-full bg-surface-container-high dark:bg-[#334155] rounded-full" />
       </div>
       <div className="col-span-2 text-center">
-        <div className="w-12 h-3 bg-surface-container-high rounded mx-auto mb-1" />
-        <div className="w-16 h-4 bg-surface-container-high rounded mx-auto" />
+        <div className="w-12 h-3 bg-surface-container-high dark:bg-[#334155] rounded mx-auto mb-1" />
+        <div className="w-16 h-4 bg-surface-container-high dark:bg-[#334155] rounded mx-auto" />
       </div>
       <div className="col-span-2 text-right">
-        <div className="w-16 h-6 bg-surface-container-high rounded ml-auto" />
+        <div className="w-16 h-6 bg-surface-container-high dark:bg-[#334155] rounded ml-auto" />
       </div>
     </div>
   );
 
   return (
-    <section className="p-8 space-y-8">
+    <section className="p-8 space-y-8 bg-surface dark:bg-[#0a0f1c] min-h-screen">
       {/* Reach Type Toggle */}
       <div className="flex justify-between items-center">
         <div className="text-xs text-secondary">
           Current: <span className="font-bold text-primary">{reachType}</span> | 
           Reach: <span className="font-bold text-primary">{formatNumber(getReachValue(totals.orgReach, totals.paidReach, reachType))}</span>
         </div>
-        <div className="bg-surface-container-low p-1.5 rounded-xl inline-flex gap-1">
+        <div className="bg-surface-container-low dark:bg-[#1e293b] p-1.5 rounded-xl inline-flex gap-1">
           {(['organic', 'paid', 'combined'] as ReachType[]).map((type) => (
             <button
               key={type}
               onClick={() => setReachType(type)}
               className={`px-4 py-2 rounded-lg text-sm font-bold transition-all duration-200 ${
                 reachType === type
-                  ? 'bg-primary text-white shadow-md'
-                  : 'text-secondary hover:bg-surface-container-high'
+                  ? 'bg-primary dark:bg-[#3b82f6] text-white shadow-md'
+                  : 'text-secondary dark:text-gray-400 hover:bg-surface-container-high dark:hover:bg-[#334155]'
               }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -382,21 +382,21 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
           : filteredKpis.map((card, idx) => (
           <div
             key={`${card.title}-${idx}`}
-            className="bg-surface-container-lowest p-6 rounded-xl border-none shadow-[0_8px_24px_rgba(19,27,46,0.06)] group hover:-translate-y-1 transition-all duration-300"
+            className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl border border-outline-variant/10 dark:border-[#334155] shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 group hover:-translate-y-1 transition-all duration-300"
           >
             <div className="flex justify-between items-start mb-4">
               <span className={`p-2 ${card.iconBg} rounded-lg ${card.iconColor} material-symbols-outlined`}>
                 {card.icon}
               </span>
-              <span className={`text-xs font-bold flex items-center gap-1 ${card.delta.positive ? 'text-tertiary' : 'text-error'}`}>
+              <span className={`text-xs font-bold flex items-center gap-1 ${card.delta.positive ? 'text-tertiary dark:text-green-400' : 'text-error dark:text-red-400'}`}>
                 <span className="material-symbols-outlined text-xs">
                   {card.delta.positive ? 'arrow_upward' : 'arrow_downward'}
                 </span>
                 {card.delta.value}
               </span>
             </div>
-            <p className="text-secondary text-sm font-medium mb-1">{card.title}</p>
-            <h3 className="text-3xl font-black text-on-surface tracking-tight">{card.value}</h3>
+            <p className="text-secondary dark:text-gray-400 text-sm font-medium mb-1">{card.title}</p>
+            <h3 className="text-3xl font-black text-on-surface dark:text-white tracking-tight">{card.value}</h3>
           </div>
         ))}
       </div>
@@ -404,11 +404,11 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
       {/* Main Charts Row */}
       <div key={`charts-${reachType}`} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Reach Over Time */}
-        <div className="lg:col-span-8 bg-surface-container-lowest p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
+        <div className="lg:col-span-8 bg-surface-container-lowest dark:bg-[#1e293b] p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h4 className="text-xl font-bold text-on-surface mb-1">Reach Over Time</h4>
-              <p className="text-secondary text-xs">Comparison between Organic and Paid channels ({label})</p>
+              <h4 className="text-xl font-bold text-on-surface dark:text-white mb-1">Reach Over Time</h4>
+              <p className="text-secondary dark:text-gray-400 text-xs">Comparison between Organic and Paid channels ({label})</p>
             </div>
           </div>
           <div className="h-[280px]">
@@ -421,8 +421,8 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
         </div>
 
         {/* Platform Mix */}
-        <div className="lg:col-span-4 bg-surface-container-lowest p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
-          <h4 className="text-xl font-bold text-on-surface mb-6 w-full">Platform Mix</h4>
+        <div className="lg:col-span-4 bg-surface-container-lowest dark:bg-[#1e293b] p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="text-xl font-bold text-on-surface dark:text-white mb-6 w-full">Platform Mix</h4>
           <div className="h-[280px]">
             {isLoading || pendingDays !== null ? (
               <ChartSkeleton height={280} />
@@ -435,8 +435,8 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
 
       {/* Detail Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
-          <h4 className="text-lg font-bold text-on-surface mb-6">
+        <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="text-lg font-bold text-on-surface dark:text-white mb-6">
             {reachType === 'organic' ? 'Organic' : reachType === 'paid' ? 'Paid' : 'Organic vs Paid'} Engagement Rate (%)
           </h4>
           <div className="h-[200px]">
@@ -447,8 +447,8 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
             )}
           </div>
         </div>
-        <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
-          <h4 className="text-lg font-bold text-on-surface mb-6">Ad Spend (₹)</h4>
+        <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="text-lg font-bold text-on-surface dark:text-white mb-6">Ad Spend (₹)</h4>
           <div className="h-[200px]">
             {isLoading || pendingDays !== null ? (
               <ChartSkeleton height={200} />
@@ -462,8 +462,8 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
             )}
           </div>
         </div>
-        <div className="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
-          <h4 className="text-lg font-bold text-on-surface mb-6">Follower Growth</h4>
+        <div className="bg-surface-container-lowest dark:bg-[#1e293b] p-6 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
+          <h4 className="text-lg font-bold text-on-surface dark:text-white mb-6">Follower Growth</h4>
           <div className="h-[200px]">
             {isLoading || pendingDays !== null ? (
               <ChartSkeleton height={200} />
@@ -475,20 +475,20 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
       </div>
 
       {/* Platform Performance Breakdown */}
-      <div key={`platform-performance-${reachType}`} className="bg-surface-container-lowest p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)]">
+      <div key={`platform-performance-${reachType}`} className="bg-surface-container-lowest dark:bg-[#1e293b] p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-outline-variant/10 dark:border-[#334155]">
         <div className="flex justify-between items-end mb-8">
           <div>
-            <h4 className="text-2xl font-black text-on-surface">Platform Performance Breakdown</h4>
-            <p className="text-secondary text-sm">Detailed metric analysis by social network</p>
+            <h4 className="text-2xl font-black text-on-surface dark:text-white">Platform Performance Breakdown</h4>
+            <p className="text-secondary dark:text-gray-400 text-sm">Detailed metric analysis by social network</p>
           </div>
           <div className="flex gap-6">
             <div className="flex items-center gap-2">
-              <span className="w-12 h-2 rounded-full bg-slate-200" />
-              <span className="text-[10px] font-bold text-secondary uppercase">Organic</span>
+              <span className="w-12 h-2 rounded-full bg-slate-200 dark:bg-[#475569]" />
+              <span className="text-[10px] font-bold text-secondary dark:text-gray-400 uppercase">Organic</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="w-12 h-2 rounded-full bg-amber-400" />
-              <span className="text-[10px] font-bold text-secondary uppercase">Paid</span>
+              <span className="text-[10px] font-bold text-secondary dark:text-gray-400 uppercase">Paid</span>
             </div>
           </div>
         </div>
@@ -524,7 +524,7 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
                     {showPaid && <span>Paid: {formatNumber(p.paidReach)}</span>}
                     {!showOrganic && !showPaid && <span>Reach: {formatNumber(total)}</span>}
                   </div>
-                  <div className="h-3 w-full bg-surface-container rounded-full overflow-hidden">
+                  <div className="h-3 w-full bg-surface-container dark:bg-[#334155] rounded-full overflow-hidden">
                     {reachType === 'organic' ? (
                       <div className="h-full w-full" style={{ backgroundColor: p.color }} />
                     ) : reachType === 'paid' ? (
@@ -558,20 +558,20 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
       </div>
 
       {/* AI Insight Banner */}
-      <div className="flex flex-col md:flex-row justify-between items-center bg-surface-container-low rounded-xl p-6 border-none">
+      <div className="flex flex-col md:flex-row justify-between items-center bg-surface-container-low dark:bg-[#1e293b] rounded-xl p-6 border border-outline-variant/10 dark:border-[#334155]">
         <div className="flex items-center gap-4 mb-4 md:mb-0">
-          <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center shadow-sm">
-            <span className="material-symbols-outlined text-primary text-2xl">auto_awesome</span>
+          <div className="w-12 h-12 bg-surface-container-high dark:bg-[#334155] rounded-lg flex items-center justify-center shadow-sm">
+            <span className="material-symbols-outlined text-primary dark:text-[#60a5fa] text-2xl">auto_awesome</span>
           </div>
           <div>
-            <h5 className="text-sm font-bold text-on-surface">Pulse AI Insight</h5>
-            <p className="text-xs text-on-surface-variant">
+            <h5 className="text-sm font-bold text-on-surface dark:text-white">Pulse AI Insight</h5>
+            <p className="text-xs text-on-surface-variant dark:text-gray-400">
               Your Organic Reach on TikTok has surpassed Instagram for the first time this quarter.
               Consider shifting 5% of LinkedIn budget to TikTok ads.
             </p>
           </div>
         </div>
-        <button className="bg-primary text-white px-6 py-2 rounded-full text-xs font-bold shadow-md hover:shadow-lg transition-all">
+        <button className="bg-primary dark:bg-[#3b82f6] text-white px-6 py-2 rounded-full text-xs font-bold shadow-md hover:bg-primary-container dark:hover:bg-[#2563eb] transition-all">
           Apply Recommendation
         </button>
       </div>

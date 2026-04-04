@@ -44,40 +44,25 @@ export default function ConnectAccountModal({ isOpen, onClose, platform, onConne
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-surface-container-lowest rounded-2xl shadow-2xl max-w-md w-full p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center"
-            style={{ backgroundColor: `${platform.brandColor}1A` }}
-          >
-            <span className="material-symbols-outlined text-2xl" style={{ color: platform.brandColor }}>
-              {platform.icon}
-            </span>
-          </div>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      
+      {/* Modal */}
+      <div className="relative bg-surface-container-lowest dark:bg-[#1e293b] rounded-2xl shadow-2xl w-full max-w-md border border-outline-variant/10 dark:border-[#334155]">
+        <div className="p-6 border-b border-outline-variant/10 dark:border-[#334155] flex justify-between items-center">
           <div>
-            <h2 className="text-xl font-bold text-on-surface">Connect {platform.name}</h2>
-            <p className="text-sm text-secondary">Enter your account details to connect</p>
+            <h2 className="text-xl font-bold text-on-surface dark:text-white">Connect {platform?.name}</h2>
+            <p className="text-sm text-secondary dark:text-gray-400">Enter your account details</p>
           </div>
+          <button onClick={onClose} className="p-2 hover:bg-surface-container dark:hover:bg-[#334155] rounded-lg transition-colors">
+            <span className="material-symbols-outlined text-on-surface dark:text-gray-400">close</span>
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-on-surface mb-1">
-              Account Name *
-            </label>
-            <input
-              type="text"
-              value={accountName}
-              onChange={(e) => setAccountName(e.target.value)}
-              placeholder="e.g., My Business Account"
-              className="w-full px-4 py-2 bg-surface-container rounded-lg border border-outline-variant text-on-surface placeholder-secondary focus:outline-none focus:ring-2 focus:ring-primary"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-on-surface mb-1">
+            <label className="block text-sm font-medium text-on-surface dark:text-white mb-1">
               Account Handle/Username
             </label>
             <input
@@ -85,12 +70,12 @@ export default function ConnectAccountModal({ isOpen, onClose, platform, onConne
               value={accountHandle}
               onChange={(e) => setAccountHandle(e.target.value)}
               placeholder="e.g., @mybusiness"
-              className="w-full px-4 py-2 bg-surface-container rounded-lg border border-outline-variant text-on-surface placeholder-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 bg-surface-container dark:bg-[#334155] rounded-lg border border-outline-variant dark:border-[#334155] text-on-surface dark:text-white placeholder-secondary dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-on-surface mb-1">
+            <label className="block text-sm font-medium text-on-surface dark:text-white mb-1">
               Access Token / API Key *
             </label>
             <input
@@ -98,11 +83,11 @@ export default function ConnectAccountModal({ isOpen, onClose, platform, onConne
               value={accessToken}
               onChange={(e) => setAccessToken(e.target.value)}
               placeholder="Enter your API access token"
-              className="w-full px-4 py-2 bg-surface-container rounded-lg border border-outline-variant text-on-surface placeholder-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 bg-surface-container dark:bg-[#334155] rounded-lg border border-outline-variant dark:border-[#334155] text-on-surface dark:text-white placeholder-secondary dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary"
               required
             />
-            <p className="text-xs text-secondary mt-1">
-              You can find this in your {platform.name} developer settings.
+            <p className="text-xs text-secondary dark:text-gray-400 mt-1">
+              You can find this in your {platform?.name} developer settings.
             </p>
           </div>
 
@@ -110,14 +95,14 @@ export default function ConnectAccountModal({ isOpen, onClose, platform, onConne
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-outline-variant text-on-surface font-semibold rounded-lg hover:bg-surface-container transition-all"
+              className="flex-1 px-4 py-2 border border-outline-variant dark:border-[#334155] text-on-surface dark:text-gray-300 font-semibold rounded-lg hover:bg-surface-container dark:hover:bg-[#334155] transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 px-4 py-3 bg-linear-to-br from-primary to-primary-container text-on-primary font-bold rounded-lg shadow-sm hover:opacity-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="flex-1 px-4 py-3 bg-linear-to-br from-primary to-primary-container dark:from-[#3b82f6] dark:to-[#60a5fa] text-white font-bold rounded-lg shadow-sm hover:opacity-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isLoading ? (
                 <span className="animate-spin material-symbols-outlined">progress_activity</span>

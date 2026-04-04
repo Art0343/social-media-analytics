@@ -1,14 +1,14 @@
 export default function LoginPage() {
   return (
-    <main className="editorial-gradient min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    <main className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-surface dark:bg-[#0a0f1c]">
       {/* Background Elements */}
-      <div className="absolute top-[-10%] right-[-5%] w-[40rem] h-[40rem] rounded-full bg-primary/5 blur-[120px]" />
-      <div className="absolute bottom-[-5%] left-[-5%] w-[30rem] h-[30rem] rounded-full bg-secondary-container/20 blur-[100px]" />
+      <div className="absolute top-[-10%] right-[-5%] w-[40rem] h-[40rem] rounded-full bg-primary/5 dark:bg-[#1e3a5f]/20 blur-[120px]" />
+      <div className="absolute bottom-[-5%] left-[-5%] w-[30rem] h-[30rem] rounded-full bg-secondary-container/20 dark:bg-[#0f2d4a]/30 blur-[100px]" />
 
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="flex flex-col items-center mb-10 text-center">
-          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-2xl shadow-primary/10 mb-6 hover:scale-105 transition-transform duration-300">
+          <div className="w-16 h-16 bg-surface-container-high rounded-2xl flex items-center justify-center shadow-2xl shadow-primary/10 mb-6 hover:scale-105 transition-transform duration-300">
             <span className="material-symbols-outlined text-primary text-4xl" style={{ fontVariationSettings: "'FILL' 1" }}>analytics</span>
           </div>
           <h1 className="text-3xl font-black tracking-tight text-on-surface mb-2">Pulse Analytics</h1>
@@ -18,7 +18,7 @@ export default function LoginPage() {
         </div>
 
         {/* Login Card */}
-        <div className="glass-panel rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] p-8 border border-white/40">
+        <div className="bg-surface-container-high dark:bg-[#111827] rounded-2xl shadow-2xl dark:shadow-black/50 p-8 border border-outline-variant/20 dark:border-[#1e293b]">
           <div className="space-y-6">
             {/* Google Sign-in */}
             <button className="w-full flex items-center justify-center gap-3 bg-white text-on-surface font-semibold py-3.5 px-6 rounded-lg border border-outline-variant/30 hover:bg-surface-container-low active:scale-[0.98] transition-all duration-200">
@@ -46,7 +46,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="name@company.com"
                   disabled
-                  className="w-full bg-surface-container-low border-0 rounded-lg px-4 py-3.5 text-sm focus:ring-1 focus:ring-primary/20 focus:bg-white transition-all outline-none placeholder:text-outline/60"
+                  className="w-full bg-surface-container-low dark:bg-[#1e293b] border border-outline-variant/30 dark:border-[#334155] rounded-lg px-4 py-3.5 text-sm text-on-surface dark:text-white focus:ring-2 focus:ring-primary/50 dark:focus:ring-[#3b82f6]/50 transition-all outline-none placeholder:text-outline/60 dark:placeholder:text-gray-500"
                 />
                 <div className="absolute right-4 top-1/2 -translate-y-1/2">
                   <span className="material-symbols-outlined text-outline/40 text-lg">lock</span>
@@ -54,7 +54,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button className="w-full btn-gradient text-white font-bold py-4 px-6 rounded-lg shadow-lg shadow-primary/20 opacity-50 cursor-not-allowed">
+            <button className="w-full bg-primary dark:bg-gradient-to-r dark:from-[#3b82f6] dark:to-[#60a5fa] text-white font-bold py-4 px-6 rounded-lg shadow-lg shadow-primary/20 dark:shadow-blue-500/25 opacity-50 cursor-not-allowed">
               Continue to Dashboard
             </button>
           </div>
@@ -77,18 +77,18 @@ export default function LoginPage() {
 
         {/* Floating Chips */}
         <div className="absolute -right-16 top-1/4 hidden lg:block">
-          <div className="bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-xl border border-white/50 flex items-center gap-4 animate-pulse">
-            <div className="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center">
-              <span className="material-symbols-outlined text-tertiary">trending_up</span>
+          <div className="bg-surface-container-high/90 dark:bg-[#1e293b] backdrop-blur-md rounded-xl p-4 shadow-xl border border-surface-container-high/50 dark:border-[#334155] flex items-center gap-4 animate-pulse">
+            <div className="w-10 h-10 rounded-full bg-tertiary/10 dark:bg-[#3b82f6]/20 flex items-center justify-center">
+              <span className="material-symbols-outlined text-tertiary dark:text-[#60a5fa]">trending_up</span>
             </div>
             <div>
-              <div className="text-[10px] font-bold text-outline uppercase tracking-wider">Top Insight</div>
-              <div className="text-sm font-bold text-on-surface">Reach up +12.4%</div>
+              <div className="text-[10px] font-bold text-outline dark:text-gray-400 uppercase tracking-wider">Top Insight</div>
+              <div className="text-sm font-bold text-on-surface dark:text-white">Reach up +12.4%</div>
             </div>
           </div>
         </div>
         <div className="absolute -left-20 bottom-1/4 hidden lg:block">
-          <div className="bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-xl border border-white/50 flex items-center gap-4">
+          <div className="bg-surface-container-high/90 dark:bg-[#1e293b] backdrop-blur-md rounded-xl p-4 shadow-xl border border-surface-container-high/50 dark:border-[#334155] flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <span className="material-symbols-outlined text-primary">bolt</span>
             </div>

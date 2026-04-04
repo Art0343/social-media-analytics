@@ -64,9 +64,9 @@ export default function AddPlatformModal({ isOpen, onClose, onSave, editData }: 
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fade-in-up">
+      <div className="relative bg-white dark:bg-[#1e293b] rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fade-in-up border border-outline-variant/20 dark:border-[#334155]">
         {/* Header */}
-        <div className="sticky top-0 bg-white z-10 px-8 pt-8 pb-4 border-b border-outline-variant/10">
+        <div className="sticky top-0 bg-white dark:bg-[#1e293b] z-10 px-8 pt-8 pb-4 border-b border-outline-variant/10 dark:border-[#334155]">
           <div className="flex justify-between items-center">
             <div>
               <h2 className="text-2xl font-black text-on-surface">
@@ -291,7 +291,7 @@ export default function AddPlatformModal({ isOpen, onClose, onSave, editData }: 
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-white px-8 py-4 border-t border-outline-variant/10 flex justify-between items-center">
+        <div className="sticky bottom-0 bg-white dark:bg-[#1e293b] px-8 py-4 border-t border-outline-variant/10 dark:border-[#334155] flex justify-between items-center">
           <button
             onClick={() => step > 1 ? setStep(step - 1) : onClose()}
             className="px-6 py-2.5 text-on-surface-variant font-semibold text-sm hover:bg-surface-container rounded-lg transition-colors"

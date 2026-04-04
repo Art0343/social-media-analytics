@@ -72,6 +72,8 @@ export interface ROITableItem {
 
 export interface ConnectedAccount {
   id: string;
+  /** Organic / profile integrations vs paid media ad accounts */
+  accountKind: 'social' | 'ad';
   platform: string;
   platformSlug: string;
   platformColor: string;
@@ -81,6 +83,10 @@ export interface ConnectedAccount {
   isConnected: boolean;
   lastSynced?: string;
   description?: string;
+  /** e.g. ad network scope: "Facebook + Instagram" */
+  subtext?: string;
+  /** Shown for connected ad accounts, e.g. "$1,070/mo" */
+  monthlySpendLabel?: string;
 }
 
 export interface DemoPlatform {

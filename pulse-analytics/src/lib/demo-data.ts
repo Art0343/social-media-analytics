@@ -238,53 +238,89 @@ export const roiTableData = [
   },
 ];
 
-export const connectedAccountsData = [
+/** Organic & profile integrations (pages, channels, messaging, local listings) */
+export const socialProfileAccountsData = [
   {
-    id: '1', platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
+    id: 's1', accountKind: 'social' as const, platform: 'Instagram', platformSlug: 'instagram', platformColor: '#E1306C',
     icon: 'photo_camera', accountName: 'Instagram Business', accountHandle: '@pulse_digital_official',
     isConnected: true, lastSynced: '4 mins ago',
   },
   {
-    id: '2', platform: 'Facebook', platformSlug: 'facebook', platformColor: '#1877F2',
+    id: 's2', accountKind: 'social' as const, platform: 'Facebook', platformSlug: 'facebook', platformColor: '#1877F2',
     icon: 'thumb_up', accountName: 'Facebook Pages', accountHandle: 'Pulse Analytics Global',
     isConnected: true, lastSynced: '12 mins ago',
   },
   {
-    id: '3', platform: 'LinkedIn', platformSlug: 'linkedin', platformColor: '#0A66C2',
+    id: 's3', accountKind: 'social' as const, platform: 'LinkedIn', platformSlug: 'linkedin', platformColor: '#0A66C2',
     icon: 'work', accountName: 'LinkedIn Company', isConnected: false,
     description: 'Track corporate reach and employee advocacy metrics.',
   },
   {
-    id: '4', platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
+    id: 's4', accountKind: 'social' as const, platform: 'TikTok', platformSlug: 'tiktok', platformColor: '#000000',
     icon: 'music_note', accountName: 'TikTok Creator', isConnected: false,
     description: 'Analyze short-form video performance and viral trends.',
   },
   {
-    id: '5', platform: 'YouTube', platformSlug: 'youtube', platformColor: '#FF0000',
+    id: 's5', accountKind: 'social' as const, platform: 'YouTube', platformSlug: 'youtube', platformColor: '#FF0000',
     icon: 'smart_display', accountName: 'YouTube Studio', accountHandle: 'Pulse Creative Hub',
     isConnected: true, lastSynced: '2 hours ago',
   },
   {
-    id: '6', platform: 'Twitter / X', platformSlug: 'twitter', platformColor: '#000000',
-    icon: 'flutter', accountName: 'X / Twitter Ads', isConnected: false,
-    description: 'Measure real-time engagement and paid campaign impact.',
-  },
-  {
-    id: '7', platform: 'WhatsApp Business', platformSlug: 'whatsapp', platformColor: '#25D366',
+    id: 's6', accountKind: 'social' as const, platform: 'WhatsApp Business', platformSlug: 'whatsapp', platformColor: '#25D366',
     icon: 'chat_bubble', accountName: 'WhatsApp Business', isConnected: false,
     description: 'Connect with customers and track messaging metrics.',
   },
   {
-    id: '8', platform: 'Google Ads', platformSlug: 'google-ads', platformColor: '#4285F4',
-    icon: 'ads_click', accountName: 'Google Ads', isConnected: false,
-    description: 'Track paid search and display campaign performance.',
-  },
-  {
-    id: '9', platform: 'Google Maps', platformSlug: 'google-maps', platformColor: '#4285F4',
+    id: 's7', accountKind: 'social' as const, platform: 'Google Maps', platformSlug: 'google-maps', platformColor: '#4285F4',
     icon: 'location_on', accountName: 'Google Business Profile', isConnected: false,
     description: 'Monitor local business visibility and reviews.',
   },
+  {
+    id: 's8', accountKind: 'social' as const, platform: 'Snapchat', platformSlug: 'snapchat', platformColor: '#000000',
+    icon: 'photo_camera', accountName: 'Snapchat', isConnected: false,
+    description: 'Stories, Spotlight, and metrics from your public profile.',
+  },
 ];
+
+/** Paid media / ads manager connections */
+export const adAccountsData = [
+  {
+    id: 'a1', accountKind: 'ad' as const, platform: 'Meta', platformSlug: 'meta-ads', platformColor: '#1877F2',
+    icon: 'campaign', accountName: 'Meta Ads', isConnected: true, lastSynced: '18 mins ago',
+    subtext: 'Facebook + Instagram', monthlySpendLabel: '$1,070/mo',
+  },
+  {
+    id: 'a2', accountKind: 'ad' as const, platform: 'Google Ads', platformSlug: 'google-ads', platformColor: '#4285F4',
+    icon: 'ads_click', accountName: 'Google Ads', isConnected: true, lastSynced: '45 mins ago',
+    subtext: 'Search, Display & YouTube', monthlySpendLabel: '$220/mo',
+  },
+  {
+    id: 'a3', accountKind: 'ad' as const, platform: 'LinkedIn', platformSlug: 'linkedin-ads', platformColor: '#0A66C2',
+    icon: 'campaign', accountName: 'LinkedIn Ads', isConnected: true, lastSynced: '1 hour ago',
+    subtext: 'Campaign Manager', monthlySpendLabel: '$270/mo',
+  },
+  {
+    id: 'a4', accountKind: 'ad' as const, platform: 'TikTok', platformSlug: 'tiktok-ads', platformColor: '#000000',
+    icon: 'campaign', accountName: 'TikTok Ads', isConnected: false,
+    description: 'Short-form paid campaigns, pixels, and attribution.',
+    subtext: 'TikTok for Business',
+  },
+  {
+    id: 'a5', accountKind: 'ad' as const, platform: 'Twitter / X', platformSlug: 'twitter', platformColor: '#000000',
+    icon: 'flutter', accountName: 'X / Twitter Ads', isConnected: false,
+    description: 'Measure real-time engagement and paid campaign impact.',
+    subtext: 'X Advertising',
+  },
+  {
+    id: 'a6', accountKind: 'ad' as const, platform: 'Snapchat', platformSlug: 'snapchat-ads', platformColor: '#000000',
+    icon: 'campaign', accountName: 'Snapchat Ads', isConnected: false,
+    description: 'Reach audiences on Snapchat and the Snap Audience Network.',
+    subtext: 'Snap Audience Network',
+  },
+];
+
+/** Full list for tooling/tests; UI uses `socialProfileAccountsData` and `adAccountsData`. */
+export const connectedAccountsData = [...socialProfileAccountsData, ...adAccountsData];
 
 export const demoPlatforms = [
   { id: 'p1', name: 'Instagram', slug: 'instagram', brandColor: '#E1306C', icon: 'photo_camera', isActive: true, isBuiltIn: true },
@@ -296,6 +332,11 @@ export const demoPlatforms = [
   { id: 'p7', name: 'Google Ads', slug: 'google-ads', brandColor: '#4285F4', icon: 'ads_click', isActive: true, isBuiltIn: true },
   { id: 'p8', name: 'Google Maps', slug: 'google-maps', brandColor: '#4285F4', icon: 'location_on', isActive: true, isBuiltIn: true },
   { id: 'p9', name: 'TikTok', slug: 'tiktok', brandColor: '#000000', icon: 'music_note', isActive: true, isBuiltIn: true },
+  { id: 'p10', name: 'Meta Ads', slug: 'meta-ads', brandColor: '#1877F2', icon: 'campaign', isActive: true, isBuiltIn: true },
+  { id: 'p11', name: 'LinkedIn Ads', slug: 'linkedin-ads', brandColor: '#0A66C2', icon: 'campaign', isActive: true, isBuiltIn: true },
+  { id: 'p12', name: 'TikTok Ads', slug: 'tiktok-ads', brandColor: '#000000', icon: 'campaign', isActive: true, isBuiltIn: true },
+  { id: 'p13', name: 'Snapchat Ads', slug: 'snapchat-ads', brandColor: '#000000', icon: 'campaign', isActive: true, isBuiltIn: true },
+  { id: 'p14', name: 'Snapchat', slug: 'snapchat', brandColor: '#000000', icon: 'photo_camera', isActive: true, isBuiltIn: true },
 ];
 
 // Chart data exports for backward compatibility

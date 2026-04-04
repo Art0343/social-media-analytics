@@ -51,10 +51,12 @@ test.describe('Settings', () => {
     await expect(page.locator('h1')).toContainText('Platforms');
   });
 
-  test('connected accounts page shows all platforms', async ({ page }) => {
+  test('connected accounts page toggles social and ad account lists', async ({ page }) => {
     await page.goto('/settings/accounts');
-    await expect(page.locator('text=Instagram')).toBeVisible();
-    await expect(page.locator('text=YouTube')).toBeVisible();
-    await expect(page.locator('text=TikTok')).toBeVisible();
+    await expect(page.getByRole('tab', { name: 'Social profiles' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { name: 'Instagram Business' })).toBeVisible();
+    await page.getByRole('tab', { name: 'Ad accounts' }).click();
+    await expect(page.getByRole('tab', { name: 'Ad accounts' })).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { name: 'Meta Ads' })).toBeVisible();
   });
 });

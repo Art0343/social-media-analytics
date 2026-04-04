@@ -19,16 +19,18 @@
 
 ---
 
-## ✨ Features (v0.2 - Current State)
+## ✨ Features (v0.3 - Current State)
 
 - **Comprehensive Dashboard:** Reach, Engagement, Ad Spend, and Follower Growth metrics.
 - **Global Date Range Filter:** 7D / 30D / 90D / 6M / 1Y toggles that dynamically update all charts and UI components.
+- **Organic / Paid / Combined Toggle:** Switch reach type across all dashboard metrics and charts.
+- **Platform Mix:** Donut chart showing reach by social platform only (ad accounts excluded), with actual reach values in the legend.
+- **Ad Spend Chart:** Stacked bar chart grouped by month for 30d+ ranges, showing per-platform ad spend.
+- **Follower Growth Chart:** Multi-line chart with platform names shown in hover tooltips.
+- **Platform Performance Breakdown:** Detailed per-platform metrics for social profiles only (ad accounts excluded).
 - **Responsive Design:** Fully responsive sidebar with mobile hamburger menu and slide-in drawer.
 - **Dark Mode:** System and manual toggle support persisted to `localStorage`.
 - **Export Capabilities:** CSV exporting for post analytics.
-- **Platform Registry:** Full CRUD scaffolding for adding new social platforms to track.
-
-> **Note to team:** The UI is currently built and populated with high-quality mock data (`src/lib/demo-data.ts`). The immediate next step is to hook up the frontend components to our Prisma Database.
 
 ---
 

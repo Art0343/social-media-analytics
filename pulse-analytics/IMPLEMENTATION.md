@@ -1,8 +1,8 @@
 # Pulse Analytics — Implementation Plan
 
 > **Project:** Social Media Analytics SaaS Dashboard  
-> **Version:** 0.2 (Phase 2.5 Complete + Project Organization + INR Currency)  
-> **Last Updated:** 2026-04-03
+> **Version:** 0.3 (Dashboard UI Refinements)  
+> **Last Updated:** 2026-04-05
 
 ---
 
@@ -85,6 +85,10 @@ report/page.tsx        → ReportClient.tsx
 | Responsive Charts | Recharts with ResponsiveContainer |
 | Encrypted Tokens | AES-256-GCM for OAuth tokens in DB |
 | Currency | INR (₹) | `formatCurrency()` helper uses Indian Rupees |
+| Ad Account Filtering | Ad platforms excluded from Platform Mix and Platform Performance Breakdown |
+| Platform Mix Reach Values | Legend shows actual reach numbers (K/M) instead of percentages |
+| Monthly Ad Spend Grouping | Ad Spend chart groups by month for 30d+ date ranges |
+| Follower Growth Tooltip | Hover tooltip shows platform name alongside follower count |
 | TypeScript Strict | Zero `any` types, full type coverage |
 
 ---

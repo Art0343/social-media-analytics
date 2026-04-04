@@ -7,6 +7,7 @@ import {
   postWhereConnected,
 } from '@/lib/connected-analytics';
 import { getPlatformColor } from '@/lib/platform-colors';
+import { buildAdSpendChartFromSummaries } from '@/lib/ad-spend-chart-from-summaries';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -104,6 +105,8 @@ export async function GET(request: Request) {
     };
   });
 
+  const adSpendChart = buildAdSpendChartFromSummaries(summaries, days);
+
   return NextResponse.json({
     totalSpend,
     totalPaidReach,
@@ -115,5 +118,6 @@ export async function GET(request: Request) {
     prevAvgCPE,
     platformData,
     boostedPosts: formattedBoostedPosts,
+    adSpendChart,
   });
 }

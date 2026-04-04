@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { formatCurrency, formatNumber } from '@/lib/utils';
 import { useDateRange } from '@/lib/stores/useDateRange';
+import type { AdSpendChartRow, AdSpendStackKey } from '@/lib/ad-spend-chart-from-summaries';
 
 const AdSpendChart = dynamic(() => import('@/components/charts/AdSpendChart'), { ssr: false });
 
@@ -36,6 +37,7 @@ interface PaidData {
     cpe: number;
     perf: string;
   }>;
+  adSpendChart: { data: AdSpendChartRow[]; stackKeys: AdSpendStackKey[] };
 }
 
 interface PaidClientProps {
@@ -105,6 +107,7 @@ export default function PaidClient({ initialData, initialDays }: PaidClientProps
     prevAvgCPE,
     platformData,
     boostedPosts,
+    adSpendChart,
   } = data;
 
   const spendDelta = calcDelta(totalSpend, prevSpend);
@@ -170,7 +173,7 @@ export default function PaidClient({ initialData, initialDays }: PaidClientProps
           <div className="bg-[#f8fafc] dark:bg-[#1e293b] p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-[#e2e8f0] dark:border-[#334155]">
             <h4 className="text-xl font-bold text-[#131b2e] dark:text-white mb-2">Monthly Ad Spend Breakdown</h4>
             <p className="text-[#64748b] dark:text-gray-400 text-xs mb-6">Stacked platform spend over the last 6 months</p>
-            <AdSpendChart />
+            <AdSpendChart liveSeries={adSpendChart} />
           </div>
           <div className="bg-[#f8fafc] dark:bg-[#1e293b] p-8 rounded-xl shadow-[0_8px_24px_rgba(19,27,46,0.06)] dark:shadow-lg dark:shadow-black/20 border border-[#e2e8f0] dark:border-[#334155]">
             <h4 className="text-xl font-bold text-[#131b2e] dark:text-white mb-2">Spend vs Reach Efficiency</h4>

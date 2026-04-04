@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { getPlatformColor } from '@/lib/platform-colors';
+import { buildAdSpendChartFromSummaries } from '@/lib/ad-spend-chart-from-summaries';
 import dynamic from 'next/dynamic';
 import { formatNumber, formatCurrency, parseFormattedNumber } from '@/lib/utils';
 import { useDateRange } from '@/lib/stores/useDateRange';
@@ -131,6 +132,11 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
   }, [days, initialDays, fetchDashboardData]);
 
   const { kpis, platformMix, totals, summaries, platforms } = data;
+
+  const adSpendLive = useMemo(
+    () => buildAdSpendChartFromSummaries(summaries, days),
+    [summaries, days]
+  );
 
   // Filter data based on reach type - memoized
   const getReachValue = useCallback((org: number | null, paid: number | null, type: ReachType) => {
@@ -464,7 +470,7 @@ export default function DashboardClient({ initialData, days: initialDays }: Dash
                 <p className="text-sm font-medium">No ad spend in Organic view</p>
               </div>
             ) : (
-              <AdSpendChart />
+              <AdSpendChart liveSeries={adSpendLive} />
             )}
           </div>
         </div>

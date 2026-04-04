@@ -7,6 +7,7 @@ import {
   postWhereConnected,
 } from '@/lib/connected-analytics';
 import { getPlatformColor } from '@/lib/platform-colors';
+import { buildAdSpendChartFromSummaries } from '@/lib/ad-spend-chart-from-summaries';
 
 async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pulse') {
   const endDate = new Date();
@@ -99,6 +100,8 @@ async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pul
     };
   });
 
+  const adSpendChart = buildAdSpendChartFromSummaries(summaries, days);
+
   return {
     totalSpend,
     totalPaidReach,
@@ -110,6 +113,7 @@ async function getPaidData(days: number = 30, workspaceId: string = 'ws-demo-pul
     prevAvgCPE,
     platformData,
     boostedPosts: formattedBoostedPosts,
+    adSpendChart,
   };
 }
 

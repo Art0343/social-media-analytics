@@ -7,6 +7,12 @@ import {
 import { adSpendData } from '@/lib/demo-data';
 import { useDateRange } from '@/lib/stores/useDateRange';
 import { AD_SPEND_STACK_KEYS, getPlatformColor } from '@/lib/platform-colors';
+import type { AdSpendChartRow, AdSpendStackKey } from '@/lib/ad-spend-chart-from-summaries';
+
+export type AdSpendLiveSeries = {
+  data: AdSpendChartRow[];
+  stackKeys: AdSpendStackKey[];
+};
 
 function sliceByRange(range: string) {
   switch (range) {
@@ -19,14 +25,38 @@ function sliceByRange(range: string) {
   }
 }
 
-export default function AdSpendChart() {
+interface AdSpendChartProps {
+  /** When set, chart reflects DB summaries scoped to connected accounts (overview / paid). */
+  liveSeries?: AdSpendLiveSeries | null;
+}
+
+export default function AdSpendChart({ liveSeries }: AdSpendChartProps) {
   const { range } = useDateRange();
-  const data = sliceByRange(range);
+
+  const useLive =
+    liveSeries != null &&
+    liveSeries.stackKeys.length > 0 &&
+    liveSeries.data.length > 0;
+
+  const liveEmpty =
+    liveSeries != null && (liveSeries.stackKeys.length === 0 || liveSeries.data.length === 0);
+
+  if (liveEmpty) {
+    return (
+      <div className="flex h-full min-h-[152px] flex-col items-center justify-center gap-2 px-4 text-center text-secondary text-sm">
+        <span className="material-symbols-outlined text-3xl opacity-50">bar_chart</span>
+        <p>No ad spend for your connected accounts in this period.</p>
+      </div>
+    );
+  }
+
+  const data = useLive ? liveSeries.data : sliceByRange(range);
+  const stackKeys = useLive ? liveSeries.stackKeys : [...AD_SPEND_STACK_KEYS];
 
   return (
     <div className="flex h-full min-h-0 w-full flex-col gap-2">
       <ul className="flex flex-wrap gap-x-2.5 gap-y-1.5 text-[10px] font-bold leading-tight text-on-surface dark:text-gray-200">
-        {AD_SPEND_STACK_KEYS.map(({ key, name }) => (
+        {stackKeys.map(({ key, name }) => (
           <li key={key} className="flex items-center gap-1.5">
             <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: getPlatformColor(key) }} />
             <span>{name}</span>
@@ -60,13 +90,13 @@ export default function AdSpendChart() {
                 fontWeight: 600,
               }}
             />
-            {AD_SPEND_STACK_KEYS.map(({ key, name }, i) => (
+            {stackKeys.map(({ key, name }, i) => (
               <Bar
                 key={key}
                 dataKey={key}
                 stackId="a"
                 fill={getPlatformColor(key)}
-                radius={i === AD_SPEND_STACK_KEYS.length - 1 ? [4, 4, 0, 0] : [0, 0, 0, 0]}
+                radius={i === stackKeys.length - 1 ? [4, 4, 0, 0] : [0, 0, 0, 0]}
                 maxBarSize={28}
                 name={name}
                 animationDuration={600}
